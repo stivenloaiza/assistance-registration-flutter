@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "810833966441",
+    "project_id": "asia-flutter-riwi",
+    "storage_bucket": "asia-flutter-riwi.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:810833966441:android:ebf7b05de99e3268ab39f8",
+        "android_client_info": {
+          "package_name": "io.riwi.asia_project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFVYEXGO_cgZNUltd0uFZ-osJdwglzeuE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
