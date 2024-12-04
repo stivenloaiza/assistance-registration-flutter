@@ -19,73 +19,75 @@ class _FilterUserState extends State<FilterUser> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Estadísticas de Usuario"),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+    return Container(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            // Contenedor de las 2 filas verticales y 3 filas horizontales
-            Container(
-              width: double.infinity,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  // Columna 1 (Asistencias Totales y Exitosas)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      _buildStatCard('Asistencias Totales', '150'),
-                      const SizedBox(height: 16),
-                      _buildStatCard('Asistencias Exitosas', '140'),
-                    ],
-                  ),
-                  // Columna 2 (Inasistencias)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            showAbsenceDates = !showAbsenceDates;
-                          });
-                        },
-                        child: _buildStatCard('Inasistencias', '10'),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 32),
-            // Si se presiona "Inasistencias", mostrar las fechas
-            if (showAbsenceDates)
+      children: [
+        const Text("Estadísticas de Usuario"),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              // Contenedor de las 2 filas verticales y 3 filas horizontales
               Container(
-                padding: const EdgeInsets.all(16.0),
-                color: Colors.blue.shade50,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                width: double.infinity,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    const Text(
-                      'Fechas de Inasistencias:',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    // Columna 1 (Asistencias Totales y Exitosas)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        _buildStatCard('Asistencias Totales', '150'),
+                        const SizedBox(height: 16),
+                        _buildStatCard('Asistencias Exitosas', '140'),
+                      ],
                     ),
-                    const SizedBox(height: 8),
-                    for (var date in absenceDates)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0),
-                        child: Text(date),
-                      ),
+                    // Columna 2 (Inasistencias)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              showAbsenceDates = !showAbsenceDates;
+                            });
+                          },
+                          child: _buildStatCard('Inasistencias', '10'),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
-          ],
+              const SizedBox(height: 32),
+              // Si se presiona "Inasistencias", mostrar las fechas
+              if (showAbsenceDates)
+                Container(
+                  padding: const EdgeInsets.all(16.0),
+                  color: Colors.blue.shade50,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      const Text(
+                        'Fechas de Inasistencias:',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 8),
+                      for (var date in absenceDates)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4.0),
+                          child: Text(date),
+                        ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
         ),
-      ),
-    );
+      ],
+    ));
   }
 
   // Método para crear las tarjetas de las estadísticas

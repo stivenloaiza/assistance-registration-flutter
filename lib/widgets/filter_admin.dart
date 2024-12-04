@@ -30,77 +30,81 @@ class _FilterAdminState extends State<FilterAdmin> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Filtro de Administrador")),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+    return Container(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            // Input para el nombre
-            TextField(
-              onChanged: (value) {
-                setState(() {
-                  name = value;
-                });
-              },
-              decoration: const InputDecoration(
-                labelText: 'Nombre',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 16),
-            
-            // Selector de grupo (1-5)
-            DropdownButtonFormField<int>(
-              value: selectedGroup,
-              hint: const Text("Seleccionar grupo"),
-              onChanged: (int? newValue) {
-                setState(() {
-                  selectedGroup = newValue;
-                });
-              },
-              items: List.generate(5, (index) {
-                return DropdownMenuItem(
-                  value: index + 1,
-                  child: Text("Grupo ${index + 1}"),
-                );
-              }),
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // Selector de fecha
-            Row(
-              children: [
-                Text(
-                  selectedDate == null
-                      ? 'Fecha no seleccionada'
-                      : 'Fecha seleccionada: ${selectedDate!.toLocal()}'.split(' ')[0],
+      children: [
+        const Text("Filtro de Administrador"),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              // Input para el nombre
+              TextField(
+                onChanged: (value) {
+                  setState(() {
+                    name = value;
+                  });
+                },
+                decoration: const InputDecoration(
+                  labelText: 'Nombre',
+                  border: OutlineInputBorder(),
                 ),
-                IconButton(
-                  icon: const Icon(Icons.calendar_today),
-                  onPressed: () => _selectDate(context),
-                ),
-              ],
-            ),
-            const SizedBox(height: 32),
+              ),
+              const SizedBox(height: 16),
 
-            // Botón de filtro (puedes hacer lo que quieras con los valores aquí)
-            ElevatedButton(
-              onPressed: () {
-                // Aquí puedes agregar la lógica para aplicar los filtros
-                print("Nombre: $name");
-                print("Grupo: $selectedGroup");
-                print("Fecha: $selectedDate");
-              },
-              child: const Text("Aplicar Filtro"),
-            ),
-          ],
+              // Selector de grupo (1-5)
+              DropdownButtonFormField<int>(
+                value: selectedGroup,
+                hint: const Text("Seleccionar grupo"),
+                onChanged: (int? newValue) {
+                  setState(() {
+                    selectedGroup = newValue;
+                  });
+                },
+                items: List.generate(5, (index) {
+                  return DropdownMenuItem(
+                    value: index + 1,
+                    child: Text("Grupo ${index + 1}"),
+                  );
+                }),
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              // Selector de fecha
+              Row(
+                children: [
+                  Text(
+                    selectedDate == null
+                        ? 'Fecha no seleccionada'
+                        : 'Fecha seleccionada: ${selectedDate!.toLocal()}'
+                            .split(' ')[0],
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.calendar_today),
+                    onPressed: () => _selectDate(context),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 32),
+
+              // Botón de filtro (puedes hacer lo que quieras con los valores aquí)
+              ElevatedButton(
+                onPressed: () {
+                  // Aquí puedes agregar la lógica para aplicar los filtros
+                  print("Nombre: $name");
+                  print("Grupo: $selectedGroup");
+                  print("Fecha: $selectedDate");
+                },
+                child: const Text("Aplicar Filtro"),
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+      ],
+    ));
   }
 }
