@@ -1,4 +1,5 @@
 import 'package:asia_project/auth/pages/register.dart';
+import 'package:asia_project/views/notifications_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const MyHomePage(title: 'Flutter Demo Home Page'),
         '/register': (context) => RegisterPage(),
+        '/notifications': (context) => NotificationsScreen()
       },
     );
   }
