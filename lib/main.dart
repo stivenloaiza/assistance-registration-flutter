@@ -1,8 +1,7 @@
+import 'package:asia_project/views/reports_admin_view.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart'; 
-
-import 'package:asia_project/widgets/student_table.dart';
 
 void main() async {
 
@@ -22,7 +21,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: StudentTable(), 
+      home: ReportsAdmin(), 
     );
   }
 }

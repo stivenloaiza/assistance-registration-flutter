@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/coders_model.dart';
 import './coder_card_widget.dart';
 import './coder_pagination_widget.dart';
+
 class StudentTable extends StatefulWidget {
   StudentTable({super.key});
 
@@ -12,16 +13,24 @@ class StudentTable extends StatefulWidget {
 class _StudentTableState extends State<StudentTable> {
   final List<Student> students = [
     Student(name: 'Caridad', clan: 'Gates', date: '2024-06-01', attended: true),
-    Student(name: 'María Vanegas', clan: 'Berners-Lee', date: '2024-06-01', attended: false),
+    Student(
+        name: 'María Vanegas',
+        clan: 'Berners-Lee',
+        date: '2024-06-01',
+        attended: false),
     Student(name: 'Luisa', clan: 'Gates', date: '2024-06-02', attended: true),
-    Student(name: 'Ana Sofía', clan: 'Berners-Lee', date: '2024-06-02', attended: true),
-    Student(name: 'Encantador', clan: 'Gates', date: '2024-06-04', attended: false),
+    Student(
+        name: 'Ana Sofía',
+        clan: 'Berners-Lee',
+        date: '2024-06-02',
+        attended: true),
+    Student(
+        name: 'Encantador', clan: 'Gates', date: '2024-06-04', attended: false),
   ];
 
   int currentPage = 1;
   int itemsPerPage = 2;
 
-  // Calcula el número total de páginas
   int get totalPages {
     return (students.length / itemsPerPage).ceil();
   }
@@ -29,7 +38,8 @@ class _StudentTableState extends State<StudentTable> {
   List<Student> get currentPageStudents {
     int startIndex = (currentPage - 1) * itemsPerPage;
     int endIndex = startIndex + itemsPerPage;
-    return students.sublist(startIndex, endIndex > students.length ? students.length : endIndex);
+    return students.sublist(
+        startIndex, endIndex > students.length ? students.length : endIndex);
   }
 
   void onPageChanged(int page) {
@@ -40,12 +50,10 @@ class _StudentTableState extends State<StudentTable> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Tabla de Estudiantes'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      ),
-      body: SingleChildScrollView(
+    return Container(
+        child: Column(children: [
+      const Text('Tabla de Estudiantes'),
+      SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -54,9 +62,11 @@ class _StudentTableState extends State<StudentTable> {
               LayoutBuilder(
                 builder: (context, constraints) {
                   if (constraints.maxWidth > 600) {
+                    // Layout para pantallas grandes
                     return Card(
                       elevation: 4,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Table(
@@ -70,14 +80,31 @@ class _StudentTableState extends State<StudentTable> {
                           children: [
                             TableRow(
                               decoration: BoxDecoration(
-                                border: Border(bottom: BorderSide(color: Colors.grey.shade300, width: 1)),
+                                border: Border(
+                                    bottom: BorderSide(
+                                        color: Colors.grey.shade300, width: 1)),
                               ),
                               children: [
-                                TableCell(child: Text('#', style: TextStyle(fontWeight: FontWeight.bold))),
-                                TableCell(child: Text('Coders', style: TextStyle(fontWeight: FontWeight.bold))),
-                                TableCell(child: Text('Clan', style: TextStyle(fontWeight: FontWeight.bold))),
-                                TableCell(child: Text('Date', style: TextStyle(fontWeight: FontWeight.bold))),
-                                TableCell(child: Text('Asistió', style: TextStyle(fontWeight: FontWeight.bold))),
+                                TableCell(
+                                    child: Text('#',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold))),
+                                TableCell(
+                                    child: Text('Coders',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold))),
+                                TableCell(
+                                    child: Text('Clan',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold))),
+                                TableCell(
+                                    child: Text('Date',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold))),
+                                TableCell(
+                                    child: Text('Asistió',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold))),
                               ],
                             ),
                             ...currentPageStudents.asMap().entries.map((entry) {
@@ -85,52 +112,76 @@ class _StudentTableState extends State<StudentTable> {
                               final student = entry.value;
                               return TableRow(
                                 decoration: BoxDecoration(
-                                  color: index.isEven ? Colors.grey.shade50 : Colors.white,
+                                  color: index.isEven
+                                      ? Colors.grey.shade50
+                                      : Colors.white,
                                 ),
                                 children: [
                                   TableCell(
-                                    verticalAlignment: TableCellVerticalAlignment.middle,
+                                    verticalAlignment:
+                                        TableCellVerticalAlignment.middle,
                                     child: Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                                      child: Text('${index + 1}', textAlign: TextAlign.center),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8.0),
+                                      child: Text('${index + 1}',
+                                          textAlign: TextAlign.center),
                                     ),
                                   ),
                                   TableCell(
-                                    verticalAlignment: TableCellVerticalAlignment.middle,
+                                    verticalAlignment:
+                                        TableCellVerticalAlignment.middle,
                                     child: Row(
                                       children: [
                                         CircleAvatar(
                                           backgroundColor: Colors.blue,
-                                          child: Text('AB', style: TextStyle(color: Colors.white)),
+                                          child: Text('AB',
+                                              style: TextStyle(
+                                                  color: Colors.white)),
                                         ),
                                         SizedBox(width: 8),
                                         Text(student.name),
                                       ],
                                     ),
                                   ),
-                                  TableCell(verticalAlignment: TableCellVerticalAlignment.middle, child: Text(student.clan)),
-                                  TableCell(verticalAlignment: TableCellVerticalAlignment.middle, child: Text(student.date)),
                                   TableCell(
-                                    verticalAlignment: TableCellVerticalAlignment.middle,
+                                      verticalAlignment:
+                                          TableCellVerticalAlignment.middle,
+                                      child: Text(student.clan)),
+                                  TableCell(
+                                      verticalAlignment:
+                                          TableCellVerticalAlignment.middle,
+                                      child: Text(student.date)),
+                                  TableCell(
+                                    verticalAlignment:
+                                        TableCellVerticalAlignment.middle,
                                     child: Container(
-                                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 4),
                                       decoration: BoxDecoration(
-                                        color: student.attended ? Colors.green.shade100 : Colors.red.shade100,
+                                        color: student.attended
+                                            ? Colors.green.shade100
+                                            : Colors.red.shade100,
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                       child: Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           Icon(
-                                            student.attended ? Icons.check_circle : Icons.cancel,
-                                            color: student.attended ? Colors.green : Colors.red,
+                                            student.attended
+                                                ? Icons.check_circle
+                                                : Icons.cancel,
+                                            color: student.attended
+                                                ? Colors.green
+                                                : Colors.red,
                                             size: 16,
                                           ),
                                           SizedBox(width: 4),
                                           Text(
                                             student.attended ? 'Sí' : 'No',
                                             style: TextStyle(
-                                              color: student.attended ? Colors.green.shade700 : Colors.red.shade700,
+                                              color: student.attended
+                                                  ? Colors.green.shade700
+                                                  : Colors.red.shade700,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -146,8 +197,10 @@ class _StudentTableState extends State<StudentTable> {
                       ),
                     );
                   } else {
+                    // Layout para pantallas pequeñas
                     return Column(
-                      children: currentPageStudents.asMap().entries.map((entry) {
+                      children:
+                          currentPageStudents.asMap().entries.map((entry) {
                         final index = entry.key;
                         final student = entry.value;
                         return StudentCard(student: student, index: index);
@@ -156,6 +209,7 @@ class _StudentTableState extends State<StudentTable> {
                   }
                 },
               ),
+              // Agregar la paginación debajo de la tabla
               PaginationWidget(
                 currentPage: currentPage,
                 totalPages: totalPages,
@@ -165,7 +219,6 @@ class _StudentTableState extends State<StudentTable> {
           ),
         ),
       ),
-    );
+    ]));
   }
 }
-
