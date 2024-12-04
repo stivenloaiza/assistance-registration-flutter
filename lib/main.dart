@@ -1,7 +1,9 @@
 import 'package:asia_project/auth/pages/register.dart';
+import 'package:asia_project/views/notifications_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,11 +23,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
+        
       ),
       initialRoute: '/', // Define la ruta inicial
       routes: {
         '/': (context) => const MyHomePage(title: 'Flutter Demo Home Page'),
         '/register': (context) => RegisterPage(),
+        '/notifications': (context) => NotificationsScreen()
       },
     );
   }
