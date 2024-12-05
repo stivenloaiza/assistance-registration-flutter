@@ -1,12 +1,12 @@
 // import 'package:asia_project/auth/pages/register.dart';
 // import 'package:asia_project/views/notifications_screen.dart';
 
+import 'package:asia_project/auth/pages/register.dart';
+import 'package:asia_project/views/devicemanagementapp.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'views/services_page.dart';
-
-import 'package:asia_project/views/devicemanagementapp.dart';
 
 
 void main() async {
@@ -31,10 +31,10 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/', // Define la ruta inicial
       routes: {
-        // '/': (context) => const MyHomePage(title: 'Flutter Demo Home Page'),
-        // '/register': (context) => RegisterPage(),
+        '/': (context) => const MyHomePage(title: 'Flutter Demo Home Page'),
+        '/register': (context) => RegisterPage(),
         // '/notifications': (context) => NotificationsScreen(),
-          '/': (context) => ServicesPage(),
+          // '/': (context) => ServicesPage(),
       },
     );
   }
@@ -71,6 +71,17 @@ class _MyHomePageState extends State<MyHomePage> {
               },
               child: const Text('Go to Register'),
             ),
+            const SizedBox(height: 20,),
+            ElevatedButton(
+              onPressed: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DeviceManagementApp(),
+              ),
+            );
+            }, 
+            child: const Text("Device Management"))
           ],
         ),
       ),
