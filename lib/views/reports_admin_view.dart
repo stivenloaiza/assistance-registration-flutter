@@ -20,7 +20,6 @@ class _ReportsAdminState extends State<ReportsAdmin> {
         child: Column(
           children: [
             const HeaderWidget(),
-            const SearchInputWidget(),
             const Padding(
               padding: EdgeInsets.all(16.0),
               child: SearchInputWidget(),
@@ -64,4 +63,3 @@ class _ReportsAdminState extends State<ReportsAdmin> {
     );
   }
 }
-
