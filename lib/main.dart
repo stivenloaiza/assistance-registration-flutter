@@ -6,6 +6,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'views/services_page.dart';
 
+import 'package:asia_project/views/devicemanagementapp.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
