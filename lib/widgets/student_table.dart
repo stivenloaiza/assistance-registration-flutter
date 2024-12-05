@@ -62,7 +62,7 @@ class _StudentTableState extends State<StudentTable> {
               LayoutBuilder(
                 builder: (context, constraints) {
                   if (constraints.maxWidth > 600) {
-                    // Layout para pantallas grandes
+               
                     return Card(
                       elevation: 4,
                       shape: RoundedRectangleBorder(

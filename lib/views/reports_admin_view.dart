@@ -1,9 +1,9 @@
-
+import 'package:flutter/material.dart';
+import 'package:asia_project/widgets/HeaderWidget.dart';
+import 'package:asia_project/widgets/SearchInputWidget.dart';
 import 'package:asia_project/widgets/filter_admin.dart';
 import 'package:asia_project/widgets/student_table.dart';
-import 'package:flutter/material.dart';
-
-import '../widgets/bar_chart.dart';
+import 'package:asia_project/widgets/bar_chart.dart';
 
 class ReportsAdmin extends StatefulWidget {
   const ReportsAdmin({Key? key}) : super(key: key);
@@ -19,8 +19,13 @@ class _ReportsAdminState extends State<ReportsAdmin> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            const HeaderWidget(),
+            const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: SearchInputWidget(),
+            ),
             const FilterAdmin(),
-             StudentTable(),
+            StudentTable(),
             LayoutBuilder(
               builder: (context, constraints) {
                 return Container(
