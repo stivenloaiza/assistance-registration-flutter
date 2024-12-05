@@ -1,6 +1,7 @@
 // import 'package:asia_project/auth/pages/register.dart';
 // import 'package:asia_project/views/notifications_screen.dart';
 
+import 'package:asia_project/views/services_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -62,10 +63,10 @@ class _MyHomePageState extends State<MyHomePage> {
             const Text(
               'You have pushed the button this many times:',
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
+            // Text(
+            //   '$_counter',
+            //   style: Theme.of(context).textTheme.headlineMedium,
+            // ),
             const SizedBox(height: 20,),
             ElevatedButton(
               onPressed: (){
