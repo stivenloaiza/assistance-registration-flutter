@@ -27,7 +27,7 @@ class SearchBarWidget extends StatelessWidget {
           Expanded(
             child: TextField(
               controller: searchController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'Buscar usuario',
                 border: InputBorder.none,
                 hintStyle: TextStyle(color: AppColors.primary),

@@ -33,7 +33,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     if (!isMobile) return null;
     
     return IconButton(
-      icon: Icon(Icons.menu, color: Colors.black),
+      icon: const Icon(Icons.menu, color: AppColors.primary),
       onPressed: onMenuPressed,
     );
   }
@@ -51,7 +51,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SizedBox(height: 16),
         Text(
           title,
           style: TextStyle(
@@ -73,21 +72,23 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   Widget _buildDesktopContent(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title,
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: AppColors.primary,
+    return Center(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: AppColors.primary,
+            ),
           ),
-        ),
-        SearchBarWidget(
-          searchController: searchController,
-        ),
-      ],
+          SearchBarWidget(
+            searchController: searchController,
+          ),
+        ],
+      ),
     );
   }
 }
