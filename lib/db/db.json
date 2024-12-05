@@ -1,0 +1,162 @@
+[
+    {
+        "users": "users 1",
+        "type": "type 1",
+        "timeStamp": "timeStamp 1",
+        "group": "group 1",
+        "dispositive": "dispositive 1",
+        "id": "1"
+    },
+    {
+        "users": "users 2",
+        "type": "type 2",
+        "timeStamp": "timeStamp 2",
+        "group": "group 2",
+        "dispositive": "dispositive 2",
+        "id": "2"
+    },
+    {
+        "users": "users 3",
+        "type": "type 3",
+        "timeStamp": "timeStamp 3",
+        "group": "group 3",
+        "dispositive": "dispositive 3",
+        "id": "3"
+    },
+    {
+        "users": "users 4",
+        "type": "type 4",
+        "timeStamp": "timeStamp 4",
+        "group": "group 4",
+        "dispositive": "dispositive 4",
+        "id": "4"
+    },
+    {
+        "users": "users 5",
+        "type": "type 5",
+        "timeStamp": "timeStamp 5",
+        "group": "group 5",
+        "dispositive": "dispositive 5",
+        "id": "5"
+    },
+    {
+        "users": "users 6",
+        "type": "type 6",
+        "timeStamp": "timeStamp 6",
+        "group": "group 6",
+        "dispositive": "dispositive 6",
+        "id": "6"
+    },
+    {
+        "users": "users 7",
+        "type": "type 7",
+        "timeStamp": "timeStamp 7",
+        "group": "group 7",
+        "dispositive": "dispositive 7",
+        "id": "7"
+    },
+    {
+        "users": "users 8",
+        "type": "type 8",
+        "timeStamp": "timeStamp 8",
+        "group": "group 8",
+        "dispositive": "dispositive 8",
+        "id": "8"
+    },
+    {
+        "users": "users 9",
+        "type": "type 9",
+        "timeStamp": "timeStamp 9",
+        "group": "group 9",
+        "dispositive": "dispositive 9",
+        "id": "9"
+    },
+    {
+        "users": "users 10",
+        "type": "type 10",
+        "timeStamp": "timeStamp 10",
+        "group": "group 10",
+        "dispositive": "dispositive 10",
+        "id": "10"
+    },
+    {
+        "users": "users 11",
+        "type": "type 11",
+        "timeStamp": "timeStamp 11",
+        "group": "group 11",
+        "dispositive": "dispositive 11",
+        "id": "11"
+    },
+    {
+        "users": "users 12",
+        "type": "type 12",
+        "timeStamp": "timeStamp 12",
+        "group": "group 12",
+        "dispositive": "dispositive 12",
+        "id": "12"
+    },
+    {
+        "users": "users 13",
+        "type": "type 13",
+        "timeStamp": "timeStamp 13",
+        "group": "group 13",
+        "dispositive": "dispositive 13",
+        "id": "13"
+    },
+    {
+        "users": "users 14",
+        "type": "type 14",
+        "timeStamp": "timeStamp 14",
+        "group": "group 14",
+        "dispositive": "dispositive 14",
+        "id": "14"
+    },
+    {
+        "users": "users 15",
+        "type": "type 15",
+        "timeStamp": "timeStamp 15",
+        "group": "group 15",
+        "dispositive": "dispositive 15",
+        "id": "15"
+    },
+    {
+        "users": "users 16",
+        "type": "type 16",
+        "timeStamp": "timeStamp 16",
+        "group": "group 16",
+        "dispositive": "dispositive 16",
+        "id": "16"
+    },
+    {
+        "users": "users 17",
+        "type": "type 17",
+        "timeStamp": "timeStamp 17",
+        "group": "group 17",
+        "dispositive": "dispositive 17",
+        "id": "17"
+    },
+    {
+        "users": "users 18",
+        "type": "type 18",
+        "timeStamp": "timeStamp 18",
+        "group": "group 18",
+        "dispositive": "dispositive 18",
+        "id": "18"
+    },
+    {
+        "users": "users 19",
+        "type": "type 19",
+        "timeStamp": "timeStamp 19",
+        "group": "group 19",
+        "dispositive": "dispositive 19",
+        "id": "19"
+    },
+    {
+        "users": "users 20",
+        "type": "type 20",
+        "timeStamp": "timeStamp 20",
+        "group": "group 20",
+        "dispositive": "dispositive 20",
+        "id": "20"
+    }
+]
