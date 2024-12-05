@@ -1,3 +1,5 @@
+import 'package:asia_project/widgets/HeaderWidget.dart';
+import 'package:asia_project/widgets/SearchInputWidget.dart';
 import 'package:asia_project/widgets/bar_chart.dart';
 import 'package:asia_project/widgets/filter_admin.dart';
 import 'package:asia_project/widgets/student_table.dart';
@@ -17,7 +19,9 @@ class _ReportsAdminState extends State<ReportsAdmin> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            FilterAdmin(),
+            const HeaderWidget(),
+            const SearchInputWidget(),
+            const FilterAdmin(),
             StudentTable(),
             BarChartWidget(
               chartTitle: "Attendance Chart",
