@@ -1,8 +1,10 @@
-import 'package:asia_project/auth/pages/register.dart';
-import 'package:asia_project/views/notifications_screen.dart';
+// import 'package:asia_project/auth/pages/register.dart';
+// import 'package:asia_project/views/notifications_screen.dart';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'views/services_page.dart';
 
 
 void main() async {
@@ -27,9 +29,10 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/', // Define la ruta inicial
       routes: {
-        '/': (context) => const MyHomePage(title: 'Flutter Demo Home Page'),
-        '/register': (context) => RegisterPage(),
-        '/notifications': (context) => NotificationsScreen()
+        // '/': (context) => const MyHomePage(title: 'Flutter Demo Home Page'),
+        // '/register': (context) => RegisterPage(),
+        // '/notifications': (context) => NotificationsScreen(),
+          '/': (context) => ServicesPage(),
       },
     );
   }
