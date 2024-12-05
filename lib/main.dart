@@ -4,7 +4,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'views/services_page.dart';
+import 'package:asia_project/views/devicemanagementapp.dart';
 
 
 void main() async {
@@ -62,13 +62,21 @@ class _MyHomePageState extends State<MyHomePage> {
             const Text(
               'You have pushed the button this many times:',
             ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(
-                    context, '/register'); // Navega a la página de registro
-              },
-              child: const Text('Go to Register'),
+            Text(
+              '$_counter',
+              style: Theme.of(context).textTheme.headlineMedium,
             ),
+            const SizedBox(height: 20,),
+            ElevatedButton(
+              onPressed: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DeviceManagementApp(),
+              ),
+            );
+            }, 
+            child: const Text("Device Management"))
           ],
         ),
       ),
