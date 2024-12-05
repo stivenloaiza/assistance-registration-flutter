@@ -1,199 +1,275 @@
-import 'dart:math';
-import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
 
-class BarChartSample2 extends StatelessWidget {
-  final List<ChartData> data;
+class BarChartWidget extends StatefulWidget {
   final String chartTitle;
+  final List<ChartData> data;
+  final Map<String, String> ref;
   final Color backgroundColor;
-  final Color attendanceColor;
-  final Color absenceColor;
 
-  const BarChartSample2({
-    Key? key,
-    required this.data,
+  const BarChartWidget({
+    super.key,
     required this.chartTitle,
-    required this.backgroundColor,
-    required this.attendanceColor,
-    required this.absenceColor,
-  }) : super(key: key);
+    required this.data,
+    required this.ref,
+    this.backgroundColor = Colors.white,
+  });
+
+  final Color firstBarColor = const Color.fromRGBO(22, 219, 204, 1);
+  final Color secondBarColor = const Color.fromRGBO(255, 130, 172, 1);
+  final Color thirdBarColor = const Color.fromARGB(255, 22, 219, 71);
+  final Color fourthBarColor = const Color.fromARGB(255, 255, 211, 130);
+  final Color avgColor = const Color.fromRGBO(181, 181, 181, 1);
+
+  @override
+  State<BarChartWidget> createState() => _BarChartWidgetState();
+}
+
+class _BarChartWidgetState extends State<BarChartWidget> {
+  final double barWidth = 7;
+  late List<BarChartGroupData> barGroups;
+  late List<BarChartGroupData> showingBarGroups;
+  int touchedGroupIndex = -1;
+
+  @override
+  void initState() {
+    super.initState();
+    barGroups = widget.data.asMap().entries.map((entry) {
+      final index = entry.key;
+      final chartData = entry.value;
+      return makeGroupData(
+        index,
+        chartData.numberFirstValue,
+        chartData.numberSecondValue,
+        chartData.numberThirdValue ?? 0,
+        chartData.numberFourthValue ?? 0,
+      );
+    }).toList();
+
+    showingBarGroups = List.of(barGroups);
+  }
 
   @override
   Widget build(BuildContext context) {
-    final maxY = data
-        .map((e) => e.attendanceNumber + e.absencesNumber)
-        .reduce((a, b) => a > b ? a : b);
+    double roundUpToNextMultipleOfFive(double value) {
+      return (value / 5).ceil() * 5;
+    }
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final aspectRatio = constraints.maxWidth / constraints.maxHeight;
-        final isLandscape = aspectRatio > 1;
-        final fontSize = min(14.0, constraints.maxWidth / 30);
+    final maxY = roundUpToNextMultipleOfFive(widget.data.fold<double>(
+      0,
+      (previousMax, element) => [
+        element.numberFirstValue,
+        element.numberSecondValue,
+        element.numberThirdValue ?? 0,
+        element.numberFourthValue ?? 0,
+      ].reduce((a, b) => a > b ? a : b).clamp(previousMax, double.infinity),
+    ));
 
-        return Container(
-          color: backgroundColor,
-          padding: EdgeInsets.all(min(16, constraints.maxWidth / 30)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    chartTitle,
-                    style: TextStyle(
-                      color: const Color.fromRGBO(181, 181, 181, 1),
-                      fontSize: min(22, constraints.maxWidth / 20),
-                      fontFamily: 'Helvetica',
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      _LegendItem(color: attendanceColor, label: 'Asistencias'),
-                      const SizedBox(width: 16),
-                      _LegendItem(color: absenceColor, label: 'Inasistencias'),
-                    ],
-                  ),
-                ],
+    return AspectRatio(
+      aspectRatio: 1,
+      child: Container(
+        color: widget.backgroundColor,
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            const SizedBox(height: 20),
+            Center(
+              child: Text(
+                widget.chartTitle,
+                style: const TextStyle(
+                  color: Color.fromRGBO(181, 181, 181, 1),
+                  fontSize: 22,
+                  fontFamily: 'Helvetica',
+                ),
               ),
-              SizedBox(height: min(40, constraints.maxHeight / 10)),
-              Expanded(
-                child: BarChart(
-                  BarChartData(
-                    maxY: maxY,
-                    barTouchData: BarTouchData(
-                      enabled: true,
-                      touchTooltipData: BarTouchTooltipData(
-                        tooltipPadding: const EdgeInsets.all(8),
-                        tooltipMargin: 8,
-                        getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                          final chartData = data[groupIndex];
-                          final value = rodIndex == 0 ? chartData.attendanceNumber : chartData.absencesNumber;
-                          final label = rodIndex == 0 ? 'Asistencias' : 'Inasistencias';
-                          return BarTooltipItem(
-                            '${chartData.barTitle}\n$label: ${value.toStringAsFixed(1)}',
-                            const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
+            ),
+            const SizedBox(height: 20),
+            _buildLegend(),
+            const SizedBox(height: 20),
+            Expanded(
+              child: BarChart(
+                BarChartData(
+                  minY: 0,
+                  maxY: maxY,
+                  barTouchData: BarTouchData(
+                    touchTooltipData: BarTouchTooltipData(
+                      getTooltipColor: (group) =>
+                          const Color.fromRGBO(181, 181, 181, 1),
+                      getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                        final chartData = widget.data[group.x.toInt()];
+                        return BarTooltipItem(
+                          'Avg: ${chartData.average.toStringAsFixed(1)}\n',
+                          const TextStyle(
+                            color: Color.fromRGBO(92, 92, 92, 1),
+                            fontSize: 14,
+                            fontFamily: 'Helvetica',
+                          ),
+                        );
+                      },
+                    ),
+                    touchCallback: (event, response) {
+                      if (response == null || response.spot == null) {
+                        setState(() {
+                          touchedGroupIndex = -1;
+                          showingBarGroups = List.of(barGroups);
+                        });
+                        return;
+                      }
+
+                      touchedGroupIndex = response.spot!.touchedBarGroupIndex;
+
+                      setState(() {
+                        if (!event.isInterestedForInteractions) {
+                          touchedGroupIndex = -1;
+                          showingBarGroups = List.of(barGroups);
+                          return;
+                        }
+                        showingBarGroups = List.of(barGroups);
+                        if (touchedGroupIndex != -1) {
+                          showingBarGroups[touchedGroupIndex] =
+                              showingBarGroups[touchedGroupIndex].copyWith(
+                            barRods: showingBarGroups[touchedGroupIndex]
+                                .barRods
+                                .map((rod) {
+                              return rod.copyWith(
+                                toY: widget.data[touchedGroupIndex].average,
+                                color: widget.avgColor,
+                              );
+                            }).toList(),
+                          );
+                        }
+                      });
+                    },
+                  ),
+                  titlesData: FlTitlesData(
+                    show: true,
+                    rightTitles: const AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
+                    topTitles: const AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
+                    bottomTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        reservedSize: 42,
+                        getTitlesWidget: (value, meta) {
+                          if (value.toInt() < widget.data.length) {
+                            return SideTitleWidget(
+                              axisSide: meta.axisSide,
+                              space: 16,
+                              child: Text(
+                                widget.data[value.toInt()].barTitle,
+                                style: const TextStyle(
+                                  fontFamily: 'Helvetica',
+                                  color: Color.fromRGBO(181, 181, 181, 1),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            );
+                          }
+                          return Container();
+                        },
+                      ),
+                    ),
+                    leftTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        reservedSize: 28,
+                        interval: maxY / 5,
+                        getTitlesWidget: (value, meta) {
+                          return SideTitleWidget(
+                            axisSide: meta.axisSide,
+                            space: 0,
+                            child: Text(
+                              value.toStringAsFixed(0),
+                              style: const TextStyle(
+                                color: Color.fromRGBO(181, 181, 181, 1),
+                                fontFamily: 'Helvetica',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
                             ),
                           );
                         },
                       ),
                     ),
-                    titlesData: FlTitlesData(
-                      show: true,
-                      rightTitles: const AxisTitles(
-                        sideTitles: SideTitles(showTitles: false),
-                      ),
-                      topTitles: const AxisTitles(
-                        sideTitles: SideTitles(showTitles: false),
-                      ),
-                      bottomTitles: AxisTitles(
-                        sideTitles: SideTitles(
-                          showTitles: true,
-                          reservedSize: isLandscape ? 42 : constraints.maxHeight / 8,
-                          getTitlesWidget: (value, meta) {
-                            if (value.toInt() < data.length) {
-                              return SideTitleWidget(
-                                axisSide: meta.axisSide,
-                                space: 16,
-                                child: Text(
-                                  data[value.toInt()].barTitle,
-                                  style: TextStyle(
-                                    fontFamily: 'Helvetica',
-                                    color: const Color.fromRGBO(181, 181, 181, 1),
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: fontSize,
-                                  ),
-                                ),
-                              );
-                            }
-                            return Container();
-                          },
-                        ),
-                      ),
-                      leftTitles: AxisTitles(
-                        sideTitles: SideTitles(
-                          showTitles: true,
-                          reservedSize: isLandscape ? 28 : constraints.maxWidth / 10,
-                          interval: maxY / 5,
-                          getTitlesWidget: (value, meta) {
-                            return SideTitleWidget(
-                              axisSide: meta.axisSide,
-                              space: 0,
-                              child: Text(
-                                value.toStringAsFixed(0),
-                                style: TextStyle(
-                                  color: const Color.fromRGBO(181, 181, 181, 1),
-                                  fontFamily: 'Helvetica',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: fontSize,
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                    borderData: FlBorderData(show: false),
-                    barGroups: data.asMap().entries.map((entry) {
-                      final index = entry.key;
-                      final chartData = entry.value;
-                      return BarChartGroupData(
-                        x: index,
-                        barRods: [
-                          BarChartRodData(
-                            toY: chartData.attendanceNumber,
-                            color: attendanceColor,
-                            width: 16,
-                          ),
-                          BarChartRodData(
-                            toY: chartData.absencesNumber,
-                            color: absenceColor,
-                            width: 16,
-                          ),
-                        ],
-                      );
-                    }).toList(),
-                    gridData: const FlGridData(show: false),
                   ),
+                  gridData: const FlGridData(
+                    show: true,
+                    drawVerticalLine: false,
+                    drawHorizontalLine: true,
+                    horizontalInterval: 5,
+                  ),
+                  borderData: FlBorderData(show: false),
+                  barGroups: showingBarGroups,
                 ),
               ),
-            ],
-          ),
-        );
-      },
+            ),
+            const SizedBox(height: 12),
+          ],
+        ),
+      ),
     );
   }
-}
 
-class _LegendItem extends StatelessWidget {
-  final Color color;
-  final String label;
+  Widget _buildLegend() {
+    return SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            _legendItem(widget.firstBarColor, widget.ref['titleFirstValue']!),
+            _legendItem(widget.secondBarColor, widget.ref['titleSecondValue']!),
+            if (widget.ref['titleThirdValue'] != null)
+              _legendItem(widget.thirdBarColor, widget.ref['titleThirdValue']!),
+            if (widget.ref['titleFourthValue'] != null)
+              _legendItem(
+                  widget.fourthBarColor, widget.ref['titleFourthValue']!),
+          ],
+        ));
+  }
 
-  const _LegendItem({
-    Key? key,
-    required this.color,
-    required this.label,
-  }) : super(key: key);
+  Widget _legendItem(Color color, String title) {
+    return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            const SizedBox(width: 5),
+            CircleAvatar(radius: 8, backgroundColor: color),
+            const SizedBox(width: 5),
+            Text(title, style: const TextStyle(fontSize: 14)),
+          ],
+        ));
+  }
 
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          width: 16,
-          height: 16,
-          color: color,
+  BarChartGroupData makeGroupData(
+      int x, double y1, double y2, double y3, double y4) {
+    return BarChartGroupData(
+      barsSpace: 4,
+      x: x,
+      barRods: [
+        BarChartRodData(
+          toY: y1,
+          color: widget.firstBarColor,
+          width: barWidth,
         ),
-        const SizedBox(width: 4),
-        Text(
-          label,
-          style: const TextStyle(
-            color: Color.fromRGBO(181, 181, 181, 1),
-            fontSize: 12,
-            fontFamily: 'Helvetica',
-          ),
+        BarChartRodData(
+          toY: y2,
+          color: widget.secondBarColor,
+          width: barWidth,
+        ),
+        BarChartRodData(
+          toY: y3,
+          color: widget.thirdBarColor,
+          width: barWidth,
+        ),
+        BarChartRodData(
+          toY: y4,
+          color: widget.fourthBarColor,
+          width: barWidth,
         ),
       ],
     );
@@ -202,13 +278,18 @@ class _LegendItem extends StatelessWidget {
 
 class ChartData {
   final String barTitle;
-  final double attendanceNumber;
-  final double absencesNumber;
+  final double numberFirstValue;
+  final double numberSecondValue;
+  final double? numberThirdValue;
+  final double? numberFourthValue;
+  final double average;
 
   ChartData({
     required this.barTitle,
-    required this.attendanceNumber,
-    required this.absencesNumber,
+    required this.numberFirstValue,
+    required this.numberSecondValue,
+    this.numberThirdValue,
+    this.numberFourthValue,
+    required this.average,
   });
 }
-
