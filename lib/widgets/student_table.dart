@@ -84,7 +84,7 @@ class _StudentTableState extends State<StudentTable> {
                                     bottom: BorderSide(
                                         color: Colors.grey.shade300, width: 1)),
                               ),
-                              children: [
+                              children: const [
                                 TableCell(
                                     child: Text('#',
                                         style: TextStyle(
@@ -132,7 +132,7 @@ class _StudentTableState extends State<StudentTable> {
                                         TableCellVerticalAlignment.middle,
                                     child: Row(
                                       children: [
-                                        CircleAvatar(
+                                        const CircleAvatar(
                                           backgroundColor: Colors.blue,
                                           child: Text('AB',
                                               style: TextStyle(
@@ -209,7 +209,7 @@ class _StudentTableState extends State<StudentTable> {
                   }
                 },
               ),
-              // Agregar la paginación debajo de la tabla
+            
               PaginationWidget(
                 currentPage: currentPage,
                 totalPages: totalPages,

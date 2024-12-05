@@ -9,6 +9,13 @@ class PaginationWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    double screenWidth = MediaQuery.of(context).size.width;
+
+   
+    double buttonSize = screenWidth < 400 ? 10 : 16;
+    double iconPadding = screenWidth < 400 ? 8 : 12;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -18,60 +25,38 @@ class PaginationWidget extends StatelessWidget {
                   onPageChanged(currentPage - 1);
                 }
               : null,
-          child: Icon(Icons.arrow_back),
+          child: Icon(Icons.arrow_back, color: currentPage > 1 ? Colors.white : Colors.grey), 
           style: ElevatedButton.styleFrom(
             shape: CircleBorder(),
-            padding: EdgeInsets.all(12),
+            padding: EdgeInsets.all(iconPadding),
             backgroundColor: currentPage > 1 ? Theme.of(context).primaryColor : Colors.grey,
           ),
         ),
         SizedBox(width: 8),
-        ElevatedButton(
-          onPressed: () {
-            onPageChanged(1); // Ir a la primera página
-          },
-          child: Text('1'),
-          style: ElevatedButton.styleFrom(
-            shape: CircleBorder(),
-            padding: EdgeInsets.all(16),
-            foregroundColor: Colors.white,
-            backgroundColor: currentPage == 1
-                ? Theme.of(context).primaryColor
-                : Theme.of(context).colorScheme.onSurface,
+  
+        for (int i = 1; i <= 3 && i <= totalPages; i++) 
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: ElevatedButton(
+              onPressed: () {
+                onPageChanged(i);
+              },
+              child: Text(i.toString(), style: TextStyle(fontSize: buttonSize)),
+              style: ElevatedButton.styleFrom(
+                shape: CircleBorder(),
+                padding: EdgeInsets.all(16),
+                foregroundColor: Colors.white,
+                backgroundColor: currentPage == i
+                    ? Theme.of(context).primaryColor
+                    : Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
           ),
-        ),
-        SizedBox(width: 8),
-        ElevatedButton(
-          onPressed: () {
-            onPageChanged(2); // Ir a la segunda página
-          },
-          child: Text('2'),
-          style: ElevatedButton.styleFrom(
-            shape: CircleBorder(),
-            padding: EdgeInsets.all(16),
-            foregroundColor: Colors.white,
-            backgroundColor: currentPage == 2
-                ? Theme.of(context).primaryColor
-                : Theme.of(context).colorScheme.onSurface,
+        if (totalPages > 3) 
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: Text('...', style: TextStyle(fontSize: buttonSize)),
           ),
-        ),
-        SizedBox(width: 8),
-        ElevatedButton(
-          onPressed: () {
-            onPageChanged(3); // Ir a la tercera página
-          },
-          child: Text('3'),
-          style: ElevatedButton.styleFrom(
-            shape: CircleBorder(),
-            padding: EdgeInsets.all(16),
-            foregroundColor: Colors.white,
-            backgroundColor: currentPage == 3
-                ? Theme.of(context).primaryColor
-                : Theme.of(context).colorScheme.onSurface,
-          ),
-        ),
-        SizedBox(width: 8),
-        Text('...', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         SizedBox(width: 8),
         ElevatedButton(
           onPressed: currentPage < totalPages
@@ -79,10 +64,10 @@ class PaginationWidget extends StatelessWidget {
                   onPageChanged(currentPage + 1);
                 }
               : null,
-          child: Icon(Icons.arrow_forward),
+          child: Icon(Icons.arrow_forward, color: currentPage < totalPages ? Colors.white : Colors.grey), 
           style: ElevatedButton.styleFrom(
             shape: CircleBorder(),
-            padding: EdgeInsets.all(12),
+            padding: EdgeInsets.all(iconPadding),
             backgroundColor: currentPage < totalPages ? Theme.of(context).primaryColor : Colors.grey,
           ),
         ),
