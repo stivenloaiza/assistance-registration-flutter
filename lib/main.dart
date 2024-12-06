@@ -1,12 +1,10 @@
-// import 'package:asia_project/auth/pages/register.dart';
-// import 'package:asia_project/views/notifications_screen.dart';
-
 import 'package:asia_project/auth/pages/register.dart';
 import 'package:asia_project/views/devicemanagementapp.dart';
+import 'package:asia_project/views/notifications_screen.dart';
+import 'views/services_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'views/services_page.dart';
 
 
 void main() async {
@@ -81,7 +79,32 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             );
             }, 
-            child: const Text("Device Management"))
+            child: const Text("Device Management")
+            ),
+            const SizedBox(height: 20,),
+            ElevatedButton(
+              onPressed: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => NotificationsScreen(),
+              ),
+            );
+            }, 
+            child: const Text("Notifications")
+            ),
+            const SizedBox(height: 20,),
+            ElevatedButton(
+              onPressed: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ServicesPage(),
+              ),
+            );
+            }, 
+            child: const Text("ServicePage")
+            ),
           ],
         ),
       ),
