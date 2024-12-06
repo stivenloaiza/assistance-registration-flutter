@@ -1,9 +1,14 @@
-import 'package:asia_project/utils/provider_nav.dart';
 import 'package:flutter/material.dart';
 import 'package:asia_project/utils/const_data_admin_user.dart';
-import 'package:provider/provider.dart';
-class AppDrawer extends StatelessWidget {
-  const AppDrawer({Key? key}) : super(key: key);
+class CustomDrawer extends StatelessWidget {
+  final int currentIndex;
+  final Function(int) onNavigate;
+
+  const CustomDrawer({
+    super.key,
+    required this.currentIndex,
+    required this.onNavigate,
+  });
 
   Widget _buildDrawerItem({
     required IconData icon,
@@ -11,8 +16,7 @@ class AppDrawer extends StatelessWidget {
     required int index,
     required BuildContext context,
   }) {
-    final navigationProvider = Provider.of<NavigationProvider>(context);
-    final bool isSelected = navigationProvider.currentIndex == index;
+    final bool isSelected = currentIndex == index;
 
     return MouseRegion(
       cursor: SystemMouseCursors.click,
@@ -47,7 +51,7 @@ class AppDrawer extends StatelessWidget {
                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
                   ),
                 ),
-                onTap: () => navigationProvider.setIndex(index),
+                onTap: () => onNavigate(index),
                 hoverColor: AppColors.secondary.withOpacity(0.1),
               ),
             ),
@@ -60,20 +64,43 @@ class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      color: AppColors.background,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           _buildDrawerHeader(),
-          _buildDrawerItem(
-            icon: Icons.dashboard,
-            title: 'Users',
-            index: 0,
-            context: context,
+          Column(
+            children: [
+              _buildDrawerItem(
+                icon: Icons.stacked_line_chart_sharp,
+                title: 'Stadistics',
+                index: 0,
+                context: context,
+              ),
+              _buildDrawerItem(
+                icon: Icons.people,
+                title: 'Users',
+                index: 1,
+                context: context,
+              ),
+              _buildDrawerItem(
+                icon: Icons.groups,
+                title: 'Groups',
+                index: 2,
+                context: context,
+              ),
+               _buildDrawerItem(
+                icon: Icons.mobile_screen_share,
+                title: 'Devices',
+                index: 3,
+                context: context,
+              ),
+            ],
           ),
           _buildDrawerItem(
-            icon: Icons.receipt_long,
-            title: 'Groups',
-            index: 1,
+            icon: Icons.dock_rounded,
+            title: 'Logout',
+            index: 4,
             context: context,
           ),
         ],

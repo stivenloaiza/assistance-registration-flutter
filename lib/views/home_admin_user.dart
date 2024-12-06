@@ -1,12 +1,13 @@
 import 'package:asia_project/utils/const_data_admin_user.dart';
-import 'package:asia_project/utils/provider_nav.dart';
 import 'package:asia_project/widgets/admin_drawer.dart';
-import 'package:asia_project/widgets/custom_apbar_admin.dart';
+import 'package:asia_project/widgets/dashboard_stadists.dart';
+import 'package:asia_project/widgets/device_white.dart';
+import 'package:asia_project/widgets/groupspage.dart';
+import 'package:asia_project/widgets/userspage.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -14,12 +15,30 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final PageController _pageController = PageController();
+  int _currentPage = 0;
+
+  void _navigateToPage(int index) {
+    _pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+    setState(() {
+      _currentPage = index;
+    });
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < AppDimensions.mobileBreakpoint;
-    final navigationProvider = Provider.of<NavigationProvider>(context);
 
     return Scaffold(
       key: _scaffoldKey,
@@ -34,55 +53,52 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 backgroundColor: AppColors.background,
-                child: const AppDrawer(),
+                child: CustomDrawer(
+                  currentIndex: _currentPage,
+                  onNavigate: _navigateToPage,
+                ),
               ),
             )
           : null,
       body: Row(
         children: [
           if (!isMobile)
-            const SizedBox(
+            SizedBox(
               width: AppDimensions.drawerWidth,
-              child: AppDrawer(),
+              child: CustomDrawer(
+                currentIndex: _currentPage,
+                onNavigate: _navigateToPage,
+              ),
             ),
           Expanded(
-            child: IndexedStack(
-              index: navigationProvider.currentIndex,
+            child: PageView(
+              controller: _pageController,
+              onPageChanged: (index) {
+                setState(() {
+                  _currentPage = index;
+                });
+              },
               children: [
-                _buildMainContent(isMobile, 'Users'),
-                _buildMainContent(isMobile, 'Groups'),
+                DashboardPage(
+                  isMobile: isMobile,
+                  onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
+                ),
+                UsersPage(
+                  isMobile: isMobile,
+                  onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
+                ),
+                GroupsPage(
+                  isMobile: isMobile,
+                  onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
+                ),
+                DevicePage(
+                  isMobile: isMobile,
+                  onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
+                ),
               ],
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildMainContent(bool isMobile, String title) {
-    return Scaffold(
-      appBar: CustomAppBar(
-        isMobile: isMobile,
-        onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
-        title: title,
-        searchController: TextEditingController(),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 24),
-            Text(
-              '$title List',
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 16),
-          ],
-        ),
       ),
     );
   }

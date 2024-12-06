@@ -6,10 +6,10 @@ class SearchBarWidget extends StatelessWidget {
   final bool isMobile;
 
   const SearchBarWidget({
-    Key? key,
+    super.key,
     required this.searchController,
     this.isMobile = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,13 +22,13 @@ class SearchBarWidget extends StatelessWidget {
       width: isMobile ? null : MediaQuery.of(context).size.width * 0.4,
       child: Row(
         children: [
-          Icon(Icons.search, color: AppColors.primary),
+          const Icon(Icons.search, color: AppColors.primary),
           SizedBox(width: 8),
           Expanded(
             child: TextField(
               controller: searchController,
               decoration: const InputDecoration(
-                hintText: 'Buscar usuario',
+                hintText: 'Buscar',
                 border: InputBorder.none,
                 hintStyle: TextStyle(color: AppColors.primary),
               ),
