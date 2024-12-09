@@ -1,3 +1,4 @@
+import 'package:asia_project/views/notifications_screen.dart';
 import 'package:flutter/material.dart';
 
 class ServiceListTile extends StatelessWidget {
@@ -53,9 +54,15 @@ class ServiceListTile extends StatelessWidget {
             ),
           ),
           TextButton(
-            onPressed: () {},
-            child: Text("View Details"),
-          ),
+  onPressed: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => NotificationsScreen()),
+    );
+  },
+  child: Text("Ver notificación"),
+)
+
         ],
       ),
     );
