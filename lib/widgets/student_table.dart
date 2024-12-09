@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/coders_model.dart';
 import './coder_card_widget.dart';
 import './coder_pagination_widget.dart';
+import './pdf_download_button.dart';
 
 class StudentTable extends StatefulWidget {
   StudentTable({super.key});
@@ -53,6 +54,10 @@ class _StudentTableState extends State<StudentTable> {
     return Container(
         child: Column(children: [
       const Text('Tabla de Estudiantes'),
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
+        child: PdfDownloadButton(students: students),
+      ),
       SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -62,7 +67,6 @@ class _StudentTableState extends State<StudentTable> {
               LayoutBuilder(
                 builder: (context, constraints) {
                   if (constraints.maxWidth > 600) {
-               
                     return Card(
                       elevation: 4,
                       shape: RoundedRectangleBorder(
@@ -197,7 +201,7 @@ class _StudentTableState extends State<StudentTable> {
                       ),
                     );
                   } else {
-                    // Layout para pantallas pequeñas
+                 
                     return Column(
                       children:
                           currentPageStudents.asMap().entries.map((entry) {
@@ -209,7 +213,6 @@ class _StudentTableState extends State<StudentTable> {
                   }
                 },
               ),
-            
               PaginationWidget(
                 currentPage: currentPage,
                 totalPages: totalPages,
@@ -222,3 +225,4 @@ class _StudentTableState extends State<StudentTable> {
     ]));
   }
 }
+
