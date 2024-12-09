@@ -1,14 +1,9 @@
+import 'package:asia_project/models/coders_model.dart';
 import 'package:flutter/material.dart';
-<<<<<<< HEAD:lib/widgets/student_table.dart
-import '../models/coders_model.dart';
 import './coder_card_widget.dart';
 import './coder_pagination_widget.dart';
-import './pdf_download_button.dart';
-=======
-import '../../models/coders_model.dart';
-import 'coder_card_widget.dart';
-import 'coder_pagination_widget.dart';
->>>>>>> afdac5a536647768c3d04b7994ee70598bcbe848:lib/widgets/reports_bi_widgets/coder_table.dart
+import '../pdf_download_button.dart';
+
 
 class StudentTable extends StatefulWidget {
   StudentTable({super.key});
@@ -59,14 +54,12 @@ class _StudentTableState extends State<StudentTable> {
   Widget build(BuildContext context) {
     return Container(
         child: Column(children: [
-<<<<<<< HEAD:lib/widgets/student_table.dart
       const Text('Tabla de Estudiantes'),
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 16.0),
         child: PdfDownloadButton(students: students),
       ),
-=======
->>>>>>> afdac5a536647768c3d04b7994ee70598bcbe848:lib/widgets/reports_bi_widgets/coder_table.dart
+
       SingleChildScrollView(
         child: Padding(
 
