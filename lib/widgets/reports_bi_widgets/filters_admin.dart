@@ -8,7 +8,7 @@ class FilterAdmin extends StatefulWidget {
 }
 
 class _FilterAdminState extends State<FilterAdmin> {
-  // Variables para almacenar los valores seleccionados
+  
   int? selectedGroup;
 
   @override
@@ -22,7 +22,7 @@ class _FilterAdminState extends State<FilterAdmin> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                // Fila con el título "Grupo" y el selector de grupo
+             
                 Row(
                   children: [
                     Text(

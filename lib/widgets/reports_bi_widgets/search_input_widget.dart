@@ -15,7 +15,7 @@ class SearchInputWidget extends StatelessWidget {
     return Container(
       height: 40,
       decoration: BoxDecoration(
-        color: const Color(0xFFF3F2FB), // Light purple background
+        color: const Color(0xFFF3F2FB), 
         borderRadius: BorderRadius.circular(20),
       ),
       child: TextField(
@@ -37,3 +37,4 @@ class SearchInputWidget extends StatelessWidget {
     );
   }
 }
+

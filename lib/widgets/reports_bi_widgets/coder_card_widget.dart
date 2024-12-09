@@ -5,7 +5,7 @@ class StudentCard extends StatelessWidget {
   final Student student;
   final int index;
 
-  StudentCard({required this.student, required this.index});
+  StudentCard({required this.student, required this.index, required Null Function() onTap});
 
   Color getAvatarColor(int index) {
     final colors = [
