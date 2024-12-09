@@ -36,8 +36,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           IconWidget(),
-          TitleWidget(title: _title, onTap: _changeTitle),
-          AvatarWidget(avatarUrl: _avatarUrl, onTap: _changeAvatar),
+          TitleWidget(title:"Título", onTap: _changeTitle),
         ],
       ),
     );

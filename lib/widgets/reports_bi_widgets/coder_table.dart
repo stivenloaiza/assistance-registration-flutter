@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../models/coders_model.dart';
-import './coder_card_widget.dart';
-import './coder_pagination_widget.dart';
+import '../../models/coders_model.dart';
+import 'coder_card_widget.dart';
+import 'coder_pagination_widget.dart';
 
 class StudentTable extends StatefulWidget {
   StudentTable({super.key});
@@ -55,6 +55,8 @@ class _StudentTableState extends State<StudentTable> {
       const Text('Tabla de Estudiantes'),
       SingleChildScrollView(
         child: Padding(
+
+          
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,8 +1,8 @@
-import 'package:asia_project/widgets/bar_chart.dart';
-import 'package:asia_project/widgets/filter_admin.dart';
-import 'package:asia_project/widgets/student_table.dart';
-import 'package:asia_project/widgets/SearchInputWidget.dart';
-import 'package:asia_project/widgets/HeaderWidget.dart';
+import 'package:asia_project/widgets/reports_bi_widgets/bar_chart.dart';
+import 'package:asia_project/widgets/reports_bi_widgets/filter_admin.dart';
+import 'package:asia_project/widgets/reports_bi_widgets/coder_table.dart';
+import 'package:asia_project/widgets/reports_bi_widgets/search_input_widget.dart';
+import 'package:asia_project/widgets/reports_bi_widgets/header_widget.dart';
 import 'package:flutter/material.dart';
 
 class ReportsAdmin extends StatefulWidget {
