@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-
 class RegisterPage extends StatefulWidget {
   @override
   _RegisterPageState createState() => _RegisterPageState();
@@ -15,40 +14,64 @@ class _RegisterPageState extends State<RegisterPage> {
   String? _nombre;
   String? _tipoDocumento;
   String? _numeroDocumento;
+  DateTime? _fechaNacimiento;
 
-  // Controladores para email y contraseña
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  bool _acceptTerms = false; // Estado del checkbox
+
+  Future<void> _selectFechaNacimiento() async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+
+    if (pickedDate != null && pickedDate != _fechaNacimiento) {
+      setState(() {
+        _fechaNacimiento = pickedDate;
+      });
+    }
+  }
+
   void _registerUser() async {
+    if (!_acceptTerms) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Debes aceptar los términos y condiciones para registrarte.'),
+        ),
+      );
+      return;
+    }
+
     try {
-      // Registro con email y contraseña
       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
 
-      // Obtén el usuario registrado
       User? user = userCredential.user;
 
       if (user != null) {
-        // Guarda los datos adicionales en Firestore
         await _firestore.collection('users').doc(user.uid).set({
           'nombre': _nombre,
           'tipoDocumento': _tipoDocumento,
           'numeroDocumento': _numeroDocumento,
+          'fechaNacimiento': _fechaNacimiento?.toIso8601String(),
           'email': user.email,
           'uid': user.uid,
+          'status': 'active',
+          'role': 'postulante',
         });
 
         print('Usuario registrado: ${user.email}');
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Usuario registrado exitosamente')),
         );
-        // Puedes redirigir al usuario a otra pantalla si es necesario
       }
     } on FirebaseAuthException catch (e) {
-      // Manejo de errores comunes
       String message;
       if (e.code == 'weak-password') {
         message = 'La contraseña es demasiado débil.';
@@ -74,7 +97,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200], // Fondo claro
+      backgroundColor: Colors.grey[200],
       body: Center(
         child: SingleChildScrollView(
           child: Container(
@@ -95,7 +118,6 @@ class _RegisterPageState extends State<RegisterPage> {
               ],
             ),
             child: Column(
-              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -106,7 +128,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 const SizedBox(height: 25),
-                // Campo Nombre
                 TextField(
                   decoration: InputDecoration(
                     labelText: 'Nombre',
@@ -123,7 +144,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   },
                 ),
                 const SizedBox(height: 25),
-                // Campo Tipo de documento
                 DropdownButtonFormField<String>(
                   decoration: InputDecoration(
                     labelText: 'Tipo de documento',
@@ -150,7 +170,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   },
                 ),
                 const SizedBox(height: 25),
-                // Campo Número de documento
                 TextField(
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
@@ -168,7 +187,21 @@ class _RegisterPageState extends State<RegisterPage> {
                   },
                 ),
                 const SizedBox(height: 25),
-                // Campo Email
+                TextField(
+                  readOnly: true,
+                  decoration: InputDecoration(
+                    labelText: _fechaNacimiento == null
+                        ? 'Fecha de nacimiento'
+                        : 'Fecha: ${_fechaNacimiento!.toLocal()}'.split(' ')[0],
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    filled: true,
+                    fillColor: Colors.grey[100],
+                  ),
+                  onTap: _selectFechaNacimiento,
+                ),
+                const SizedBox(height: 25),
                 TextField(
                   controller: _emailController,
                   decoration: InputDecoration(
@@ -181,7 +214,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 const SizedBox(height: 25),
-                // Campo Password
                 TextField(
                   controller: _passwordController,
                   obscureText: true,
@@ -194,8 +226,28 @@ class _RegisterPageState extends State<RegisterPage> {
                     fillColor: Colors.grey[100],
                   ),
                 ),
+                const SizedBox(height: 25),
+                Row(
+                  children: [
+                    Checkbox(
+                      value: _acceptTerms,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          _acceptTerms = value ?? false;
+                        });
+                      },
+                    ),
+                    const Expanded(
+                      child: Text(
+                        'Acepto los términos y condiciones',
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 40),
-                // Botón de registro
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
