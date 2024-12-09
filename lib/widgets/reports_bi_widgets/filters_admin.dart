@@ -16,7 +16,7 @@ class _FilterAdminState extends State<FilterAdmin> {
       color: Colors.white,
       child: Column(
         children: [
-          const SizedBox(height: 10),
+          const SizedBox(height: 5),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(

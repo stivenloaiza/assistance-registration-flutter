@@ -55,7 +55,7 @@ class _CustomLineChartState extends State<CustomLineChart> {
       fontSize: 12,
     );
 
-    if (value.toInt() >= 0 && value.toInt() < widget.ref.length) {
+    if (value.toInt() > 0 && value.toInt() < widget.ref.length) {
       return SideTitleWidget(
         axisSide: meta.axisSide,
         child: Text(widget.ref[value.toInt()], style: style),
