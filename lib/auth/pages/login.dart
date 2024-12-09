@@ -10,7 +10,6 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  
 
   // Controladores para email y contraseña
   final TextEditingController _emailController = TextEditingController();
@@ -156,6 +155,60 @@ class _LoginPageState extends State<LoginPage> {
                       style: TextStyle(fontSize: 18, color: Colors.white),
                     ),
                   ),
+                ),
+                // ... (código anterior) ...
+                const SizedBox(
+                    height:
+                        20), // Espacio entre el botón principal y los nuevos
+// Botones de registro e inicio de sesión con dispositivo
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    // Botón Registrarse
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Navegación a la página de registro
+                          Navigator.pushNamed(context,
+                              '/register'); // Reemplaza '/register' con la ruta correcta
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              Colors.grey[300], // Color de fondo gris claro
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 15),
+                        ),
+                        child: const Text(
+                          'Registrarse',
+                          style: TextStyle(fontSize: 16, color: Colors.black),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 20),
+                    // Botón Login Device
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Navegación a la página de login con dispositivo
+                          Navigator.pushNamed(context,
+                              '/loginDevice'); // Reemplaza '/loginDevice' con la ruta correcta
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF007BFF),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 15),
+                        ),
+                        child: const Text(
+                          'Login Device',
+                          style: TextStyle(fontSize: 16, color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
