@@ -23,9 +23,9 @@ class _HeaderAdminState extends State<HeaderAdmin> {
       color: Colors.white, // Establece el color de fondo a blanco
       child: Padding(
         padding: EdgeInsets.only(
-          top: 60.0,
-          left: 30.0,
-        ), // Padding de 60 píxeles arriba y 30 a la izquierda
+            top: 70.0,
+            left: 60.0,
+            bottom: 30.0), // Padding de 60 píxeles arriba y 30 a la izquierda
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
