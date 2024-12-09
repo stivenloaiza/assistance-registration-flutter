@@ -20,10 +20,12 @@ class _HeaderAdminState extends State<HeaderAdmin> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Colors.white, // Establece el color de fondo a blanco
       child: Padding(
         padding: EdgeInsets.only(
-            top: 60.0,
-            left: 30.0), // Padding de 60 píxeles arriba y 30 a la izquierda
+          top: 60.0,
+          left: 30.0,
+        ), // Padding de 60 píxeles arriba y 30 a la izquierda
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -32,8 +34,12 @@ class _HeaderAdminState extends State<HeaderAdmin> {
               padding: EdgeInsets.only(
                   right: 16.0), // Padding adicional a la derecha
               child: Text(
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  "Reportes Coders"),
+                "REPORTES CODERS", // Asegúrate de que el texto esté en un formato correcto
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ],
         ),
