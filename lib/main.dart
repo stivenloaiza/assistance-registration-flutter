@@ -1,3 +1,4 @@
+import 'package:asia_project/auth/pages/login.dart';
 import 'package:asia_project/auth/pages/register.dart';
 import 'package:asia_project/views/devicemanagementapp.dart';
 import 'package:asia_project/views/notifications_screen.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const MyHomePage(title: 'Flutter Demo Home Page'),
         '/register': (context) => RegisterPage(),
+        '/login': (context) => LoginPage(),
         // '/notifications': (context) => NotificationsScreen(),
           // '/': (context) => ServicesPage(),
       },
@@ -101,6 +103,30 @@ class _MyHomePageState extends State<MyHomePage> {
             );
             }, 
             child: const Text("ServicePage")
+            ),
+            const SizedBox(height: 20,),
+            ElevatedButton(
+              onPressed: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LoginPage(),
+              ),
+            );
+            }, 
+            child: const Text("Login")
+            ),
+            const SizedBox(height: 20,),
+            ElevatedButton(
+              onPressed: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => RegisterPage(),
+              ),
+            );
+            }, 
+            child: const Text("register")
             ),
           ],
         ),
