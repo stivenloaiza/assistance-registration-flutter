@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -8,6 +9,8 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  
 
   // Controladores para email y contraseña
   final TextEditingController _emailController = TextEditingController();
@@ -15,31 +18,42 @@ class _LoginPageState extends State<LoginPage> {
 
   void _loginUser() async {
     try {
-      // Inicio de sesión con email y contraseña
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
-
-      // Obtén el usuario que ha iniciado sesión
       User? user = userCredential.user;
 
       if (user != null) {
+        // Obtener la referencia al documento del usuario en Firestore
+        DocumentReference userDoc =
+            _firestore.collection('users').doc(user.uid);
+
+        // Obtener los datos del usuario
+        DocumentSnapshot doc = await userDoc.get();
+        if (doc.exists) {
+          // Acceder a los datos del usuario, por ejemplo:
+          String nombre = doc['nombre'];
+          print('Nombre del usuario: $nombre');
+
+          // ... usar los datos del usuario como necesites ...
+        } else {
+          print('No se encontró el documento del usuario en Firestore');
+          // Puedes crear un nuevo documento para el usuario si es necesario
+        }
+
         print('Usuario ha iniciado sesión: ${user.email}');
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Inicio de sesión exitoso')),
         );
-        // Puedes redirigir al usuario a otra pantalla si es necesario
       }
     } on FirebaseAuthException catch (e) {
-      // Manejo de errores comunes
-      String message;
+      String message = 'Ocurrió un error. Inténtalo de nuevo.';
+
       if (e.code == 'user-not-found') {
         message = 'No se encontró ningún usuario con ese correo electrónico.';
       } else if (e.code == 'wrong-password') {
-        message = 'Contraseña incorrecta.';
-      } else {
-        message = 'Error: ${e.message}';
+        message = 'La contraseña es incorrecta.';
       }
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -83,7 +97,7 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 const Center(
                   child: Text(
-                    'Login',
+                    'ASIA',
                     style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
@@ -103,7 +117,8 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     filled: true,
                     fillColor: Colors.grey[100],
-                    prefixIcon: const Icon(Icons.email, color: Color(0xFF999999)),
+                    prefixIcon:
+                        const Icon(Icons.email, color: Color(0xFF999999)),
                   ),
                 ),
                 const SizedBox(height: 35),
@@ -119,7 +134,8 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     filled: true,
                     fillColor: Colors.grey[100],
-                    prefixIcon: const Icon(Icons.lock, color: Color(0xFF999999)),
+                    prefixIcon:
+                        const Icon(Icons.lock, color: Color(0xFF999999)),
                   ),
                 ),
                 const SizedBox(height: 50),
