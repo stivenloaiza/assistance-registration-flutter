@@ -33,7 +33,6 @@ class _FilterAdminState extends State<FilterAdmin> {
     return Container(
         child: Column(
       children: [
-        const Text("Filtro de Administrador"),
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
