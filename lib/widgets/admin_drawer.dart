@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:asia_project/utils/const_data_admin_user.dart';
+
 class CustomDrawer extends StatelessWidget {
   final int currentIndex;
   final Function(int) onNavigate;
@@ -48,7 +49,8 @@ class CustomDrawer extends StatelessWidget {
                   title,
                   style: TextStyle(
                     color: isSelected ? AppColors.secondary : Colors.grey,
-                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                    fontWeight:
+                        isSelected ? FontWeight.w600 : FontWeight.normal,
                   ),
                 ),
                 onTap: () => onNavigate(index),
@@ -63,47 +65,49 @@ class CustomDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: AppColors.background,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          _buildDrawerHeader(),
-          Column(
-            children: [
-              _buildDrawerItem(
-                icon: Icons.stacked_line_chart_sharp,
-                title: 'Stadistics',
-                index: 0,
-                context: context,
-              ),
-              _buildDrawerItem(
-                icon: Icons.people,
-                title: 'Users',
-                index: 1,
-                context: context,
-              ),
-              _buildDrawerItem(
-                icon: Icons.groups,
-                title: 'Groups',
-                index: 2,
-                context: context,
-              ),
-               _buildDrawerItem(
-                icon: Icons.mobile_screen_share,
-                title: 'Devices',
-                index: 3,
-                context: context,
-              ),
-            ],
-          ),
-          _buildDrawerItem(
-            icon: Icons.dock_rounded,
-            title: 'Logout',
-            index: 4,
-            context: context,
-          ),
-        ],
+    return SafeArea(
+      child: Container(
+        color: AppColors.background,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _buildDrawerHeader(),
+            Column(
+              children: [
+                _buildDrawerItem(
+                  icon: Icons.stacked_line_chart_sharp,
+                  title: 'Stadistics',
+                  index: 0,
+                  context: context,
+                ),
+                _buildDrawerItem(
+                  icon: Icons.people,
+                  title: 'Users',
+                  index: 1,
+                  context: context,
+                ),
+                _buildDrawerItem(
+                  icon: Icons.groups,
+                  title: 'Groups',
+                  index: 2,
+                  context: context,
+                ),
+                _buildDrawerItem(
+                  icon: Icons.mobile_screen_share,
+                  title: 'Devices',
+                  index: 3,
+                  context: context,
+                ),
+              ],
+            ),
+            _buildDrawerItem(
+              icon: Icons.dock_rounded,
+              title: 'Logout',
+              index: 4,
+              context: context,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -114,7 +118,8 @@ class CustomDrawer extends StatelessWidget {
       child: Row(
         children: [
           Image(
-            image: NetworkImage('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHj_MByJQ2VcVl4xe-gpdQFLGgMOHuoy7uyQ&s'),
+            image: NetworkImage(
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHj_MByJQ2VcVl4xe-gpdQFLGgMOHuoy7uyQ&s'),
             height: 30,
           ),
           SizedBox(width: 8),
