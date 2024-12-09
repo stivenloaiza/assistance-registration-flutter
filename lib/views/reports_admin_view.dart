@@ -1,5 +1,6 @@
 import 'package:asia_project/widgets/reports_bi_widgets/bar_chart.dart';
-import 'package:asia_project/widgets/reports_bi_widgets/filters.dart';
+import 'package:asia_project/widgets/reports_bi_widgets/filters_Admin.dart';
+import 'package:asia_project/widgets/reports_bi_widgets/filters_coder.dart';
 import 'package:asia_project/widgets/reports_bi_widgets/coder_table.dart';
 import 'package:asia_project/widgets/reports_bi_widgets/header_admin_widget.dart';
 import 'package:asia_project/widgets/reports_bi_widgets/search_input_widget.dart';
@@ -59,7 +60,7 @@ class _ReportsAdminState extends State<ReportsAdmin> {
               padding: EdgeInsets.all(16.0),
               child: SearchInputWidget(),
             ),
-            const Filters(),
+            const FilterAdmin(),
             BarChartWidget(
               chartTitle: "Attendance Chart",
               ref: attendanceChartRefs,

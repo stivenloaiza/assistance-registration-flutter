@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class Filters extends StatefulWidget {
-  const Filters({super.key});
+class FilterAdmin extends StatefulWidget {
+  const FilterAdmin({super.key});
 
   @override
-  State<Filters> createState() => _FiltersState();
+  State<FilterAdmin> createState() => _FilterAdminState();
 }
 
-class _FiltersState extends State<Filters> {
+class _FilterAdminState extends State<FilterAdmin> {
   // Variables para almacenar los valores seleccionados
   String name = '';
   int? selectedGroup;
