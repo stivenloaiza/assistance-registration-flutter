@@ -1,8 +1,10 @@
-import 'package:asia_project/widgets/bar_chart.dart';
-import 'package:asia_project/widgets/filter_admin.dart';
-import 'package:asia_project/widgets/student_table.dart';
-import 'package:asia_project/widgets/SearchInputWidget.dart';
-import 'package:asia_project/widgets/HeaderWidget.dart';
+import 'package:asia_project/widgets/reports_bi_widgets/bar_chart.dart';
+import 'package:asia_project/widgets/reports_bi_widgets/filters_Admin.dart';
+import 'package:asia_project/widgets/reports_bi_widgets/filters_coder.dart';
+import 'package:asia_project/widgets/reports_bi_widgets/coder_table.dart';
+import 'package:asia_project/widgets/reports_bi_widgets/header_admin_widget.dart';
+import 'package:asia_project/widgets/reports_bi_widgets/search_input_widget.dart';
+import 'package:asia_project/widgets/reports_bi_widgets/header_coder_widget.dart';
 import 'package:flutter/material.dart';
 
 class ReportsAdmin extends StatefulWidget {
@@ -53,18 +55,18 @@ class _ReportsAdminState extends State<ReportsAdmin> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const HeaderWidget(),
+            const HeaderAdmin(),
             const Padding(
               padding: EdgeInsets.all(16.0),
               child: SearchInputWidget(),
             ),
             const FilterAdmin(),
-            StudentTable(),
             BarChartWidget(
               chartTitle: "Attendance Chart",
               ref: attendanceChartRefs,
               data: attendanceChartData,
             ),
+            StudentTable(),
           ],
         ),
       ),

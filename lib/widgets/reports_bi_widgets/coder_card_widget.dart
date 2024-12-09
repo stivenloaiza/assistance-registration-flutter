@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/coders_model.dart';
+import '../../models/coders_model.dart';
 
 class StudentCard extends StatelessWidget {
   final Student student;
@@ -32,6 +32,7 @@ class StudentCard extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 16),
       elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Row(
