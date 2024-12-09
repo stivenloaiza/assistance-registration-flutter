@@ -1,4 +1,5 @@
 import 'package:asia_project/widgets/custom_apbar_admin.dart';
+import 'package:asia_project/widgets/floating_button_widget.dart';
 import 'package:asia_project/widgets/user_card_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -44,6 +45,8 @@ class UsersPage extends StatelessWidget {
               ],
             ),
           ),
-        ));
+        ),
+        floatingActionButton: const FloatingButton(),
+        );
   }
 }
