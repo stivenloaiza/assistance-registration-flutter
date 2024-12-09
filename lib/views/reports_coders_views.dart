@@ -13,10 +13,8 @@ class ReportsCoders extends StatefulWidget {
 
 class _ReportsCodersState extends State<ReportsCoders> {
   final Map<String, String> attendanceChartRefs = {
-    'titleFirstValue': 'Justified Absence',
-    'titleSecondValue': 'Unjustified Absence',
-    'titleThirdValue': 'On-Time Attendance',
-    'titleFourthValue': 'Late Attendance',
+    'titleFirstValue': 'Absence',
+    'titleSecondValue': 'Attendance',
   };
 
   final List<ChartData> attendanceChartData = [
@@ -24,25 +22,16 @@ class _ReportsCodersState extends State<ReportsCoders> {
       barTitle: "Sandra Pérez",
       numberFirstValue: 10,
       numberSecondValue: 10,
-      numberThirdValue: 10,
-      numberFourthValue: 10,
-      average: 10,
     ),
     ChartData(
       barTitle: "Julian Sanders",
       numberFirstValue: 12,
       numberSecondValue: 8,
-      numberThirdValue: 10,
-      numberFourthValue: 10,
-      average: 10,
     ),
     ChartData(
       barTitle: "Mario Zapata",
       numberFirstValue: 15,
       numberSecondValue: 10,
-      numberThirdValue: 10,
-      numberFourthValue: 10,
-      average: 40,
     ),
   ];
 
@@ -53,9 +42,6 @@ class _ReportsCodersState extends State<ReportsCoders> {
         child: Column(
           children: [
             const HeaderCoder(),
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-            ),
             const FilterCoder(),
             BarChartWidget(
               chartTitle: "Attendance Chart",
