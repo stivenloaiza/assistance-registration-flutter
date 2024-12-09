@@ -16,9 +16,7 @@ class _HeaderCoderState extends State<HeaderCoder> {
     return Container(
       color: Colors.white,
       child: Padding(
-        padding: EdgeInsets.only(
-            top: 60.0,
-            left: 30.0), // Padding de 60 píxeles arriba y 30 a la izquierda
+        padding: EdgeInsets.only(top: 70.0, left: 30.0, bottom: 30.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -30,15 +28,15 @@ class _HeaderCoderState extends State<HeaderCoder> {
                   "REPORTES"),
             ),
             ElevatedButton(
-               style: ElevatedButton.styleFrom(
-                      elevation: 0.0, // Elimina la sombra del botón
-                    ),
+              style: ElevatedButton.styleFrom(
+                elevation: 0.0, // Elimina la sombra del botón
+              ),
               onPressed: () {
                 // Acción cuando se presiona el botón
                 print('Cerrar sesión');
               },
               child: Text(
-                style: TextStyle(color: Colors.black), 
+                style: TextStyle(color: Colors.black),
                 'Cerrar sesión',
               ),
             ),
