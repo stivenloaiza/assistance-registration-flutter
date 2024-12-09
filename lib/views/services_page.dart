@@ -26,22 +26,44 @@ class _ServicesPageState extends State<ServicesPage> {
       {
         "icon": Icons.warning,
         "title": "Dispositivos no autorizados",
+        'subtitle': 'Intento desde el dispositivo X123',
         "color": Colors.yellow,
+        'type': 'unauthorized_device',
       },
       {
         "icon": Icons.lock,
         "title": "Acceso fallido",
+        'subtitle': '3 intentos fallidos de inicio de sesión',
         "color": Colors.red,
+        'type': 'failed_access',
       },
       {
         "icon": Icons.schedule,
         "title": "Inactividad prolongada",
+        'subtitle': 'Usuario Pepito Pérez inactivo por 2 horas',
         "color": Colors.orange,
+        'type': 'long_inactivity',
       },
       {
         "icon": Icons.verified,
         "title": "Dispositivo autorizado",
+        'subtitle': 'Dispositivo Y456 autorizado con éxito',
         "color": Colors.blue,
+        'type': 'authorized_device',
+      },
+      {
+        "icon": Icons.warning,
+        "title": "Dispositivos no autorizados",
+        'subtitle': 'Intento desde el dispositivo Huawei123',
+        "color": Colors.yellow,
+        'type': 'unauthorized_device',
+      },
+      {
+        "icon": Icons.schedule,
+        "title": "Inactividad prolongada",
+        'subtitle': 'Usuario Juan Peña inactivo por 2 horas',
+        "color": Colors.orange,
+        'type': 'long_inactivity',
       },
     ];
 
@@ -147,7 +169,7 @@ class _ServicesPageState extends State<ServicesPage> {
                   return ServiceListTile(
                     icon: item['icon'],
                     title: item['title'],
-                    subtitle: "",
+                    subtitle: item['subtitle'],
                     color: item['color'],
                   );
                 },

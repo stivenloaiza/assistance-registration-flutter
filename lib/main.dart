@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -26,7 +25,6 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
-        
       ),
       initialRoute: '/', // Define la ruta inicial
       routes: {
@@ -34,7 +32,7 @@ class MyApp extends StatelessWidget {
         '/register': (context) => RegisterPage(),
         '/login': (context) => LoginPage(),
         // '/notifications': (context) => NotificationsScreen(),
-          // '/': (context) => ServicesPage(),
+        // '/': (context) => ServicesPage(),
       },
     );
   }
@@ -68,66 +66,65 @@ class _MyHomePageState extends State<MyHomePage> {
             //   '$_counter',
             //   style: Theme.of(context).textTheme.headlineMedium,
             // ),
-            const SizedBox(height: 20,),
             ElevatedButton(
-              onPressed: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DeviceManagementApp(),
-              ),
-            );
-            }, 
-            child: const Text("Device Management")
+              onPressed: () {
+                Navigator.pushNamed(
+                    context, '/register'); // Navega a la página de registro
+              },
+              child: const Text('Go to Register'),
             ),
-            const SizedBox(height: 20,),
+            const SizedBox(
+              height: 20,
+            ),
             ElevatedButton(
-              onPressed: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => NotificationsScreen(),
-              ),
-            );
-            }, 
-            child: const Text("Notifications")
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => LoginPage(),
+                    ),
+                  );
+                },
+                child: const Text("Login")),
+            const SizedBox(
+              height: 20,
             ),
-            const SizedBox(height: 20,),
             ElevatedButton(
-              onPressed: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ServicesPage(),
-              ),
-            );
-            }, 
-            child: const Text("ServicePage")
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DeviceManagementApp(),
+                    ),
+                  );
+                },
+                child: const Text("Device Management")),
+            const SizedBox(
+              height: 20,
             ),
-            const SizedBox(height: 20,),
             ElevatedButton(
-              onPressed: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => LoginPage(),
-              ),
-            );
-            }, 
-            child: const Text("Login")
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NotificationsScreen(),
+                    ),
+                  );
+                },
+                child: const Text("Notifications")),
+            const SizedBox(
+              height: 20,
             ),
-            const SizedBox(height: 20,),
             ElevatedButton(
-              onPressed: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => RegisterPage(),
-              ),
-            );
-            }, 
-            child: const Text("register")
-            ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ServicesPage(),
+                    ),
+                  );
+                },
+                child: const Text("ServicePage")),
           ],
         ),
       ),

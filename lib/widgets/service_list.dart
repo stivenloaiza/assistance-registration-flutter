@@ -46,23 +46,55 @@ class ServiceListTile extends StatelessWidget {
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 4),
-                Text(
-                  subtitle,
-                  style: TextStyle(color: const Color.fromARGB(255, 128, 124, 124)),
-                ),
               ],
             ),
           ),
           TextButton(
-  onPressed: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => NotificationsScreen()),
-    );
-  },
-  child: Text("Ver notificación"),
-)
-
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text("Detalles de la notificación"),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(icon, color: color, size: 48),
+                        SizedBox(height: 16),
+                        Text(
+                          title,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          subtitle.isNotEmpty
+                              ? subtitle
+                              : "No hay información adicional disponible.",
+                          style: TextStyle(
+                            color: Colors.grey.shade700,
+                            fontSize: 14,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context); // Cierra la modal
+                        },
+                        child: Text("Cerrar"),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            child: Text("Ver notificación"),
+          )
         ],
       ),
     );
