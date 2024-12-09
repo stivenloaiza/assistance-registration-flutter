@@ -11,17 +11,27 @@ class NotificationList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: notifications.length,
-      itemBuilder: (context, index) {
-        final notification = notifications[index];
-        return CardNotification(
-          title: notification['title'] ?? 'Sin título',
-          subtitle: notification['subtitle'] ?? 'Sin detalles',
-          timestamp: notification['timestamp'] ?? 'Sin fecha',
-          notificationType: notification['type'] ?? 'default',
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints contraints) {
+        double maxWidth = contraints.maxWidth;
+        return Center(
+          child: SizedBox(
+            width: maxWidth > 800 ? 800 : maxWidth,
+            child: ListView.builder(
+              itemCount: notifications.length,
+              itemBuilder: (context, index) {
+                final notification = notifications[index];
+                return CardNotification(
+                  title: notification['title'] ?? 'Sin título',
+                  subtitle: notification['subtitle'] ?? 'Sin detalles',
+                  timestamp: notification['timestamp'] ?? 'Sin fecha',
+                  notificationType: notification['type'] ?? 'default',
+                );
+              },
+            ),
+          ),
         );
-      },
+      }
     );
   }
 }
