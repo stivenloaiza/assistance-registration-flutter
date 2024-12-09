@@ -13,8 +13,8 @@ class PaginationWidget extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
 
    
-    double buttonSize = screenWidth < 400 ? 10 : 16;
-    double iconPadding = screenWidth < 400 ? 8 : 12;
+    double buttonSize = screenWidth < 400 ? 4 : 12;
+    double iconPadding = screenWidth < 400 ? 3 : 8;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,

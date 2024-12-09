@@ -14,6 +14,7 @@ class _HeaderCoderState extends State<HeaderCoder> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Colors.white,
       child: Padding(
         padding: EdgeInsets.only(
             top: 60.0,
@@ -21,27 +22,24 @@ class _HeaderCoderState extends State<HeaderCoder> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            IconWidget(),
             Padding(
               padding: EdgeInsets.only(
                   right: 16.0), // Padding adicional a la derecha
               child: Text(
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  "Mis reportes"),
+                  "REPORTES"),
             ),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
-                side: BorderSide(color: Colors.white, width: 2), // Borde blanco
-                padding: EdgeInsets.symmetric(horizontal: 8),
-              ),
+               style: ElevatedButton.styleFrom(
+                      elevation: 0.0, // Elimina la sombra del botón
+                    ),
               onPressed: () {
                 // Acción cuando se presiona el botón
-                print('Iniciar sesión');
+                print('Cerrar sesión');
               },
               child: Text(
+                style: TextStyle(color: Colors.black), 
                 'Cerrar sesión',
-                style: TextStyle(color: Colors.white), // Estilo del texto
               ),
             ),
           ],

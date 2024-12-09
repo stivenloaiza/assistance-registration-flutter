@@ -52,7 +52,6 @@ class _StudentTableState extends State<StudentTable> {
   Widget build(BuildContext context) {
     return Container(
         child: Column(children: [
-      const Text('Tabla de Estudiantes'),
       SingleChildScrollView(
         child: Padding(
 
