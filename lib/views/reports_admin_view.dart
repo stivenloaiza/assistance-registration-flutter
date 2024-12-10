@@ -50,7 +50,6 @@ class _ReportsAdminState extends State<ReportsAdmin> {
               data: attendanceChartData,
             ),
 
-            StudentTable(),
             CustomLineChart(
   data: [30, 60, 90, 70, 50], 
   ref: ['Ene', 'Feb', 'Mar', 'Abr', 'May'], 
