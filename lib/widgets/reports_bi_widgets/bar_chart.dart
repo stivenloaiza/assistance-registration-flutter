@@ -15,10 +15,8 @@ class BarChartWidget extends StatefulWidget {
     this.backgroundColor = Colors.white,
   });
 
-  final Color firstBarColor = const Color.fromRGBO(22, 219, 204, 1);
-  final Color secondBarColor = const Color.fromRGBO(255, 130, 172, 1);
-  final Color thirdBarColor = const Color.fromARGB(255, 22, 219, 71);
-  final Color fourthBarColor = const Color.fromARGB(255, 255, 211, 130);
+  final Color firstBarColor = const Color.fromRGBO(252, 121, 0, 1);
+  final Color secondBarColor = const Color.fromRGBO(24, 20, 243, 1);
   final Color avgColor = const Color.fromRGBO(181, 181, 181, 1);
 
   @override
@@ -38,12 +36,7 @@ class _BarChartWidgetState extends State<BarChartWidget> {
       final index = entry.key;
       final chartData = entry.value;
       return makeGroupData(
-        index,
-        chartData.numberFirstValue,
-        chartData.numberSecondValue,
-        chartData.numberThirdValue ?? 0,
-        chartData.numberFourthValue ?? 0,
-      );
+          index, chartData.numberFirstValue, chartData.numberSecondValue);
     }).toList();
 
     showingBarGroups = List.of(barGroups);
@@ -59,9 +52,7 @@ class _BarChartWidgetState extends State<BarChartWidget> {
       0,
       (previousMax, element) => [
         element.numberFirstValue,
-        element.numberSecondValue,
-        element.numberThirdValue ?? 0,
-        element.numberFourthValue ?? 0,
+        element.numberSecondValue
       ].reduce((a, b) => a > b ? a : b).clamp(previousMax, double.infinity),
     ));
 
@@ -74,14 +65,12 @@ class _BarChartWidgetState extends State<BarChartWidget> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             const SizedBox(height: 20),
-            Center(
-              child: Text(
-                widget.chartTitle,
-                style: const TextStyle(
-                  color: Color.fromRGBO(181, 181, 181, 1),
-                  fontSize: 22,
-                  fontFamily: 'Helvetica',
-                ),
+            Text(
+              widget.chartTitle,
+              style: const TextStyle(
+                color: Color.fromRGBO(181, 181, 181, 1),
+                fontSize: 22,
+                fontFamily: 'Helvetica',
               ),
             ),
             const SizedBox(height: 20),
@@ -217,17 +206,12 @@ class _BarChartWidgetState extends State<BarChartWidget> {
 
   Widget _buildLegend() {
     return SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
+        scrollDirection: Axis.horizontal,
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             _legendItem(widget.firstBarColor, widget.ref['titleFirstValue']!),
-            _legendItem(widget.secondBarColor, widget.ref['titleSecondValue']!),
-            if (widget.ref['titleThirdValue'] != null)
-              _legendItem(widget.thirdBarColor, widget.ref['titleThirdValue']!),
-            if (widget.ref['titleFourthValue'] != null)
-              _legendItem(
-                  widget.fourthBarColor, widget.ref['titleFourthValue']!),
+            _legendItem(widget.secondBarColor, widget.ref['titleSecondValue']!)
           ],
         ));
   }
@@ -245,8 +229,7 @@ class _BarChartWidgetState extends State<BarChartWidget> {
         ));
   }
 
-  BarChartGroupData makeGroupData(
-      int x, double y1, double y2, double y3, double y4) {
+  BarChartGroupData makeGroupData(int x, double y1, double y2) {
     return BarChartGroupData(
       barsSpace: 4,
       x: x,
@@ -261,16 +244,6 @@ class _BarChartWidgetState extends State<BarChartWidget> {
           color: widget.secondBarColor,
           width: barWidth,
         ),
-        BarChartRodData(
-          toY: y3,
-          color: widget.thirdBarColor,
-          width: barWidth,
-        ),
-        BarChartRodData(
-          toY: y4,
-          color: widget.fourthBarColor,
-          width: barWidth,
-        ),
       ],
     );
   }
@@ -280,16 +253,11 @@ class ChartData {
   final String barTitle;
   final double numberFirstValue;
   final double numberSecondValue;
-  final double? numberThirdValue;
-  final double? numberFourthValue;
   final double average;
 
   ChartData({
     required this.barTitle,
     required this.numberFirstValue,
     required this.numberSecondValue,
-    this.numberThirdValue,
-    this.numberFourthValue,
-    required this.average,
-  });
+  }) : average = (numberFirstValue + numberSecondValue) / 2;
 }

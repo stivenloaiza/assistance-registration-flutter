@@ -8,7 +8,6 @@ class FilterAdmin extends StatefulWidget {
 }
 
 class _FilterAdminState extends State<FilterAdmin> {
-  
   int? selectedGroup;
 
   @override
@@ -17,19 +16,16 @@ class _FilterAdminState extends State<FilterAdmin> {
       color: Colors.white,
       child: Column(
         children: [
+          const SizedBox(height: 10),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-             
                 Row(
                   children: [
-                    Text(
-                      'Grupos:', // Título "Grupo"
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(width: 12), // Espacio entre el título y el dropdown
+                    Image.asset('assets/images/filtra-logo.png', width: 100.0),
+                    const SizedBox(width: 12),
                     // Selector de grupo (1-5)
                     Expanded(
                       child: DropdownButtonFormField<int>(
@@ -46,8 +42,33 @@ class _FilterAdminState extends State<FilterAdmin> {
                             child: Text("Grupo ${index + 1}"),
                           );
                         }),
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
+                        dropdownColor: const Color.fromRGBO(255, 255, 255, 1),
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: const Color.fromRGBO(247, 242, 250, 1),
+                          border: InputBorder.none,
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(40),
+                            borderSide: BorderSide.none,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(40),
+                            borderSide: BorderSide.none,
+                          ),
+                          disabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(40),
+                            borderSide: BorderSide.none,
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(40),
+                            borderSide: BorderSide.none,
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(40),
+                            borderSide: BorderSide.none,
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 15),
                         ),
                       ),
                     ),
@@ -58,7 +79,7 @@ class _FilterAdminState extends State<FilterAdmin> {
                 // Botón de aplicar filtro
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    elevation: 0.0, // Elimina la sombra del botón
+                    elevation: 0.0,
                   ),
                   onPressed: () {
                     // Lógica para aplicar el filtro
