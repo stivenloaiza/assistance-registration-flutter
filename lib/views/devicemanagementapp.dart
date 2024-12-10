@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(DeviceManagementApp());
 }
 
@@ -20,14 +24,12 @@ class DeviceManagementScreen extends StatefulWidget {
 }
 
 class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
-  List<Map<String, dynamic>> devices = [
-    {"id": "firebase-id-1", "name": "iPad 9A", "location": "Piso 4 Black Bird", "status": "Activo", "loginCode": "123456"},
-    {"id": "firebase-id-2", "name": "Cámara B", "location": "Pasillo", "status": "Inactivo", "loginCode": "654321"},
-    {"id": "firebase-id-3", "name": "Router C", "location": "Oficina", "status": "Activo", "loginCode": "789012"},
-  ];
+  final CollectionReference devicesCollection =
+      FirebaseFirestore.instance.collection('devices');
 
   final _formKey = GlobalKey<FormState>();
-  String? _deviceName, _deviceLocation, _deviceStatus, _loginCode;
+  String? _deviceName, _deviceLocation, _loginCode;
+  bool? _deviceStatus;
   bool isEditing = false;
   String? editingDeviceId;
 
@@ -37,8 +39,8 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
       editingDeviceId = device?['id'];
       _deviceName = device?['name'];
       _deviceLocation = device?['location'];
-      _deviceStatus = device?['status'];
       _loginCode = device?['loginCode'];
+      _deviceStatus = device?['status'] ?? false;
     });
 
     showModalBottomSheet(
@@ -75,15 +77,19 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                     value == null || value.isEmpty ? 'Campo requerido' : null,
                 onSaved: (value) => _deviceLocation = value,
               ),
-              DropdownButtonFormField<String>(
+              DropdownButtonFormField<bool>(
                 value: _deviceStatus,
                 decoration: InputDecoration(labelText: 'Estado'),
-                items: ['Activo', 'Inactivo']
-                    .map((status) => DropdownMenuItem(
-                          value: status,
-                          child: Text(status),
-                        ))
-                    .toList(),
+                items: [
+                  DropdownMenuItem(
+                    value: true,
+                    child: Text('Activo'),
+                  ),
+                  DropdownMenuItem(
+                    value: false,
+                    child: Text('Inactivo'),
+                  ),
+                ],
                 onChanged: (value) => setState(() => _deviceStatus = value),
                 validator: (value) =>
                     value == null ? 'Seleccione un estado' : null,
@@ -116,43 +122,33 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
     );
   }
 
-  void _saveDevice() {
+  Future<void> _saveDevice() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
       if (isEditing) {
         // Actualizar un dispositivo existente
-        setState(() {
-          final deviceIndex =
-              devices.indexWhere((device) => device['id'] == editingDeviceId);
-          devices[deviceIndex] = {
-            "id": editingDeviceId,
-            "name": _deviceName!,
-            "location": _deviceLocation!,
-            "status": _deviceStatus!,
-            "loginCode": _loginCode!, // Permitir editar el código de inicio de sesión
-          };
+        await devicesCollection.doc(editingDeviceId).update({
+          "name": _deviceName!,
+          "location": _deviceLocation!,
+          "status": _deviceStatus!,
+          "loginCode": _loginCode!,
         });
       } else {
         // Crear un nuevo dispositivo
-        setState(() {
-          devices.add({
-            "id": "firebase-id-${devices.length + 1}", // Simula un ID de Firebase
-            "name": _deviceName!,
-            "location": _deviceLocation!,
-            "status": _deviceStatus!,
-            "loginCode": _loginCode!, // Usar el código ingresado por el usuario
-          });
+        await devicesCollection.add({
+          "name": _deviceName!,
+          "location": _deviceLocation!,
+          "status": _deviceStatus!,
+          "loginCode": _loginCode!,
         });
       }
       Navigator.of(context).pop();
     }
   }
 
-  void _deleteDevice(String id) {
-    setState(() {
-      devices.removeWhere((device) => device['id'] == id);
-    });
+  Future<void> _deleteDevice(String id) async {
+    await devicesCollection.doc(id).delete();
   }
 
   @override
@@ -161,33 +157,45 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
       appBar: AppBar(
         title: Text('Administración de Dispositivos'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ListView.builder(
-          itemCount: devices.length,
-          itemBuilder: (context, index) {
-            final device = devices[index];
-            return Card(
-              child: ListTile(
-                title: Text(device['name']),
-                subtitle: Text('Ubicación: ${device['location']} - Código: ${device['loginCode']}'),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.edit, color: Colors.blue),
-                      onPressed: () => _openModal(device: device),
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.delete, color: Colors.red),
-                      onPressed: () => _deleteDevice(device['id']),
-                    ),
-                  ],
+      body: StreamBuilder<QuerySnapshot>(
+        stream: devicesCollection.snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+          final devices = snapshot.data!.docs.map((doc) {
+            return {
+              "id": doc.id,
+              ...doc.data() as Map<String, dynamic>,
+            };
+          }).toList();
+          return ListView.builder(
+            itemCount: devices.length,
+            itemBuilder: (context, index) {
+              final device = devices[index];
+              return Card(
+                child: ListTile(
+                  title: Text(device['name']),
+                  subtitle: Text(
+                      'Ubicación: ${device['location']} - Código: ${device['loginCode']}'),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.edit, color: Colors.blue),
+                        onPressed: () => _openModal(device: device),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.delete, color: Colors.red),
+                        onPressed: () => _deleteDevice(device['id']),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            );
-          },
-        ),
+              );
+            },
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _openModal(),
