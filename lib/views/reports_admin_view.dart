@@ -120,6 +120,7 @@ class _ReportsAdminState extends State<ReportsAdmin> {
                 }
               },
             ),
+
             StudentTable(),
             CustomPieChart(
               chartTitle: 'Attendance Overview',
@@ -132,6 +133,8 @@ class _ReportsAdminState extends State<ReportsAdmin> {
               data: [30, 60, 90, 70, 50],
               ref: ['', 'Jan', 'May', 'Sep'],
             ),
+
+
           ],
         ),
       ),
