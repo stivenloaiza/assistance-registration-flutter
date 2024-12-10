@@ -1,3 +1,4 @@
+import 'package:asia_project/controllers/attendance_controller.dart';
 import 'package:asia_project/models/attendance_model.dart';
 import 'package:asia_project/services/attendance_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -12,15 +13,15 @@ class TestView extends StatefulWidget {
 
 class _TestViewState extends State<TestView> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
   late Future<List<AttendanceModel>> _attendeceFuture;
 
   @override
   void initState() {
     super.initState();
     // Inicializamos la lista de asistencia al cargar la vista
-    final AttendanceService attendanceService = AttendanceService(firestore: _firestore);
-    _attendeceFuture = attendanceService.getAllAttendance();
+    final AttendanceService _attendanceService = AttendanceService(firestore: _firestore);
+    final AttendanceController _attendanceController = AttendanceController(_attendanceService);
+    _attendeceFuture = _attendanceController.findAllAttendance();
   }
 
   @override
