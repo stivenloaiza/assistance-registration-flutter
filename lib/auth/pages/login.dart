@@ -24,19 +24,18 @@ class _LoginPageState extends State<LoginPage> {
       User? user = userCredential.user;
 
       if (user != null) {
-        // Obtener la referencia al documento del usuario en Firestore
+
         DocumentReference userDoc =
             _firestore.collection('users').doc(user.uid);
 
-        // Obtener los datos del usuario
+
         DocumentSnapshot doc = await userDoc.get();
         if (doc.exists) {
-          // Acceder a los datos del usuario, por ejemplo:
+
           String nombre = doc['nombre'];
           print('Nombre del usuario: $nombre');
         } else {
           print('No se encontró el documento del usuario en Firestore');
-          // Puedes crear un nuevo documento para el usuario si es necesario
         }
 
         if (doc.exists) {
@@ -164,11 +163,10 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                // ... (código anterior) ...
+
                 const SizedBox(
                     height:
-                        20), // Espacio entre el botón principal y los nuevos
-// Botones de registro e inicio de sesión con dispositivo
+                        20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -176,13 +174,13 @@ class _LoginPageState extends State<LoginPage> {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
-                          // Navegación a la página de registro
+                          // Navegación registro
                           Navigator.pushNamed(context,
-                              '/register'); // Reemplaza '/register' con la ruta correcta
+                              '/register');
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor:
-                              Colors.grey[300], // Color de fondo gris claro
+                              Colors.grey[300],
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -195,13 +193,13 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     const SizedBox(width: 20),
-                    // Botón Login Device
+
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
-                          // Navegación a la página de login con dispositivo
+                          // Navegación login
                           Navigator.pushNamed(context,
-                              '/loginDevice'); // Reemplaza '/loginDevice' con la ruta correcta
+                              '/loginDevice');
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF007BFF),

@@ -19,7 +19,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  bool _acceptTerms = false; // Estado del checkbox
+  bool _acceptTerms = false;
 
   Future<void> _selectFechaNacimiento() async {
     DateTime? pickedDate = await showDatePicker(
