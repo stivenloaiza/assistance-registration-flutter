@@ -30,7 +30,7 @@ class _ReportsCodersState extends State<ReportsCoders> {
   );
 
   // Widget futuro para gráficos
-  late Future<BarChartWidget> attendanceWidget;
+  late Future<BarChartWidget> _attendanceWidget;
 
   @override
   void initState() {
@@ -38,13 +38,7 @@ class _ReportsCodersState extends State<ReportsCoders> {
     // Inicialización de servicio y controlador
     _attendanceService = AttendanceService(firestore: _firestore);
     _attendanceController = AttendanceController(_attendanceService);
-
-    // Inicializa el widget futuro
-    attendanceWidget = Future.value(BarChartWidget(
-      userId: userId,
-      dateRange: dateRange,
-      chartTitle: "Attendance Overview",
-    ));
+    _attendanceWidget = _attendanceController.buildAttendanceWidget(userId, dateRange, "Attendance Overview");
   }
 
   @override
@@ -57,7 +51,7 @@ class _ReportsCodersState extends State<ReportsCoders> {
             const FilterCoder(),
             // Builder para el gráfico de barras
             FutureBuilder<BarChartWidget>(
-              future: attendanceWidget,
+              future: _attendanceWidget,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CircularProgressIndicator();
