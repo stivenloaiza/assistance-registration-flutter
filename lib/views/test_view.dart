@@ -1,5 +1,5 @@
 import 'package:asia_project/models/attendance_model.dart';
-import 'package:asia_project/services/firebaseService.dart';
+import 'package:asia_project/services/attendance_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -11,14 +11,16 @@ class TestView extends StatefulWidget {
 }
 
 class _TestViewState extends State<TestView> {
-  final FirebaseService _firebaseService = FirebaseService();
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   late Future<List<AttendanceModel>> _attendeceFuture;
 
   @override
   void initState() {
     super.initState();
     // Inicializamos la lista de asistencia al cargar la vista
-    _attendeceFuture = _firebaseService.getAllAttendance();
+    final AttendanceService attendanceService = AttendanceService(firestore: _firestore);
+    _attendeceFuture = attendanceService.getAllAttendance();
   }
 
   @override
