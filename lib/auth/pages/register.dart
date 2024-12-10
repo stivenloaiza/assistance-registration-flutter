@@ -19,7 +19,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  bool _acceptTerms = false; // Estado del checkbox
+  bool _acceptTerms = false;
 
   Future<void> _selectFechaNacimiento() async {
     DateTime? pickedDate = await showDatePicker(
@@ -56,14 +56,25 @@ class _RegisterPageState extends State<RegisterPage> {
 
       if (user != null) {
         await _firestore.collection('users').doc(user.uid).set({
-          'nombre': _nombre,
-          'tipoDocumento': _tipoDocumento,
-          'numeroDocumento': _numeroDocumento,
-          'fechaNacimiento': _fechaNacimiento?.toIso8601String(),
-          'email': user.email,
           'uid': user.uid,
-          'status': 'active',
+          'id': user.uid,
+          'name': _nombre,
+          'type_Doc': _tipoDocumento,
+          'document_number': _numeroDocumento,
+          'birth_date': _fechaNacimiento?.toIso8601String(),
+          'email': user.email,
+          'photo': '',
           'role': 'postulante',
+          'status': 'inactivo',
+          'face_data': '',
+          'otp': 0,
+          'terms': '',
+          'created_by': '',
+          'created_at': DateTime.now().toIso8601String(),
+          'deleted_at': '',
+          'deleted_by': '',
+          'updated_at': '',
+          'updated_by': '',
         });
 
         print('Usuario registrado: ${user.email}');
@@ -273,4 +284,5 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 }
+
 

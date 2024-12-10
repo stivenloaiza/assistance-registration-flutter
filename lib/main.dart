@@ -1,3 +1,5 @@
+import 'package:asia_project/auth/pages/admin_test.dart';
+import 'package:asia_project/auth/pages/home_test.dart';
 import 'package:asia_project/auth/pages/login.dart';
 import 'package:asia_project/auth/pages/register.dart';
 import 'package:asia_project/views/devicemanagementapp.dart';
@@ -23,7 +25,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'Asia',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
@@ -34,6 +37,8 @@ class MyApp extends StatelessWidget {
         '/register': (context) => RegisterPage(),
         '/login': (context) => LoginPage(),
         '/loginDevice' : (context) => login_devices(),
+        '/admin_test' : (context) => AdminTest(),
+        '/home_test' : (context) => HomeTest(),
         // '/notifications': (context) => NotificationsScreen(),
         // '/': (context) => ServicesPage(),
       },
@@ -76,48 +81,19 @@ class _MyHomePageState extends State<MyHomePage> {
               },
               child: const Text('Go to Register'),
             ),
-            const SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 20,),
             ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => LoginPage(),
-                    ),
-                  );
-                },
-                child: const Text("Login")),
-            const SizedBox(
-              height: 20,
+              onPressed: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DeviceManagementApp(),
+              ),
+            );
+            },
+            child: const Text("Device Management")
             ),
-            ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => DeviceManagementApp(),
-                    ),
-                  );
-                },
-                child: const Text("Device Management")),
-            const SizedBox(
-              height: 20,
-            ),
-            ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => NotificationsScreen(),
-                    ),
-                  );
-                },
-                child: const Text("Notifications")),
-            const SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 20,),
             ElevatedButton(
               onPressed: (){
                 Navigator.push(
@@ -126,8 +102,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     builder: (context) => NotificationsPage(),
               ),
             );
-            }, 
-            child: const Text("ServicePage")
+            },
+            child: const Text("Vista notificaciones")
             ),
             const SizedBox(height: 20,),
             ElevatedButton(
@@ -138,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     builder: (context) => LoginPage(),
               ),
             );
-            }, 
+            },
             child: const Text("Login")
             ),
             const SizedBox(height: 20,),
@@ -147,22 +123,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => RegisterPage(),
-              ),
-            );
-            }, 
-            child: const Text("register")
-            ),
-             const SizedBox(height: 20,),
-            ElevatedButton(
-              onPressed: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
                     builder: (context) => login_devices(),
               ),
             );
-            }, 
+            },
             child: const Text("login devices")
             )
           ],
@@ -171,5 +135,3 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-
-// anton tiruriruirur

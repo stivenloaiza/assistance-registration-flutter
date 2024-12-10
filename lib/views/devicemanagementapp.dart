@@ -127,7 +127,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
       _formKey.currentState!.save();
 
       if (isEditing) {
-        // Actualizar un dispositivo existente
+
         await devicesCollection.doc(editingDeviceId).update({
           "name": _deviceName!,
           "location": _deviceLocation!,
@@ -135,7 +135,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
           "loginCode": _loginCode!,
         });
       } else {
-        // Crear un nuevo dispositivo
+
         await devicesCollection.add({
           "name": _deviceName!,
           "location": _deviceLocation!,
