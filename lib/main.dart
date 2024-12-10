@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
         '/admin_test' : (context) => AdminTest(),
         '/home_test' : (context) => HomeTest(),
         // '/notifications': (context) => NotificationsScreen(),
-          // '/': (context) => ServicesPage(),
+        // '/': (context) => ServicesPage(),
       },
     );
   }
@@ -74,6 +74,13 @@ class _MyHomePageState extends State<MyHomePage> {
             //   '$_counter',
             //   style: Theme.of(context).textTheme.headlineMedium,
             // ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(
+                    context, '/register'); // Navega a la página de registro
+              },
+              child: const Text('Go to Register'),
+            ),
             const SizedBox(height: 20,),
             ElevatedButton(
               onPressed: (){
@@ -92,23 +99,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => NotificationsScreen(),
+                    builder: (context) => NotificationsPage(),
               ),
             );
             },
-            child: const Text("Notifications")
-            ),
-            const SizedBox(height: 20,),
-            ElevatedButton(
-              onPressed: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ServicesPage(),
-              ),
-            );
-            },
-            child: const Text("ServicePage")
+            child: const Text("Vista notificaciones")
             ),
             const SizedBox(height: 20,),
             ElevatedButton(
@@ -123,18 +118,6 @@ class _MyHomePageState extends State<MyHomePage> {
             child: const Text("Login")
             ),
             const SizedBox(height: 20,),
-            ElevatedButton(
-              onPressed: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => RegisterPage(),
-              ),
-            );
-            },
-            child: const Text("register")
-            ),
-             const SizedBox(height: 20,),
             ElevatedButton(
               onPressed: (){
                 Navigator.push(

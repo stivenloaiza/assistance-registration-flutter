@@ -16,10 +16,16 @@ class login_devices extends StatelessWidget {
       home: LoginScreen(),
     );
   }
+} 
+
+class LoginScreen extends StatefulWidget {
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
-class LoginScreen extends StatelessWidget {
+class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _loginCodeController = TextEditingController();
+  int _failedAttempts = 0;
 
   Future<void> _validateLoginCode(BuildContext context) async {
     final loginCode = _loginCodeController.text.trim();
@@ -40,6 +46,9 @@ class LoginScreen extends StatelessWidget {
 
     if (querySnapshot.docs.isNotEmpty) {
       // Código encontrado, navegar a la siguiente pantalla
+      setState(() {
+        _failedAttempts = 0;
+      });
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -48,10 +57,35 @@ class LoginScreen extends StatelessWidget {
       );
     } else {
       // Código no encontrado, mostrar un mensaje de error
+      setState(() {
+        _failedAttempts++;
+      });
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Código incorrecto. Inténtalo nuevamente.')),
       );
+
+      if (_failedAttempts >= 3) {
+        await _registerFailedAccessNotification();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Se ha registrado un intento fallido en las notificaciones.')),
+        );
+
+        setState(() {
+          _failedAttempts = 0;
+        });
+      }
     }
+  }
+
+  Future<void> _registerFailedAccessNotification() async {
+    final timestamp = DateTime.now();
+    await FirebaseFirestore.instance.collection('notifications_device').add({
+      'type': 'failed_access',
+      'title': 'Acceso fallido',
+      'subtitle': 'Se realizaron múltiples intentos fallidos con un código incorrecto.',
+      'timestamp': timestamp.toIso8601String(),
+    });
   }
 
   @override
