@@ -1,13 +1,13 @@
 import 'package:asia_project/views/notifications_screen.dart';
 import 'package:flutter/material.dart';
 
-class ServiceListTile extends StatelessWidget {
+class NotificationsListTile extends StatelessWidget {
   final IconData icon;
   final String title;
   final String subtitle;
   final Color color;
 
-  const ServiceListTile({
+  const NotificationsListTile({
     required this.icon,
     required this.title,
     required this.subtitle,
