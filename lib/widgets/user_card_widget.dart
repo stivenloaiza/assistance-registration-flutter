@@ -4,7 +4,7 @@ import 'package:asia_project/widgets/user_information_widget.dart';
 import 'package:flutter/material.dart';
 
 class UserCard extends StatelessWidget {
-  const UserCard({super.key});
+  const UserCard({super.key, required String name, required String email, required String documentNumber, required String imageUrl});
 
   @override
   Widget build(BuildContext context) {
