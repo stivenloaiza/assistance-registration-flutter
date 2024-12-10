@@ -88,9 +88,9 @@ class AttendanceController implements AttendancePort{
     return BarChartWidget(
       chartTitle: chartTitle,
       ref: {
-        'titleFirstValue': 'Absent',
-        'titleSecondValue': 'On-Time',
-        'titleThirdValue': 'Late',
+        'titleFirstValue': 'Ausencia',
+        'titleSecondValue': 'Presente',
+        'titleThirdValue': 'Retraso',
       },
       data: chartData,
     );

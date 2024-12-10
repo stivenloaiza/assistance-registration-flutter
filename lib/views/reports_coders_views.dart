@@ -38,7 +38,8 @@ class _ReportsCodersState extends State<ReportsCoders> {
     // Inicialización de servicio y controlador
     _attendanceService = AttendanceService(firestore: _firestore);
     _attendanceController = AttendanceController(_attendanceService);
-    _attendanceWidget = _attendanceController.buildAttendanceWidget(userId, dateRange, "Attendance Overview");
+    _attendanceWidget = _attendanceController.buildAttendanceWidget(
+        userId, dateRange, "Visualización de Asistencia");
   }
 
   @override
@@ -62,16 +63,7 @@ class _ReportsCodersState extends State<ReportsCoders> {
                 }
               },
             ),
-            // Gráfico de pastel
-            CustomPieChart(
-              chartTitle: 'Attendance Overview',
-              data: [
-                PieData(pieTitle: 'Present', pieValue: 70, color: Colors.blue),
-                PieData(pieTitle: 'Absent', pieValue: 20, color: Colors.red),
-              ],
-            ),
-            // Gráfico de línea
-            const CustomLineChart(
+            CustomLineChart(
               data: [30, 60, 90, 70, 50],
               ref: ['', 'Jan', 'May', 'Sep'],
             ),

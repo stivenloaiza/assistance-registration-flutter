@@ -65,7 +65,7 @@ class _CustomPieChartState extends State<CustomPieChart> {
                             },
                           ),
                           sectionsSpace: 2,
-                          centerSpaceRadius: 40,
+                          centerSpaceRadius: 60,
                           sections: _generateSections(
                               totalValue, hasMissingPercentage),
                         ),

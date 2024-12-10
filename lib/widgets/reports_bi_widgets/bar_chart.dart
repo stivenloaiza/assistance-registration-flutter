@@ -17,7 +17,7 @@ class BarChartWidget extends StatefulWidget {
 
   final Color firstBarColor = const Color.fromRGBO(252, 121, 0, 1);
   final Color secondBarColor = const Color.fromRGBO(24, 20, 243, 1);
-  final Color thirdBarColor = const Color.fromRGBO(31, 153, 230, 1);
+  final Color thirdBarColor = const Color.fromARGB(255, 125, 194, 237);
   final Color avgColor = const Color.fromRGBO(181, 181, 181, 1);
 
   @override
@@ -77,7 +77,7 @@ class _BarChartWidgetState extends State<BarChartWidget> {
             ),
             const SizedBox(height: 20),
             _buildLegend(),
-            const SizedBox(height: 20),
+            const SizedBox(height: 40),
             Expanded(
               child: BarChart(
                 BarChartData(
@@ -192,7 +192,7 @@ class _BarChartWidgetState extends State<BarChartWidget> {
                     show: true,
                     drawVerticalLine: false,
                     drawHorizontalLine: true,
-                    horizontalInterval: 5,
+                    horizontalInterval: 20,
                   ),
                   borderData: FlBorderData(show: false),
                   barGroups: showingBarGroups,
