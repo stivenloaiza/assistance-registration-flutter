@@ -20,13 +20,13 @@ class UserService{
     return users;
   }
   
-  Future<List<UserModel>> getByNameUser(String nameUser)async{
+  Future<List<UserModel>> getByProperty(String property, String valueProperty)async{
     List<UserModel> users = [];
     CollectionReference collectionReferenceUser = firestore.collection("users");
     try{
-      QuerySnapshot querySnapshot = await collectionReferenceUser.where("nombre",isEqualTo: nameUser).get();
+      QuerySnapshot querySnapshot = await collectionReferenceUser.where(property,isEqualTo: valueProperty).get();
       if(querySnapshot.docs.isEmpty){
-        print("No documents found $nameUser");
+        print("No documents found $property");
       }
       querySnapshot.docs.forEach((document){
         var userModel = UserModel.fromMap(document.data() as Map<String,dynamic>);
