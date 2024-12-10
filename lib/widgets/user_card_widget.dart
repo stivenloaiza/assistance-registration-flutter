@@ -1,10 +1,21 @@
-
 import 'package:asia_project/widgets/action_buttons_widget.dart';
 import 'package:asia_project/widgets/user_information_widget.dart';
 import 'package:flutter/material.dart';
 
 class UserCard extends StatelessWidget {
-  const UserCard({super.key, required String name, required String email, required String documentNumber, required String imageUrl});
+  final String name;
+  final String email;
+  final String documentNumber;
+  final String imageUrl;
+
+  // Constructor para recibir los parámetros
+  const UserCard({
+    super.key,
+    required this.name,
+    required this.email,
+    required this.documentNumber,
+    required this.imageUrl,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,15 +34,14 @@ class UserCard extends StatelessWidget {
           ),
         ],
       ),
-      child: const Row(
+      child: Row(
         children: [
           CircleAvatar(
             radius: 35.0,
-            backgroundImage: NetworkImage(
-                'https://http2.mlstatic.com/D_NQ_NP_994009-MLU73899741687_012024-O.webp'),
+            backgroundImage: NetworkImage(imageUrl), // Usamos el parámetro imageUrl
           ),
           SizedBox(width: 16.0),
-          UserInformation(),
+          UserInformation(name: name, email: email, documentNumber: documentNumber), // Pasamos los parámetros
           SizedBox(width: 16.0),
           ActionButtons(),
         ],

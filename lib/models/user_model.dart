@@ -4,7 +4,7 @@ class User {
   String createdBy;
   String deletedAt;
   String deletedBy;
-  int documentNumber;
+  String documentNumber;
   String email;
   String faceData;
   String name;
@@ -40,17 +40,20 @@ class User {
       createdBy: map['created_by'] ?? '',
       deletedAt: map['deleted_at'] ?? '',
       deletedBy: map['deleted_by'] ?? '',
-      documentNumber: map['document_number'] ?? 0,
+      documentNumber: map['document_number']?.toString() ?? '0',
       email: map['email'] ?? '',
       faceData: map['face_data'] ?? '',
       name: map['name'] ?? '',
-      otp: map['otp'] ?? 0,
+      otp: (map['otp'] != null) ? int.tryParse(map['otp'].toString()) ?? 0 : 0,
       photo: map['photo'] ?? '',
       role: map['role'] ?? '',
-      status: map['status'] ?? false,
+      status: map['status'] is String
+          ? (map['status'] == 'true')
+          : (map['status'] ?? false),
       terms: map['terms'] ?? '',
     );
   }
+
 
   // Método para convertir de un objeto User a un Map
   Map<String, dynamic> toMap() {

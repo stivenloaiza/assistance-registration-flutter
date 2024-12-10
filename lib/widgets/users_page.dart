@@ -5,7 +5,6 @@ import 'package:asia_project/widgets/user_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'; // Importa Firestore
 
-
 class UsersPage extends StatefulWidget {
   final bool isMobile;
   final VoidCallback onMenuPressed;
@@ -70,7 +69,7 @@ class _UsersPageState extends State<UsersPage> {
               if (_users.isEmpty)
                 const Center(child: CircularProgressIndicator())
               else
-                // Mostramos la lista de UserCards
+              // Mostramos la lista de UserCards
                 ..._users.map((user) {
                   return UserCard(
                     name: user.name,
