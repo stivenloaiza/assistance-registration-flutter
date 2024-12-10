@@ -47,7 +47,7 @@ class DefaultFirebaseOptions {
     projectId: 'asia-flutter-riwi',
     authDomain: 'asia-flutter-riwi.firebaseapp.com',
     storageBucket: 'asia-flutter-riwi.firebasestorage.app',
-    measurementId: 'G-JP1BB7MV3T',
+    measurementId: 'G-JP1BB7MV3T', databaseURL: "https://asia-flutter-riwi.firebaseio.com"
   );
 
   static const FirebaseOptions android = FirebaseOptions(
@@ -56,6 +56,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '810833966441',
     projectId: 'asia-flutter-riwi',
     storageBucket: 'asia-flutter-riwi.firebasestorage.app',
+    databaseURL: "https://asia-flutter-riwi.firebaseio.com"
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
@@ -65,6 +66,7 @@ class DefaultFirebaseOptions {
     projectId: 'asia-flutter-riwi',
     storageBucket: 'asia-flutter-riwi.firebasestorage.app',
     iosBundleId: 'io.riwi.asiaProject',
+      databaseURL: "https://asia-flutter-riwi-default-rtdb.firebaseio.com"
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
