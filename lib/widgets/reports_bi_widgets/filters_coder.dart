@@ -1,4 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:asia_project/models/group_model.dart';
+import 'package:asia_project/controllers/group_controller.dart';
+import 'package:asia_project/services/group_service.dart';
 
 class FilterCoder extends StatefulWidget {
   const FilterCoder({super.key});
@@ -8,9 +12,18 @@ class FilterCoder extends StatefulWidget {
 }
 
 class _FilterCoderState extends State<FilterCoder> {
-  // Variables para almacenar los valores seleccionados
-  int? selectedGroup;
+  String? selectedGroup;
   int? selectedNumber;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  late Future<List<GroupModel>> _groupFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    final GroupService _groupService = GroupService(firestore: _firestore);
+    final GroupController _groupController = GroupController(_groupService);
+    _groupFuture = _groupController.findAllGroup();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,35 +37,46 @@ class _FilterCoderState extends State<FilterCoder> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                // Fila con el título "Grupo" y el selector de grupo
+                // Row with the title group and the selector group
                 Row(
                   children: [
-                    Text(
-                      'Grupos:', // Título "Grupo"
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    const Text(
+                      'Groups:', // Title group
+                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                     ),
-                    const SizedBox(
-                        width: 12), // Espacio entre el título y el dropdown
-                    // Selector de grupo (1-5)
+                    const SizedBox(width: 10),
                     Expanded(
-                      child: DropdownButtonFormField<int>(
-                        value: selectedGroup,
-                        hint: const Text("Seleccionar grupo"),
-                        onChanged: (int? newValue) {
-                          setState(() {
-                            selectedGroup = newValue;
-                          });
+                      child: FutureBuilder<List<GroupModel>>(
+                        future: _groupFuture,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return const CircularProgressIndicator();
+                          } else if (snapshot.hasError) {
+                            return Text('Error: ${snapshot.error}');
+                          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                            return const Text('No groups available');
+                          } else {
+                            final groups = snapshot.data!;
+                            return DropdownButtonFormField<String>(
+                              value: selectedGroup,
+                              hint: const Text("Select group"),
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  selectedGroup = newValue;
+                                });
+                              },
+                              items: groups.map((group) {
+                                return DropdownMenuItem<String>(
+                                  value: group.description ?? "Not description",
+                                  child: Text(group.description ?? "Not description"),
+                                );
+                              }).toList(),
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                              ),
+                            );
+                          }
                         },
-                        items: List.generate(5, (index) {
-                          return DropdownMenuItem(
-                            value: index + 1,
-                            child: Text("Grupo ${index + 1}"),
-                          );
-                        }),
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                        ),
                       ),
                     ),
                   ],
@@ -60,18 +84,16 @@ class _FilterCoderState extends State<FilterCoder> {
                 const SizedBox(height: 16),
 
                 Row(
-                  mainAxisAlignment:
-                      MainAxisAlignment.spaceEvenly, // Distribuir botones
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     // Botón 1
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        elevation: 0.0, // Elimina la sombra del botón
+                        elevation: 0.0,
                       ),
                       onPressed: () {
                         setState(() {
-                          selectedNumber =
-                              1; // Establece el número seleccionado como 1
+                          selectedNumber = 1;
                         });
                         print("Botón 1 presionado");
                       },
@@ -83,29 +105,27 @@ class _FilterCoderState extends State<FilterCoder> {
                     // Botón 2
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        elevation: 0.0, // Elimina la sombra del botón
+                        elevation: 0.0,
                       ),
                       onPressed: () {
                         setState(() {
-                          selectedNumber =
-                              2; // Establece el número seleccionado como 2
+                          selectedNumber = 2;
                         });
                         print("Botón 2 presionado");
                       },
                       child: const Text(
-                        "Semena",
+                        "Semana",
                         style: TextStyle(color: Colors.black),
                       ),
                     ),
                     // Botón 3
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        elevation: 0.0, // Elimina la sombra del botón
+                        elevation: 0.0,
                       ),
                       onPressed: () {
                         setState(() {
-                          selectedNumber =
-                              3; // Establece el número seleccionado como 3
+                          selectedNumber = 3;
                         });
                         print("Botón 3 presionado");
                       },
@@ -117,12 +137,11 @@ class _FilterCoderState extends State<FilterCoder> {
                     // Botón 4
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        elevation: 0.0, // Elimina la sombra del botón
+                        elevation: 0.0,
                       ),
                       onPressed: () {
                         setState(() {
-                          selectedNumber =
-                              4; // Establece el número seleccionado como 4
+                          selectedNumber = 4;
                         });
                         print("Botón 4 presionado");
                       },
@@ -135,13 +154,13 @@ class _FilterCoderState extends State<FilterCoder> {
                 ),
                 const SizedBox(height: 16),
 
-                // Botón de aplicar filtro
+                // Botton apply filter
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    elevation: 0.0, // Elimina la sombra del botón
+                    elevation: 0.0,
                   ),
                   onPressed: () {
-                    // Lógica para aplicar el filtro
+                    // Logic for the filter
                     print("Grupo: $selectedGroup, Número: $selectedNumber");
                   },
                   child: const Text(

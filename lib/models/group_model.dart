@@ -13,6 +13,7 @@ class GroupModel{
   final String end_date;
   final String end_time;
   final String start_date;
+  final String start_time;
   final int time_tolerance;
   final String title;
   final List<String> users_id;
@@ -27,6 +28,7 @@ class GroupModel{
     required this.description,
     required this.device,
     required this.end_date,
+    required this.start_time,
     required this.end_time,
     required this.start_date,
     required this.time_tolerance,
@@ -45,11 +47,12 @@ class GroupModel{
       description: data["description"] ?? "",
       device: data["device"] ?? "",
       end_date: data["end_date"] ?? "",
+      start_time: data["start_time"] ?? "",
       end_time: data["end_time"] ?? "",
       start_date: data["start_date"] ?? "",
-      time_tolerance: data["time_tolerance"] ?? "",
+      time_tolerance: data["time_tolerance"] ?? 0,
       title: data["title"] ?? "",
-      users_id: data["user_id"] ?? "",
+      users_id: data["user_id"] ?? [""],
     );
   }
 
@@ -64,6 +67,7 @@ class GroupModel{
       "description": description,
       "device": device,
       "end_date": end_date,
+      "start_time": start_time,
       "end_time": end_time,
       "start_date": start_date,
       "time_tolerance": time_tolerance,
