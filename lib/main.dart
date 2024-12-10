@@ -35,6 +35,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => const MyHomePage(title: 'Flutter Demo Home Page'),
         '/register': (context) => RegisterPage(),
         '/login': (context) => LoginPage(),
+        '/loginDevice' : (context) => login_devices(),
         // '/notifications': (context) => NotificationsScreen(),
           // '/': (context) => ServicesPage(),
       },
