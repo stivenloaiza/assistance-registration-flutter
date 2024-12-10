@@ -1,5 +1,6 @@
 import 'package:asia_project/views/reports_admin_view.dart';
 import 'package:asia_project/views/reports_coders_views.dart';
+import 'package:asia_project/views/test_view.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart'; 
@@ -7,10 +8,11 @@ import 'firebase_options.dart';
 void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform, 
-  );
-  
+  if(Firebase.apps.isEmpty){
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  }
   runApp(MyApp());
 }
 
@@ -22,7 +24,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const ReportsAdmin(), 
+      home: const TestView(),
     );
   }
 }
