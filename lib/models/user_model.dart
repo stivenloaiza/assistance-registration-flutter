@@ -15,7 +15,7 @@ class UserModel {
   final int  otp;
   final String photo;
   final String role;
-  final bool status;
+  final String status;
   final String terms;
 
   UserModel({

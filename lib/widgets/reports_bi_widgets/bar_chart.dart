@@ -17,6 +17,7 @@ class BarChartWidget extends StatefulWidget {
 
   final Color firstBarColor = const Color.fromRGBO(252, 121, 0, 1);
   final Color secondBarColor = const Color.fromRGBO(24, 20, 243, 1);
+  final Color thirdBarColor = const Color.fromRGBO(31, 153, 230, 1);
   final Color avgColor = const Color.fromRGBO(181, 181, 181, 1);
 
   @override
@@ -35,8 +36,8 @@ class _BarChartWidgetState extends State<BarChartWidget> {
     barGroups = widget.data.asMap().entries.map((entry) {
       final index = entry.key;
       final chartData = entry.value;
-      return makeGroupData(
-          index, chartData.numberFirstValue, chartData.numberSecondValue);
+      return makeGroupData(index, chartData.numberFirstValue,
+          chartData.numberSecondValue, chartData.numberThirdValue ?? 0);
     }).toList();
 
     showingBarGroups = List.of(barGroups);
@@ -52,7 +53,8 @@ class _BarChartWidgetState extends State<BarChartWidget> {
       0,
       (previousMax, element) => [
         element.numberFirstValue,
-        element.numberSecondValue
+        element.numberSecondValue,
+        element.numberThirdValue ?? 0,
       ].reduce((a, b) => a > b ? a : b).clamp(previousMax, double.infinity),
     ));
 
@@ -211,7 +213,9 @@ class _BarChartWidgetState extends State<BarChartWidget> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             _legendItem(widget.firstBarColor, widget.ref['titleFirstValue']!),
-            _legendItem(widget.secondBarColor, widget.ref['titleSecondValue']!)
+            _legendItem(widget.secondBarColor, widget.ref['titleSecondValue']!),
+            if (widget.ref['titleThirdValue'] != null)
+              _legendItem(widget.thirdBarColor, widget.ref['titleThirdValue']!),
           ],
         ));
   }
@@ -229,7 +233,7 @@ class _BarChartWidgetState extends State<BarChartWidget> {
         ));
   }
 
-  BarChartGroupData makeGroupData(int x, double y1, double y2) {
+  BarChartGroupData makeGroupData(int x, double y1, double y2, double y3) {
     return BarChartGroupData(
       barsSpace: 4,
       x: x,
@@ -244,6 +248,11 @@ class _BarChartWidgetState extends State<BarChartWidget> {
           color: widget.secondBarColor,
           width: barWidth,
         ),
+        BarChartRodData(
+          toY: y3,
+          color: widget.thirdBarColor,
+          width: barWidth,
+        ),
       ],
     );
   }
@@ -253,11 +262,16 @@ class ChartData {
   final String barTitle;
   final double numberFirstValue;
   final double numberSecondValue;
+  final double? numberThirdValue;
   final double average;
 
   ChartData({
     required this.barTitle,
     required this.numberFirstValue,
     required this.numberSecondValue,
-  }) : average = (numberFirstValue + numberSecondValue) / 2;
+    this.numberThirdValue,
+  }) : average = (numberFirstValue +
+                numberSecondValue +
+                (numberThirdValue != null ? numberThirdValue : 0)) /
+            2;
 }
