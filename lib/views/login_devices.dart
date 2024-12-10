@@ -1,3 +1,4 @@
+import 'package:asia_project/views/qr-dinamic/qr_scanner_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -27,7 +28,7 @@ class LoginScreen extends StatelessWidget {
     if (loginCode.isEmpty) {
       // Mostrar mensaje si el campo está vacío
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Por favor, ingresa el código de inicio de sesión.')),
+        const SnackBar(content: Text('Por favor, ingresa el código de inicio de sesión.')),
       );
       return;
     }
@@ -49,7 +50,7 @@ class LoginScreen extends StatelessWidget {
     } else {
       // Código no encontrado, mostrar un mensaje de error
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Código incorrecto. Inténtalo nuevamente.')),
+        const SnackBar(content: Text('Código incorrecto. Inténtalo nuevamente.')),
       );
     }
   }
@@ -64,7 +65,7 @@ class LoginScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               // Título
-              Text(
+              const Text(
                 "Iniciar Sesión",
                 style: TextStyle(
                   fontSize: 24,
@@ -72,13 +73,13 @@ class LoginScreen extends StatelessWidget {
                   color: Colors.black87,
                 ),
               ),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
               // Campo de entrada
               Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
                   boxShadow: [
-                    BoxShadow(
+                    const BoxShadow(
                       color: Colors.black26,
                       blurRadius: 8,
                       offset: Offset(0, 2),
@@ -88,7 +89,7 @@ class LoginScreen extends StatelessWidget {
                 ),
                 child: TextField(
                   controller: _loginCodeController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                     border: InputBorder.none,
                     hintText: 'Código de Inicio de Sesión',
@@ -96,7 +97,7 @@ class LoginScreen extends StatelessWidget {
                   keyboardType: TextInputType.number,
                 ),
               ),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
               // Botón de inicio de sesión
               SizedBox(
                 width: double.infinity,
@@ -104,12 +105,12 @@ class LoginScreen extends StatelessWidget {
                   onPressed: () => _validateLoginCode(context),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
-                    padding: EdgeInsets.symmetric(vertical: 14),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: Text(
+                  child: const Text(
                     "Iniciar Sesión",
                     style: TextStyle(
                       fontSize: 16,
@@ -128,14 +129,16 @@ class LoginScreen extends StatelessWidget {
 }
 
 class NextScreen extends StatelessWidget {
+  const NextScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Detalle"),
+        title: const Text("Detalle"),
         backgroundColor: Colors.blue,
       ),
-      body: Center(
+      body: const Center(
         child: Text(
           "Acá va la cara",
           style: TextStyle(
@@ -144,6 +147,19 @@ class NextScreen extends StatelessWidget {
             color: Colors.black87,
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Navegar a QRScannerScreen
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const QRScannerScreen(),
+            ),
+          );
+        },
+        backgroundColor: Colors.blue,
+        child: const Icon(Icons.qr_code_scanner),
       ),
     );
   }
