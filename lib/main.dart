@@ -1,3 +1,5 @@
+import 'package:asia_project/auth/pages/admin_test.dart';
+import 'package:asia_project/auth/pages/home_test.dart';
 import 'package:asia_project/auth/pages/login.dart';
 import 'package:asia_project/auth/pages/register.dart';
 import 'package:asia_project/views/devicemanagementapp.dart';
@@ -36,6 +38,8 @@ class MyApp extends StatelessWidget {
         '/register': (context) => RegisterPage(),
         '/login': (context) => LoginPage(),
         '/loginDevice' : (context) => login_devices(),
+        '/admin_test' : (context) => AdminTest(),
+        '/home_test' : (context) => HomeTest(),
         // '/notifications': (context) => NotificationsScreen(),
           // '/': (context) => ServicesPage(),
       },
