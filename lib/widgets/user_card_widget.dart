@@ -9,6 +9,7 @@ class UserCard extends StatelessWidget {
   final String imageUrl;
   final String userId;  // Recibimos el ID
   final VoidCallback onDelete;  // Recibimos el callback de eliminación
+  final VoidCallback onEdit;  // Recibimos el callback de edición
 
   // Constructor para recibir los parámetros
   const UserCard({
@@ -18,7 +19,8 @@ class UserCard extends StatelessWidget {
     required this.documentNumber,
     required this.imageUrl,
     required this.userId,  // Recibimos el ID
-    required this.onDelete,  // Recibimos el callback
+    required this.onDelete,  // Recibimos el callback de eliminación
+    required this.onEdit,  // Recibimos el callback de edición
   });
 
   @override
@@ -47,10 +49,13 @@ class UserCard extends StatelessWidget {
           SizedBox(width: 16.0),
           UserInformation(name: name, email: email, documentNumber: documentNumber),
           SizedBox(width: 16.0),
-          ActionButtons(onDelete: onDelete),  // Pasamos el callback de eliminación
+          // Botones de acción para eliminar o editar
+          ActionButtons(
+            onDelete: onDelete,
+            onEdit: onEdit,  // Pasa el callback de edición aquí
+          ),
         ],
       ),
     );
   }
 }
-

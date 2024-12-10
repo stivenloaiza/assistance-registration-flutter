@@ -1,35 +1,27 @@
 import 'package:flutter/material.dart';
 
-class ActionButtons extends StatefulWidget {
+class ActionButtons extends StatelessWidget {
   final VoidCallback onDelete;
+  final VoidCallback onEdit;  // Recibimos el callback de edición
 
-  const ActionButtons({super.key, required this.onDelete});
+  const ActionButtons({
+    super.key,
+    required this.onDelete,
+    required this.onEdit,  // Aceptamos el callback de edición
+  });
 
-  @override
-  State<ActionButtons> createState() => _ActionButtonsState();
-}
-
-class _ActionButtonsState extends State<ActionButtons> {
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         IconButton(
-          icon: const Icon(
-            Icons.edit,
-            color: Color(0xFF343C6A),
-          ),
-          onPressed: () {
-            // Acción para editar
-          },
+          icon: const Icon(Icons.edit),  // Ícono para editar
+          onPressed: onEdit,  // Llama al callback de edición
         ),
-        const SizedBox(height: 8.0),
         IconButton(
-          icon: const Icon(
-            Icons.delete,
-            color: Color(0xFF343C6A),
-          ),
-          onPressed: widget.onDelete,  // Llamamos a onDelete cuando se presiona el botón
+          icon: const Icon(Icons.delete),  // Ícono para eliminar
+          onPressed: onDelete,  // Llama al callback de eliminación
         ),
       ],
     );
