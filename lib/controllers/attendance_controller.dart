@@ -18,4 +18,9 @@ class AttendanceController implements AttendancePort{
   Future<List<AttendanceModel>> findAttendanceByDateRange(String range)async{
     return await _attendanceService.getAttendanceByDateRange(range);
   }
+
+  @override
+  Future<List<AttendanceModel>> findByProperty(String property, String valueProperty) async{
+    return await _attendanceService.getAttendanceByProperty(property, valueProperty);
+  }
 }
