@@ -62,7 +62,6 @@ class _ReportsAdminState extends State<ReportsAdmin> {
               ref: attendanceChartRefs,
               data: attendanceChartData,
             ),
-            StudentTable(),
           ],
         ),
       ),

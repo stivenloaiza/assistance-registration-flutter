@@ -62,7 +62,6 @@ class _ReportsCodersState extends State<ReportsCoders> {
               ref: attendanceChartRefs,
               data: attendanceChartData,
             ),
-            StudentTable(),
           ],
         ),
       ),
