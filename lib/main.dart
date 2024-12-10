@@ -1,6 +1,7 @@
 import 'package:asia_project/auth/pages/login.dart';
 import 'package:asia_project/auth/pages/register.dart';
 import 'package:asia_project/views/devicemanagementapp.dart';
+import 'package:asia_project/views/login_devices.dart';
 // import 'package:asia_project/views/login_devices.dart';
 import 'package:asia_project/views/notifications_screen.dart';
 import 'views/services_page.dart';
@@ -129,18 +130,18 @@ class _MyHomePageState extends State<MyHomePage> {
             }, 
             child: const Text("register")
             ),
-            //  const SizedBox(height: 20,),
-            // ElevatedButton(
-            //   onPressed: (){
-            //     Navigator.push(
-            //       context,
-            //       MaterialPageRoute(
-            //         builder: (context) => login_devices(),
-            //   ),
-            // );
-            // }, 
-            // child: const Text("login devices")
-            // )
+             const SizedBox(height: 20,),
+            ElevatedButton(
+              onPressed: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => login_devices(),
+              ),
+            );
+            }, 
+            child: const Text("login devices")
+            )
           ],
         ),
       ),
