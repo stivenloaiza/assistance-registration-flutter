@@ -17,12 +17,12 @@ class ReportsAdmin extends StatefulWidget {
 class _ReportsAdminState extends State<ReportsAdmin> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const HeaderAdmin(),
-            const FilterAdmin()
+            HeaderAdmin(),
+            FilterAdmin()
           ],
         ),
       ),

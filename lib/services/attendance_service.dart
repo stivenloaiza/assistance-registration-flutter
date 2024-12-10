@@ -52,4 +52,20 @@ class AttendanceService{
     }
     return attendanceList;
   }
+
+  Future<List<AttendanceModel>> getAttendanceByProperty(String property, String valueProperty)async{
+    List<AttendanceModel> attendanceList = [];
+    CollectionReference collectionReferenceAttendance = firestore.collection("attendance");
+
+    try{
+      QuerySnapshot querySnapshot = await collectionReferenceAttendance.where(property, isEqualTo: valueProperty).get();
+      querySnapshot.docs.forEach((document){
+        var data = AttendanceModel.fromMap(document.data() as Map<String,dynamic>);
+        attendanceList.add(data);
+      });
+    }catch(error){
+      print("Error with the method getAttendanceByProperty. Error: $error");
+    }
+    return attendanceList;
+  }
 }
