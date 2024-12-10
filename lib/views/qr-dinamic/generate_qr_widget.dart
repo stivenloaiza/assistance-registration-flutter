@@ -16,7 +16,7 @@ class _GenerateQRScreenState extends State<GenerateQRScreen> {
   late Timer _timer;
   String _qrData = '';
   String qrMessage = 'Generando QR...';
-  int timeLeft = 60; // Tiempo de expiración del QR
+  int timeLeft = 30; // Tiempo de expiración del QR
   final String otpSecret = "HI893Y23B234H9823Y984Y23H4HJK23HJ4HKJ23HIU4H9283Y4932"; // Secret OTP
   final String userId = "ztBjejaA7sedqntDjMIYcfQwpWG2"; // Este es el ID del usuario que estamos buscando
 
@@ -130,6 +130,16 @@ class _GenerateQRScreenState extends State<GenerateQRScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Generar QR"),
+        centerTitle: true,
+        titleTextStyle: const TextStyle(
+          color: Color.fromRGBO(52,60,106,1),
+          fontSize: 22,
+          fontWeight: FontWeight.bold,
+        ),
+        iconTheme: const IconThemeData(
+          color: Color.fromRGBO(52,60,106,1),
+        ),
+        backgroundColor: Colors.white,
       ),
       body: Center(
         child: Column(
