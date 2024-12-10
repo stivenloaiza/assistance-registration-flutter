@@ -34,11 +34,19 @@ class _LoginPageState extends State<LoginPage> {
           // Acceder a los datos del usuario, por ejemplo:
           String nombre = doc['nombre'];
           print('Nombre del usuario: $nombre');
-
-          // ... usar los datos del usuario como necesites ...
         } else {
           print('No se encontró el documento del usuario en Firestore');
           // Puedes crear un nuevo documento para el usuario si es necesario
+        }
+
+        if (doc.exists) {
+          String role = doc['role'];
+
+          if (role == 'admin') {
+            Navigator.pushReplacementNamed(context, '/admin');
+          } else {
+            Navigator.pushReplacementNamed(context, '/home');
+          }
         }
 
         print('Usuario ha iniciado sesión: ${user.email}');
