@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -24,11 +23,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'Asia',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
-        
       ),
       initialRoute: '/', // Define la ruta inicial
       routes: {
@@ -80,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     builder: (context) => DeviceManagementApp(),
               ),
             );
-            }, 
+            },
             child: const Text("Device Management")
             ),
             const SizedBox(height: 20,),
@@ -92,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     builder: (context) => NotificationsScreen(),
               ),
             );
-            }, 
+            },
             child: const Text("Notifications")
             ),
             const SizedBox(height: 20,),
@@ -104,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     builder: (context) => ServicesPage(),
               ),
             );
-            }, 
+            },
             child: const Text("ServicePage")
             ),
             const SizedBox(height: 20,),
@@ -116,7 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     builder: (context) => LoginPage(),
               ),
             );
-            }, 
+            },
             child: const Text("Login")
             ),
             const SizedBox(height: 20,),
@@ -128,7 +127,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     builder: (context) => RegisterPage(),
               ),
             );
-            }, 
+            },
             child: const Text("register")
             ),
              const SizedBox(height: 20,),
@@ -140,7 +139,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     builder: (context) => login_devices(),
               ),
             );
-            }, 
+            },
             child: const Text("login devices")
             )
           ],
@@ -149,5 +148,3 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-
-// anton tiruriruirur
