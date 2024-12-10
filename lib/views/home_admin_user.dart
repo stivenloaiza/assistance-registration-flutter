@@ -2,7 +2,7 @@ import 'package:asia_project/utils/const_data_admin_user.dart';
 import 'package:asia_project/widgets/admin_drawer.dart';
 import 'package:asia_project/widgets/dashboard_stadists.dart';
 import 'package:asia_project/widgets/device_white.dart';
-import 'package:asia_project/widgets/groupspage.dart';
+import 'package:asia_project/widgets/groups_page.dart';
 import 'package:asia_project/widgets/users_page.dart';
 import 'package:flutter/material.dart';
 

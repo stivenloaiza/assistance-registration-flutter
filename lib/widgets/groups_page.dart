@@ -1,5 +1,5 @@
  // Controlador para manejar grupos
-import 'package:asia_project/controllers/group.controller.dart';
+import 'package:asia_project/controllers/group_controller.dart';
 import 'package:asia_project/models/group_model.dart'; // Modelo del grupo
 import 'package:asia_project/widgets/custom_apbar_admin.dart'; // AppBar personalizado
 import 'package:asia_project/widgets/floating_button_widget.dart'; // Botón flotante para agregar grupo
@@ -83,7 +83,9 @@ class _GroupsPageState extends State<GroupsPage> {
               timeTolerance: group.timeTolerance,
               usersId: group.usersId,
               groupId: group.id,
-              onDelete: () => _deleteGroup(group.id), // Pasamos el callback para eliminar
+              onDelete: () => _deleteGroup(group.id),
+              onEdit: () => _deleteGroup(group.id),
+              // Pasamos el callback para eliminar
             );
           },
         ),
