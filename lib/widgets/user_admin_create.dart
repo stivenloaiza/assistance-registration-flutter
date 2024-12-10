@@ -1,22 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:asia_project/models/user_model.dart';
+import 'package:asia_project/controllers/users_controller.dart';
+
 class UserForm extends StatefulWidget {
-  const UserForm({Key? key}) : super(key: key);
+  final Function? onUserCreated;
+
+  const UserForm({Key? key, this.onUserCreated}) : super(key: key);
+
   @override
   State<UserForm> createState() => _UserFormState();
 }
+
 class _UserFormState extends State<UserForm> {
   final _formKey = GlobalKey<FormState>();
-  
+  final UserController _userController = UserController();
+
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _documentNumberController = TextEditingController();
   DateTime? _selectedBirthDate;
   String? _selectedDocumentType;
   String? _selectedRole;
-  String? _selectedStatus;
+  bool _selectedStatus = true; // Default to active
+
   final List<String> _documentTypes = ['CC', 'TI'];
   final List<String> _roles = ['admin', 'coder', 'postulante'];
-  final List<String> _status = ['activo','inactivo'];
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -30,8 +39,8 @@ class _UserFormState extends State<UserForm> {
               labelText: 'Nombre',
               border: OutlineInputBorder(),
             ),
-            validator: (value) => 
-              value == null || value.isEmpty ? 'Ingrese nombre' : null,
+            validator: (value) =>
+                value == null || value.isEmpty ? 'Ingrese nombre' : null,
           ),
           const SizedBox(height: 15),
           TextFormField(
@@ -45,9 +54,7 @@ class _UserFormState extends State<UserForm> {
                 return 'Ingrese email';
               }
               final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-              return !emailRegex.hasMatch(value) 
-                ? 'Email inválido' 
-                : null;
+              return !emailRegex.hasMatch(value) ? 'Email inválido' : null;
             },
           ),
           const SizedBox(height: 15),
@@ -58,17 +65,12 @@ class _UserFormState extends State<UserForm> {
             ),
             value: _selectedDocumentType,
             items: _documentTypes
-              .map((type) => DropdownMenuItem(
-                value: type, 
-                child: Text(type)
-              ))
-              .toList(),
-            validator: (value) => 
-              value == null ? 'Seleccione tipo de documento' : null,
-            onChanged: (value) => 
-              setState(() => _selectedDocumentType = value),
+                .map((type) => DropdownMenuItem(value: type, child: Text(type)))
+                .toList(),
+            validator: (value) =>
+                value == null ? 'Seleccione tipo de documento' : null,
+            onChanged: (value) => setState(() => _selectedDocumentType = value),
           ),
-          
           const SizedBox(height: 15),
           TextFormField(
             controller: _documentNumberController,
@@ -77,8 +79,9 @@ class _UserFormState extends State<UserForm> {
               labelText: 'Número de Documento',
               border: OutlineInputBorder(),
             ),
-            validator: (value) => 
-              value == null || value.isEmpty ? 'Ingrese número de documento' : null,
+            validator: (value) => value == null || value.isEmpty
+                ? 'Ingrese número de documento'
+                : null,
           ),
           const SizedBox(height: 15),
           InkWell(
@@ -90,8 +93,8 @@ class _UserFormState extends State<UserForm> {
               ),
               child: Text(
                 _selectedBirthDate == null
-                  ? 'Seleccionar fecha'
-                  : '${_selectedBirthDate!.day}/${_selectedBirthDate!.month}/${_selectedBirthDate!.year}',
+                    ? 'Seleccionar fecha'
+                    : '${_selectedBirthDate!.day}/${_selectedBirthDate!.month}/${_selectedBirthDate!.year}',
               ),
             ),
           ),
@@ -103,33 +106,20 @@ class _UserFormState extends State<UserForm> {
             ),
             value: _selectedRole,
             items: _roles
-              .map((role) => DropdownMenuItem(
-                value: role, 
-                child: Text(role)
-              ))
-              .toList(),
-            validator: (value) => 
-              value == null ? 'Seleccione un rol' : null,
-            onChanged: (value) => 
-              setState(() => _selectedRole = value),
+                .map((role) => DropdownMenuItem(value: role, child: Text(role)))
+                .toList(),
+            validator: (value) => value == null ? 'Seleccione un rol' : null,
+            onChanged: (value) => setState(() => _selectedRole = value),
           ),
           const SizedBox(height: 15),
-          DropdownButtonFormField<String>(
-            decoration: const InputDecoration(
-              labelText: 'Estado del Usuario',
-              border: OutlineInputBorder(),
-            ),
+          SwitchListTile(
+            title: const Text('Estado del Usuario'),
             value: _selectedStatus,
-            items: _status
-              .map((type) => DropdownMenuItem(
-                value: type, 
-                child: Text(type)
-              ))
-              .toList(),
-            validator: (value) => 
-              value == null ? 'Selecciona el rol' : null,
-            onChanged: (value) => 
-              setState(() => _selectedStatus = value),
+            onChanged: (bool value) {
+              setState(() {
+                _selectedStatus = value;
+              });
+            },
           ),
           const SizedBox(height: 20),
           Row(
@@ -150,6 +140,7 @@ class _UserFormState extends State<UserForm> {
       ),
     );
   }
+
   void _presentDatePicker() async {
     final pickedDate = await showDatePicker(
       context: context,
@@ -163,33 +154,47 @@ class _UserFormState extends State<UserForm> {
       });
     }
   }
+
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      final userData = {
-        'id':'',
-        'name': _nameController.text,
-        'email': _emailController.text,
-        'document_type': [_selectedDocumentType],
-        'document_number': _documentNumberController.text,
-        'birth_date': _selectedBirthDate?.toIso8601String(),
-        'role': [_selectedRole],
-        'created_at': DateTime.now().toIso8601String(),
-        'created_by': 'current_user',
-        'status': [_selectedStatus],
-        'terms': '',
-        'face_data': '',
-        'photo': '',
-        'otp': '',
-      };
-      print('Datos de usuario: $userData');
-      Navigator.pop(context);
+      // Crear un nuevo objeto User
+      final newUser = User(
+        id: '', // Firestore generará el ID
+        birthDate: _selectedBirthDate?.toIso8601String() ?? '',
+        createdAt: DateTime.now().toIso8601String(),
+        createdBy:
+            'current_user', // Podrías reemplazar esto con el usuario actual
+        deletedAt: '',
+        deletedBy: '',
+        documentNumber: _documentNumberController.text,
+        email: _emailController.text,
+        faceData: '',
+        name: _nameController.text,
+        otp: 0, // Valor por defecto, podrías generarlo de manera diferente
+        photo: '',
+        role: _selectedRole ?? '',
+        status: _selectedStatus ?? true, // Usar un valor por defecto si es nulo
+        terms: '', // Podrías manejar los términos de manera diferente
+      );
+
+      // Instanciar el UserController
+      final userController = UserController();
+
+      // Agregar el usuario
+      userController.addUser(newUser).then((_) {
+        // Cerrar el modal
+        Navigator.pop(context);
+
+        // Mostrar un mensaje de éxito
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Usuario creado exitosamente')),
+        );
+      }).catchError((error) {
+        // Manejar cualquier error
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error al crear usuario: $error')),
+        );
+      });
     }
-  }
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _emailController.dispose();
-    _documentNumberController.dispose();
-    super.dispose();
   }
 }
