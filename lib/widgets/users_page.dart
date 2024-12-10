@@ -1,9 +1,11 @@
+import 'package:asia_project/controllers/users_controller.dart';
 import 'package:asia_project/models/user_model.dart';
 import 'package:asia_project/widgets/custom_apbar_admin.dart';
 import 'package:asia_project/widgets/floating_button_widget.dart';
 import 'package:asia_project/widgets/user_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'; // Importa Firestore
+
 
 class UsersPage extends StatefulWidget {
   final bool isMobile;
@@ -23,11 +25,12 @@ class UsersPage extends StatefulWidget {
 class _UsersPageState extends State<UsersPage> {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   List<User> _users = [];
+  final UserController _userController = UserController();  // Instanciamos el controlador
 
   @override
   void initState() {
     super.initState();
-    _loadUsersData(); // Cargar los usuarios al iniciar
+    _loadUsersData();  // Cargar los usuarios al iniciar
   }
 
   // Método para cargar los datos desde Firestore
@@ -37,8 +40,24 @@ class _UsersPageState extends State<UsersPage> {
     // Convertimos los documentos a objetos User
     setState(() {
       _users = querySnapshot.docs
-          .map((doc) => User.fromMap(doc.data() as Map<String, dynamic>))
+          .map((doc) {
+            final user = User.fromMap({
+              'id': doc.id,  // Aseguramos de asignar el ID del documento
+              ...doc.data() as Map<String, dynamic>,
+            });
+            return user;
+          })
           .toList();
+    });
+  }
+
+  // Método para eliminar un usuario
+  Future<void> _deleteUser(String userId) async {
+    await _userController.deleteUser(userId);  // Llamamos a la función de eliminar en el controlador
+
+    setState(() {
+      // Actualizamos la lista de usuarios
+      _users.removeWhere((user) => user.id == userId);
     });
   }
 
@@ -53,36 +72,24 @@ class _UsersPageState extends State<UsersPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Users List',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(height: 16),
-              // Verificamos si tenemos usuarios cargados
-              if (_users.isEmpty)
-                const Center(child: CircularProgressIndicator())
-              else
-              // Mostramos la lista de UserCards
-                ..._users.map((user) {
+        child: _users.isEmpty
+            ? const Center(child: CircularProgressIndicator())
+            : ListView.builder(
+                itemCount: _users.length,
+                itemBuilder: (context, index) {
+                  final user = _users[index];
                   return UserCard(
                     name: user.name,
                     email: user.email,
                     documentNumber: user.documentNumber.toString(),
                     imageUrl: user.photo.isNotEmpty
                         ? user.photo
-                        : 'https://www.example.com/default_image.png', // Imagen por defecto
+                        : 'https://riwi.io/wp-content/uploads/2023/07/favicon.png',
+                    userId: user.id,
+                    onDelete: () => _deleteUser(user.id),  // Pasamos el callback para eliminar
                   );
-                }).toList(),
-            ],
-          ),
-        ),
+                },
+              ),
       ),
       floatingActionButton: const FloatingButton(),
     );

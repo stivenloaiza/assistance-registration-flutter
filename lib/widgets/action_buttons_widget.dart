@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class ActionButtons extends StatefulWidget {
-  const ActionButtons({super.key});
+  final VoidCallback onDelete;
+
+  const ActionButtons({super.key, required this.onDelete});
 
   @override
   State<ActionButtons> createState() => _ActionButtonsState();
@@ -17,7 +19,9 @@ class _ActionButtonsState extends State<ActionButtons> {
             Icons.edit,
             color: Color(0xFF343C6A),
           ),
-          onPressed: () {},
+          onPressed: () {
+            // Acción para editar
+          },
         ),
         const SizedBox(height: 8.0),
         IconButton(
@@ -25,7 +29,7 @@ class _ActionButtonsState extends State<ActionButtons> {
             Icons.delete,
             color: Color(0xFF343C6A),
           ),
-          onPressed: () {},
+          onPressed: widget.onDelete,  // Llamamos a onDelete cuando se presiona el botón
         ),
       ],
     );

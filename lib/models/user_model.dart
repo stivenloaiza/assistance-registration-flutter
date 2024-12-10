@@ -1,4 +1,5 @@
 class User {
+  String id; // Campo ID agregado
   String birthDate;
   String createdAt;
   String createdBy;
@@ -16,6 +17,7 @@ class User {
 
   // Constructor
   User({
+    required this.id,  // Agregamos el campo id en el constructor
     required this.birthDate,
     required this.createdAt,
     required this.createdBy,
@@ -35,6 +37,7 @@ class User {
   // Método para convertir de un Map a un objeto User
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
+      id: map['id'] ?? '',  // Asignamos el ID desde el map
       birthDate: map['birth_date'] ?? '',
       createdAt: map['created_at'] ?? '',
       createdBy: map['created_by'] ?? '',
@@ -54,10 +57,10 @@ class User {
     );
   }
 
-
   // Método para convertir de un objeto User a un Map
   Map<String, dynamic> toMap() {
     return {
+      'id': id,  // Agregamos el id al Map
       'birth_date': birthDate,
       'created_at': createdAt,
       'created_by': createdBy,

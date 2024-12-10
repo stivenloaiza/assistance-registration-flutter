@@ -11,9 +11,12 @@ class UserController {
     await _db.collection('users').get().then((event) {
       for (var doc in event.docs) {
         print("${doc.id} => ${doc.data()}");
-        
+
         // Suponiendo que solo hay un usuario o queremos el primer usuario en la colección
-        currentUser = User.fromMap(doc.data());
+        currentUser = User.fromMap({
+          'id': doc.id,  // Asignamos el ID de Firestore al objeto User
+          ...doc.data() as Map<String, dynamic>,
+        });
       }
     });
   }
@@ -31,4 +34,15 @@ class UserController {
       print('Error al agregar usuario: $error');
     });
   }
+
+  // Método para eliminar un usuario de Firestore
+  Future<void> deleteUser(String userId) async {
+    try {
+      await _db.collection('users').doc(userId).delete();
+      print("Usuario eliminado: $userId");
+    } catch (e) {
+      print("Error al eliminar usuario: $e");
+    }
+  }
 }
+

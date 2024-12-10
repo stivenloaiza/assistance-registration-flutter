@@ -7,6 +7,8 @@ class UserCard extends StatelessWidget {
   final String email;
   final String documentNumber;
   final String imageUrl;
+  final String userId;  // Recibimos el ID
+  final VoidCallback onDelete;  // Recibimos el callback de eliminación
 
   // Constructor para recibir los parámetros
   const UserCard({
@@ -15,6 +17,8 @@ class UserCard extends StatelessWidget {
     required this.email,
     required this.documentNumber,
     required this.imageUrl,
+    required this.userId,  // Recibimos el ID
+    required this.onDelete,  // Recibimos el callback
   });
 
   @override
@@ -38,14 +42,15 @@ class UserCard extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 35.0,
-            backgroundImage: NetworkImage(imageUrl), // Usamos el parámetro imageUrl
+            backgroundImage: NetworkImage(imageUrl),
           ),
           SizedBox(width: 16.0),
-          UserInformation(name: name, email: email, documentNumber: documentNumber), // Pasamos los parámetros
+          UserInformation(name: name, email: email, documentNumber: documentNumber),
           SizedBox(width: 16.0),
-          ActionButtons(),
+          ActionButtons(onDelete: onDelete),  // Pasamos el callback de eliminación
         ],
       ),
     );
   }
 }
+
