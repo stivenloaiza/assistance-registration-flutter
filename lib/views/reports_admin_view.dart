@@ -15,8 +15,10 @@ class ReportsAdmin extends StatefulWidget {
 
 class _ReportsAdminState extends State<ReportsAdmin> {
   final Map<String, String> attendanceChartRefs = {
+
     'titleFirstValue': 'Absent',
     'titleSecondValue': 'Present'
+
   };
 
   final List<ChartData> attendanceChartData = [
@@ -50,6 +52,7 @@ class _ReportsAdminState extends State<ReportsAdmin> {
               ref: attendanceChartRefs,
               data: attendanceChartData,
             ),
+
             StudentTable(),
             CustomPieChart(
               chartTitle: 'Attendance Overview',
@@ -62,6 +65,7 @@ class _ReportsAdminState extends State<ReportsAdmin> {
               data: [30, 60, 90, 70, 50],
               ref: ['', 'Jan', 'May', 'Sep'],
             ),
+
 
           ],
         ),
