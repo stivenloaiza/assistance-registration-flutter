@@ -29,6 +29,8 @@ class AttendanceService {
         return now.subtract(const Duration(days: 7));
       case "1 mes":
         return DateTime(now.year, now.month - 1, now.day);
+      case "1 año":
+        return DateTime(now.year - 1, now.month, now.day);
       default:
         throw Exception("Range invalid");
     }

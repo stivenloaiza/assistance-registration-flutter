@@ -1,33 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:excel/excel.dart';
-import 'dart:io';
-import 'dart:typed_data';
-import 'package:path_provider/path_provider.dart';
 import 'dart:html' as html;
-import 'package:pdf/pdf.dart';
 
 class AttendanceTable extends StatefulWidget {
-final List<Map<String, dynamic>> data;
+  final List<Map<String, dynamic>> data;
 
-const AttendanceTable({super.key, required this.data});
+  const AttendanceTable({super.key, required this.data});
 
-@override
-State<AttendanceTable> createState() => _AttendanceTableState();
+  @override
+  State<AttendanceTable> createState() => _AttendanceTableState();
 }
 
 class _AttendanceTableState extends State<AttendanceTable> {
-int currentPage = 0;
-final int rowsPerPage = 10;
+  int currentPage = 0;
+  final int rowsPerPage = 10;
 
   @override
   Widget build(BuildContext context) {
     final paginatedData =
         widget.data.skip(currentPage * rowsPerPage).take(rowsPerPage).toList();
-
-    // Calculamos el ancho equitativo por columna
-    final columnWidth =
-        MediaQuery.of(context).size.width / 6; // 6 columnas en este caso
 
     return Column(
       children: [
@@ -55,11 +47,11 @@ final int rowsPerPage = 10;
               dataRowColor: MaterialStateProperty.resolveWith(
                 (states) => Colors.white,
               ),
-              columnSpacing: 0.0,
+              columnSpacing: 0.0, // Elimina el espaciado adicional
               columns: [
                 DataColumn(
                   label: SizedBox(
-                    width: columnWidth,
+                    width: MediaQuery.of(context).size.width * 0.5, // 50% del ancho
                     child: Text(
                       "Fecha",
                       style: const TextStyle(
@@ -72,61 +64,9 @@ final int rowsPerPage = 10;
                 ),
                 DataColumn(
                   label: SizedBox(
-                    width: columnWidth,
+                    width: MediaQuery.of(context).size.width * 0.5, // 50% del ancho
                     child: Text(
-                      "Registrados",
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-                DataColumn(
-                  label: SizedBox(
-                    width: columnWidth,
-                    child: Text(
-                      "Asistentes",
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-                DataColumn(
-                  label: SizedBox(
-                    width: columnWidth,
-                    child: Text(
-                      "A Tiempo",
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-                DataColumn(
-                  label: SizedBox(
-                    width: columnWidth,
-                    child: Text(
-                      "Tarde",
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-                DataColumn(
-                  label: SizedBox(
-                    width: columnWidth,
-                    child: Text(
-                      "Inasistentes",
+                      "Estado",
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.black87,
@@ -140,60 +80,31 @@ final int rowsPerPage = 10;
                 return DataRow(cells: [
                   DataCell(
                     SizedBox(
-                      width: columnWidth,
+                      width: MediaQuery.of(context).size.width * 0.5, // 50% del ancho
                       child: Text(
                         row['date'],
-                        style: const TextStyle(fontSize: 14),
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.black,
+                        ),
                         textAlign: TextAlign.center,
                       ),
                     ),
                   ),
                   DataCell(
                     SizedBox(
-                      width: columnWidth,
+                      width: MediaQuery.of(context).size.width * 0.5, // 50% del ancho
                       child: Text(
-                        "${row['totalRegistered']}",
-                        style: const TextStyle(fontSize: 14),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                  DataCell(
-                    SizedBox(
-                      width: columnWidth,
-                      child: Text(
-                        "${row['attendees']}",
-                        style: const TextStyle(fontSize: 14),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                  DataCell(
-                    SizedBox(
-                      width: columnWidth,
-                      child: Text(
-                        "${row['onTime']}",
-                        style: const TextStyle(fontSize: 14),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                  DataCell(
-                    SizedBox(
-                      width: columnWidth,
-                      child: Text(
-                        "${row['late']}",
-                        style: const TextStyle(fontSize: 14),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                  DataCell(
-                    SizedBox(
-                      width: columnWidth,
-                      child: Text(
-                        "${row['absent']}",
-                        style: const TextStyle(fontSize: 14),
+                        row['status'],
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: row['status'] == "onTime"
+                              ? Colors.green
+                              : row['status'] == "late"
+                                  ? Colors.orange
+                                  : Colors.red,
+                        ),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -272,15 +183,11 @@ final int rowsPerPage = 10;
       pw.Page(
         build: (context) {
           return pw.Table.fromTextArray(
-            headers: ["Fecha", "Registrados", "Asistentes", "A Tiempo", "Tarde", "Inasistentes"],
+            headers: ["Fecha", "Estado"],
             data: widget.data.map((row) {
               return [
                 row['date'],
-                row['totalRegistered'],
-                row['attendees'],
-                row['onTime'],
-                row['late'],
-                row['absent'],
+                row['status'],
               ];
             }).toList(),
           );
@@ -304,16 +211,12 @@ final int rowsPerPage = 10;
     final excel = Excel.createExcel();
     final sheet = excel['Asistencia'];
 
-    sheet.appendRow(["Fecha", "Registrados", "Asistentes", "A Tiempo", "Tarde", "Inasistentes"]);
+    sheet.appendRow(["Fecha", "Estado"]);
 
     for (var row in widget.data) {
       sheet.appendRow([
         row['date'],
-        row['totalRegistered'],
-        row['attendees'],
-        row['onTime'],
-        row['late'],
-        row['absent'],
+        row['status'],
       ]);
     }
 
