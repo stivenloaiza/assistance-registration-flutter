@@ -1,6 +1,7 @@
 import 'package:asia_project/controllers/users_controller.dart';
 import 'package:asia_project/models/user_model.dart';
 import 'package:asia_project/widgets/custom_apbar_admin.dart';
+import 'package:asia_project/widgets/custom_modal.dart';
 import 'package:asia_project/widgets/edit_users_widget.dart';
 import 'package:asia_project/widgets/floating_button_widget.dart';
 import 'package:asia_project/widgets/user_card_widget.dart';
@@ -63,11 +64,12 @@ class _UsersPageState extends State<UsersPage> {
 
   // Método para mostrar el modal de edición
   void _showEditModal(User user) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (context) {
-        return EditUserModal(
+    showDialog(
+    context: context,
+    builder: (context) {
+      return CustomModal(
+        title: 'Editar Usuario',
+        child: EditUserModal(
           user: user,
           onSave: (updatedUser) {
             // Actualiza el usuario en la lista
@@ -84,9 +86,10 @@ class _UsersPageState extends State<UsersPage> {
                 .doc(updatedUser.id)
                 .update(updatedUser.toMap());
           },
-        );
-      },
-    );
+        ),
+      );
+    },
+  );
   }
 
   @override

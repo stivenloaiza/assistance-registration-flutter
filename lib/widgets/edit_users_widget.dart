@@ -96,10 +96,6 @@ class _EditUserModalState extends State<EditUserModal> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                'Editar Usuario',
-                style: Theme.of(context).textTheme.displayLarge,
-              ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _nameController,
@@ -130,7 +126,8 @@ class _EditUserModalState extends State<EditUserModal> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: _birthDateController,
-                decoration: const InputDecoration(labelText: 'Fecha de Nacimiento'),
+                decoration:
+                    const InputDecoration(labelText: 'Fecha de Nacimiento'),
               ),
               const SizedBox(height: 16),
               TextFormField(
