@@ -187,4 +187,32 @@ class AttendanceService {
       'ref': [firstDate, middleDate, lastDate],
     };
   }
+
+  Future<int> getTotalAttendanceByUser(String userId)async{
+    String userCurrent = "ZlVXfzUz94Ks25eFUfGp";
+    List<AttendanceModel> attendanceModels = [];
+
+    CollectionReference collectionReferenceAttendance =
+    firestore.collection("attendance");
+    QuerySnapshot queryAttendance = await collectionReferenceAttendance.where("user", isEqualTo: userId ?? userCurrent).get();
+    queryAttendance.docs.forEach((document) {
+      var data =
+      AttendanceModel.fromMap(document.data() as Map<String, dynamic>);
+      attendanceModels.add(data);
+    });
+    return attendanceModels.length;
+  }
+
+  Future<int> getTotalAttendanceByUserGroup(String? userId, String group)async{
+    String userCurrent = "ZlVXfzUz94Ks25eFUfGp";
+    List<AttendanceModel> attendanceModels = [];
+
+    CollectionReference collectionReferenceAttendance = firestore.collection("attendance");
+    QuerySnapshot queryAttendance = await collectionReferenceAttendance.where("user", isEqualTo: userId ?? userCurrent).where("group", isEqualTo: group).get();
+    queryAttendance.docs.forEach((document){
+      var data = AttendanceModel.fromMap(document.data() as Map<String,dynamic>);
+      attendanceModels.add(data);
+    });
+    return attendanceModels.length;
+  }
 }
