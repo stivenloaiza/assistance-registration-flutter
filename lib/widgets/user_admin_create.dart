@@ -1,31 +1,107 @@
-import 'package:flutter/material.dart';
+import 'package:asia_project/models/group_model.dart';
 import 'package:asia_project/models/user_model.dart';
-import 'package:asia_project/controllers/users_controller.dart';
+import 'package:asia_project/widgets/users_select_groups.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'dart:io';
 
-class UserForm extends StatefulWidget {
-  final Function? onUserCreated;
+class GroupForm extends StatefulWidget {
+  final Function? onGroupCreated;
 
-  const UserForm({Key? key, this.onUserCreated}) : super(key: key);
+  const GroupForm({Key? key, this.onGroupCreated}) : super(key: key);
 
   @override
-  State<UserForm> createState() => _UserFormState();
+  State<GroupForm> createState() => _GroupFormState();
 }
 
-class _UserFormState extends State<UserForm> {
+class _GroupFormState extends State<GroupForm> {
   final _formKey = GlobalKey<FormState>();
-  final UserController _userController = UserController();
 
-  final _nameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _documentNumberController = TextEditingController();
-  DateTime? _selectedBirthDate;
-  String? _selectedDocumentType;
-  String? _selectedRole;
-  bool _selectedStatus = true; // Default to active
+  final _titleController = TextEditingController();
+  final _timeToleranceController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  final _deviceIdController = TextEditingController();
+  List<String> _selectedUsersId = []; // Lista de IDs de usuarios seleccionados
 
-  final List<String> _documentTypes = ['CC', 'TI'];
-  final List<String> _roles = ['admin', 'coder', 'postulante'];
+  List<User> _users = []; // Lista para usuarios cargados desde Firestore
 
+  // Nuevas variables para Start/End Date y Start/End Time
+  DateTime? _startDate;
+  DateTime? _endDate;
+  TimeOfDay? _startTime;
+  TimeOfDay? _endTime;
+
+  // Variable para almacenar la foto seleccionada
+  File? _image;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUsersData(); // Cargar usuarios desde Firestore
+  }
+
+  // Método para cargar los usuarios desde Firestore
+  Future<void> _loadUsersData() async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('users').get();
+      setState(() {
+        _users = querySnapshot.docs.map((doc) {
+          final user = User.fromMap({
+            'id': doc.id,
+            ...doc.data() as Map<String, dynamic>,
+          });
+          return user;
+        }).toList();
+      });
+    } catch (e) {
+      print("Error al cargar los usuarios: $e");
+    }
+  }
+
+  // Método para seleccionar fecha
+  Future<void> _selectDate(BuildContext context, bool isStartDate) async {
+    DateTime initialDate = isStartDate ? (_startDate ?? DateTime.now()) : (_endDate ?? DateTime.now());
+    DateTime pickedDate = await showDatePicker(
+      context: context,
+      initialDate: initialDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    ) ?? initialDate;
+
+    if (isStartDate) {
+      setState(() {
+        _startDate = pickedDate;
+      });
+    } else {
+      setState(() {
+        _endDate = pickedDate;
+      });
+    }
+  }
+
+  // Método para seleccionar hora
+  Future<void> _selectTime(BuildContext context, bool isStartTime) async {
+    TimeOfDay initialTime = isStartTime ? (_startTime ?? TimeOfDay.now()) : (_endTime ?? TimeOfDay.now());
+    TimeOfDay pickedTime = await showTimePicker(
+      context: context,
+      initialTime: initialTime,
+    ) ?? initialTime;
+
+    if (isStartTime) {
+      setState(() {
+        _startTime = pickedTime;
+      });
+    } else {
+      setState(() {
+        _endTime = pickedTime;
+      });
+    }
+  }
+
+  // Método para seleccionar una foto de la galería o cámara
+  Future<void> _selectImage() async {
+   
+  }
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -33,95 +109,163 @@ class _UserFormState extends State<UserForm> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          // Campo para el título
           TextFormField(
-            controller: _nameController,
+            controller: _titleController,
             decoration: const InputDecoration(
-              labelText: 'Nombre',
-              border: OutlineInputBorder(),
-            ),
-            validator: (value) =>
-                value == null || value.isEmpty ? 'Ingrese nombre' : null,
-          ),
-          const SizedBox(height: 15),
-          TextFormField(
-            controller: _emailController,
-            decoration: const InputDecoration(
-              labelText: 'Email',
-              border: OutlineInputBorder(),
-            ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Ingrese email';
-              }
-              final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-              return !emailRegex.hasMatch(value) ? 'Email inválido' : null;
-            },
-          ),
-          const SizedBox(height: 15),
-          DropdownButtonFormField<String>(
-            decoration: const InputDecoration(
-              labelText: 'Tipo de Documento',
-              border: OutlineInputBorder(),
-            ),
-            value: _selectedDocumentType,
-            items: _documentTypes
-                .map((type) => DropdownMenuItem(value: type, child: Text(type)))
-                .toList(),
-            validator: (value) =>
-                value == null ? 'Seleccione tipo de documento' : null,
-            onChanged: (value) => setState(() => _selectedDocumentType = value),
-          ),
-          const SizedBox(height: 15),
-          TextFormField(
-            controller: _documentNumberController,
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(
-              labelText: 'Número de Documento',
+              labelText: 'Nombre del Grupo',
               border: OutlineInputBorder(),
             ),
             validator: (value) => value == null || value.isEmpty
-                ? 'Ingrese número de documento'
+                ? 'Ingrese nombre del grupo'
                 : null,
           ),
           const SizedBox(height: 15),
-          InkWell(
-            onTap: _presentDatePicker,
-            child: InputDecorator(
-              decoration: const InputDecoration(
-                labelText: 'Fecha de Nacimiento',
-                border: OutlineInputBorder(),
-              ),
-              child: Text(
-                _selectedBirthDate == null
-                    ? 'Seleccionar fecha'
-                    : '${_selectedBirthDate!.day}/${_selectedBirthDate!.month}/${_selectedBirthDate!.year}',
-              ),
-            ),
-          ),
-          const SizedBox(height: 15),
-          DropdownButtonFormField<String>(
+
+          // Campo para la descripción
+          TextFormField(
+            controller: _descriptionController,
             decoration: const InputDecoration(
-              labelText: 'Rol',
+              labelText: 'Descripción',
               border: OutlineInputBorder(),
             ),
-            value: _selectedRole,
-            items: _roles
-                .map((role) => DropdownMenuItem(value: role, child: Text(role)))
-                .toList(),
-            validator: (value) => value == null ? 'Seleccione un rol' : null,
-            onChanged: (value) => setState(() => _selectedRole = value),
+            validator: (value) =>
+                value == null || value.isEmpty ? 'Ingrese descripción' : null,
           ),
           const SizedBox(height: 15),
-          SwitchListTile(
-            title: const Text('Estado del Usuario'),
-            value: _selectedStatus,
-            onChanged: (bool value) {
-              setState(() {
-                _selectedStatus = value;
-              });
-            },
+
+          // Campo para la tolerancia de tiempo (en minutos)
+          TextFormField(
+            controller: _timeToleranceController,
+            keyboardType: TextInputType.number,
+            decoration: const InputDecoration(
+              labelText: 'Tolerancia de Tiempo (min)',
+              border: OutlineInputBorder(),
+            ),
+            validator: (value) => value == null || value.isEmpty
+                ? 'Ingrese tolerancia de tiempo'
+                : null,
           ),
+          const SizedBox(height: 15),
+
+          // Campo para el ID del dispositivo
+          TextFormField(
+            controller: _deviceIdController,
+            decoration: const InputDecoration(
+              labelText: 'ID del Dispositivo',
+              border: OutlineInputBorder(),
+            ),
+            validator: (value) => value == null || value.isEmpty
+                ? 'Ingrese ID del dispositivo'
+                : null,
+          ),
+          const SizedBox(height: 15),
+
+          // Selección de Start Date
+          GestureDetector(
+            onTap: () => _selectDate(context, true),
+            child: InputDecorator(
+              decoration: const InputDecoration(
+                labelText: 'Fecha de Inicio',
+                border: OutlineInputBorder(),
+              ),
+              child: Text(_startDate == null
+                  ? 'Seleccione la fecha'
+                  : _startDate!.toLocal().toString().split(' ')[0]),
+            ),
+          ),
+          const SizedBox(height: 15),
+
+          // Selección de Start Time
+          GestureDetector(
+            onTap: () => _selectTime(context, true),
+            child: InputDecorator(
+              decoration: const InputDecoration(
+                labelText: 'Hora de Inicio',
+                border: OutlineInputBorder(),
+              ),
+              child: Text(_startTime == null
+                  ? 'Seleccione la hora'
+                  : _startTime!.format(context)),
+            ),
+          ),
+          const SizedBox(height: 15),
+
+          // Selección de End Date
+          GestureDetector(
+            onTap: () => _selectDate(context, false),
+            child: InputDecorator(
+              decoration: const InputDecoration(
+                labelText: 'Fecha de Fin',
+                border: OutlineInputBorder(),
+              ),
+              child: Text(_endDate == null
+                  ? 'Seleccione la fecha'
+                  : _endDate!.toLocal().toString().split(' ')[0]),
+            ),
+          ),
+          const SizedBox(height: 15),
+
+          // Selección de End Time
+          GestureDetector(
+            onTap: () => _selectTime(context, false),
+            child: InputDecorator(
+              decoration: const InputDecoration(
+                labelText: 'Hora de Fin',
+                border: OutlineInputBorder(),
+              ),
+              child: Text(_endTime == null
+                  ? 'Seleccione la hora'
+                  : _endTime!.format(context)),
+            ),
+          ),
+          const SizedBox(height: 15),
+
+          // Muestra un listado de usuarios en un diálogo para selección múltiple
+          GestureDetector(
+            onTap: () async {
+              final selectedIds = await showDialog<List<String>>(
+                context: context,
+                builder: (BuildContext context) {
+                  return UserSelectDialog(
+                    users: _users,
+                    selectedUserIds: _selectedUsersId,
+                    onSelectionChanged: (selectedList) {
+                      setState(() {
+                        _selectedUsersId = selectedList;
+                      });
+                    },
+                  );
+                },
+              );
+              if (selectedIds != null) {
+                setState(() {
+                  _selectedUsersId = selectedIds;
+                });
+              }
+            },
+            child: InputDecorator(
+              decoration: const InputDecoration(
+                labelText: 'Seleccionar Usuarios',
+                border: OutlineInputBorder(),
+              ),
+              child: Text(_selectedUsersId.isEmpty
+                  ? 'No se seleccionaron usuarios'
+                  : _selectedUsersId.join(', ')),
+            ),
+          ),
+
           const SizedBox(height: 20),
+
+          // Botón para agregar una foto
+          ElevatedButton(
+            onPressed: _selectImage,
+            child: const Text('Rostro'),
+          ),
+
+          const SizedBox(height: 20),
+
+          // Botones de acción
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -136,63 +280,65 @@ class _UserFormState extends State<UserForm> {
               ),
             ],
           ),
+          const SizedBox(height: 15),
         ],
       ),
     );
   }
 
-  void _presentDatePicker() async {
-    final pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
-    );
-    if (pickedDate != null) {
-      setState(() {
-        _selectedBirthDate = pickedDate;
-      });
-    }
-  }
-
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      // Crear un nuevo objeto User
-      final newUser = User(
-        id: '', // Firestore generará el ID
-        birthDate: _selectedBirthDate?.toIso8601String() ?? '',
+      // Obtener la hora actual para el start_time si es necesario
+      String startTime = DateTime.now().toIso8601String();
+
+      // Crear un nuevo objeto Group
+      final newGroup = Group(
         createdAt: DateTime.now().toIso8601String(),
-        createdBy:
-            'current_user', // Podrías reemplazar esto con el usuario actual
+        createdBy: 'current_user', // Esto puede ser reemplazado por el usuario actual
         deletedAt: '',
         deletedBy: '',
-        documentNumber: _documentNumberController.text,
-        email: _emailController.text,
-        faceData: '',
-        name: _nameController.text,
-        otp: 0, // Valor por defecto, podrías generarlo de manera diferente
-        photo: '',
-        role: _selectedRole ?? '',
-        status: _selectedStatus ?? true, // Usar un valor por defecto si es nulo
-        terms: '', // Podrías manejar los términos de manera diferente
+        description: _descriptionController.text,
+        device: _deviceIdController.text,
+        endDate: _endDate?.toIso8601String() ?? '',
+        endTime: _endTime != null ? _endTime!.format(context) : '',
+        startDate: _startDate?.toIso8601String() ?? '',
+        startTime: _startTime != null ? _startTime!.format(context) : startTime,
+        timeTolerance: int.parse(_timeToleranceController.text),
+        title: _titleController.text,
+        updatedAt: '',
+        updatedBy: '',
+        usersId: _selectedUsersId,
       );
 
-      // Instanciar el UserController
-      final userController = UserController();
+      // Agregar el grupo a Firestore
+      FirebaseFirestore.instance
+          .collection('groups')
+          .add(newGroup.toMap())
+          .then((docRef) {
+        // Una vez creado el documento, asignamos el ID generado a la propiedad id del objeto Group
+        newGroup.id = docRef.id; // Asignar el id generado por Firestore
 
-      // Agregar el usuario
-      userController.addUser(newUser).then((_) {
-        // Cerrar el modal
-        Navigator.pop(context);
+        // Actualizamos el grupo en Firestore con el ID correcto
+        docRef.update({
+          'id': newGroup.id, // Guardamos el id dentro del documento
+        }).then((_) {
+          // Llamar a onGroupCreated si es necesario
+          if (widget.onGroupCreated != null) {
+            widget.onGroupCreated!(newGroup);
+          }
+  
+          // Cerrar el modal
+          Navigator.pop(context);
 
-        // Mostrar un mensaje de éxito
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Usuario creado exitosamente')),
-        );
+          // Mostrar mensaje de éxito
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Grupo creado exitosamente')),
+          );
+        });
       }).catchError((error) {
-        // Manejar cualquier error
+        // Manejar error
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error al crear usuario: $error')),
+          SnackBar(content: Text('Error al crear grupo: $error')),
         );
       });
     }
