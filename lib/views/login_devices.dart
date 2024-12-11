@@ -80,10 +80,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> _registerFailedAccessNotification() async {
     final timestamp = DateTime.now();
+    final loginCode = _loginCodeController.text;
     await FirebaseFirestore.instance.collection('notifications_device').add({
       'type': 'failed_access',
       'title': 'Acceso fallido',
-      'subtitle': 'Se realizaron múltiples intentos fallidos con un código incorrecto.',
+      'subtitle': 'Se realizaron múltiples intentos fallidos con un código $loginCode, el cual es incorrecto.',
       'timestamp': timestamp.toIso8601String(),
     });
   }
