@@ -68,11 +68,11 @@ class AttendanceService {
       QuerySnapshot querySnapshot = await collectionReferenceAttendance
           .where(property, isEqualTo: valueProperty)
           .get();
-      querySnapshot.docs.forEach((document) {
-        var data =
-            AttendanceModel.fromMap(document.data() as Map<String, dynamic>);
-        attendanceList.add(data);
-      });
+
+      attendanceList = querySnapshot.docs.map((document) {
+        return AttendanceModel.fromMap(document.data() as Map<String, dynamic>);
+      }).toList();
+
     } catch (error) {
       print("Error with the method getAttendanceByProperty. Error: $error");
     }

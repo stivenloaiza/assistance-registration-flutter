@@ -39,5 +39,9 @@ class AttendanceModel{
       "user": user,
     };
   }
+  @override
+  String toString() {
+    return 'AttendanceModel(user: $user, group: $group, timeStamp: $timeStamp, attendanceStatus: $attendanceStatus, dispositive: $dispositive, type: $type)';
+  }
 
 }

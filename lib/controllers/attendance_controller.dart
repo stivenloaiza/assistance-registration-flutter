@@ -100,6 +100,10 @@ class AttendanceController implements AttendancePort{
     $groupId
     """);
     final groupAttendance = await findAttendanceByUserAndDateRange(userId, dateRange, groupId); // Filtramos por grupo
+    final List<AttendanceModel> attendanceByGroup = await findByProperty("group", groupId); // Get all attendance by groupId
+    attendanceByGroup.forEach((attendance){
+      print("Attendance: ${attendance.toString()}");
+    });
     final List<ChartData> chartData = processAttendanceForWidget(groupAttendance);
 
     print("groupAttendance $groupAttendance");
