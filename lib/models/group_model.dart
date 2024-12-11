@@ -36,7 +36,7 @@ class Group {
   /// Crear un método para convertir desde un Map (desde Firestore o cualquier otro origen)
   factory Group.fromMap(Map<String, dynamic> map, {String? id}) {
     return Group(
-      id: id ?? '', // Se usa un id opcional, por si viene desde Firestore
+      id: id ?? '',
       createdAt: map['created_at'] ?? '',
       createdBy: map['created_by'] ?? '',
       deletedAt: map['deleted_at'],

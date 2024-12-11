@@ -1,4 +1,4 @@
- // Controlador para manejar grupos
+// Controlador para manejar grupos
 import 'package:asia_project/controllers/group_controller.dart';
 import 'package:asia_project/models/group_model.dart'; // Modelo del grupo
 import 'package:asia_project/widgets/custom_apbar_admin.dart'; // AppBar personalizado
@@ -39,10 +39,11 @@ class _GroupsPageState extends State<GroupsPage> {
 
     setState(() {
       _groups = querySnapshot.docs.map((doc) {
-        final group = Group.fromMap({
-          'id': doc.id, // Asignamos el ID del documento
-          ...doc.data() as Map<String, dynamic>,
-        });
+        final group = Group.fromMap(
+          doc.data() as Map<String, dynamic>,
+          id: doc.id, 
+        );
+        print("Group ID: ${group.id}"); // Debug para verificar
         return group;
       }).toList();
     });
@@ -85,7 +86,6 @@ class _GroupsPageState extends State<GroupsPage> {
               groupId: group.id,
               onDelete: () => _deleteGroup(group.id),
               onEdit: () => _deleteGroup(group.id),
-              // Pasamos el callback para eliminar
             );
           },
         ),
