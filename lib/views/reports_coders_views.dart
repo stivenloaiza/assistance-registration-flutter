@@ -1,4 +1,5 @@
 import 'package:asia_project/controllers/attendance_controller.dart';
+import 'package:asia_project/global_state.dart';
 import 'package:asia_project/ports/attendance_port.dart';
 import 'package:asia_project/services/attendance_service.dart';
 import 'package:asia_project/widgets/reports_bi_widgets/bar_chart.dart';
@@ -108,7 +109,7 @@ class ReportsCoders extends StatefulWidget {
 }
 
 class _ReportsCodersState extends State<ReportsCoders> {
-  final String userId = "gQyFZVUf8rzjlpYl1gIv";
+  final String userId = GlobalState().currentUserUid ?? "gQyFZVUf8rzjlpYl1gIv";
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   late AttendanceController _attendanceController;
   late AttendanceService _attendanceService;
