@@ -32,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
         DocumentSnapshot doc = await userDoc.get();
         if (doc.exists) {
 
-          String nombre = doc['nombre'];
+          String nombre = doc['email'];
           print('Nombre del usuario: $nombre');
         } else {
           print('No se encontró el documento del usuario en Firestore');
