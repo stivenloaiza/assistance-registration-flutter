@@ -3,19 +3,15 @@ import 'package:asia_project/auth/pages/register.dart';
 import 'package:asia_project/views/devicemanagementapp.dart';
 import 'package:asia_project/views/home_admin_user.dart';
 import 'package:asia_project/views/login_devices.dart';
-// import 'package:asia_project/views/login_devices.dart';
 import 'package:asia_project/views/notifications_screen.dart';
 import 'package:asia_project/views/reports_coders_views.dart';
-import 'views/services_page.dart';
+import 'package:asia_project/views/services_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'package:camera/camera.dart';
 
-late List<CameraDescription> cameras;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  cameras = await availableCameras();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -36,14 +32,12 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/login', // Define la ruta inicial
       routes: {
-        '/': (context) =>  LoginPage(),
+        '/': (context) => LoginPage(),
         '/register': (context) => RegisterPage(),
         '/login': (context) => LoginPage(),
-        '/loginDevice' : (context) => login_devices(),
-        '/home_admin_user' : (context) => HomePage(),
-        '/home_coder' : (context) => ReportsCoders(),
-        // '/notifications': (context) => NotificationsScreen(),
-        // '/': (context) => ServicesPage(),
+        '/loginDevice': (context) => login_devices(),
+        '/home_admin_user': (context) => HomePage(),
+        '/home_coder': (context) => ReportsCoders(),
       },
     );
   }
@@ -66,9 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: Center(
-    
-      ),
+      body: Center(),
     );
   }
 }
