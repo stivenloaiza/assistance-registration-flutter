@@ -16,7 +16,7 @@ class login_devices extends StatelessWidget {
       home: LoginScreen(),
     );
   }
-} 
+}
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -31,21 +31,18 @@ class _LoginScreenState extends State<LoginScreen> {
     final loginCode = _loginCodeController.text.trim();
 
     if (loginCode.isEmpty) {
-      // Mostrar mensaje si el campo está vacío
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Por favor, ingresa el código de inicio de sesión.')),
       );
       return;
     }
 
-    // Consultar Firestore para buscar el loginCode
     final querySnapshot = await FirebaseFirestore.instance
         .collection('devices')
         .where('loginCode', isEqualTo: loginCode)
         .get();
 
     if (querySnapshot.docs.isNotEmpty) {
-      // Código encontrado, navegar a la siguiente pantalla
       setState(() {
         _failedAttempts = 0;
       });
@@ -56,7 +53,6 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       );
     } else {
-      // Código no encontrado, mostrar un mensaje de error
       setState(() {
         _failedAttempts++;
       });
@@ -97,9 +93,8 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Título
               Text(
-                "Iniciar Sesión",
+                "Login Devices",
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -107,48 +102,54 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               SizedBox(height: 24),
-              // Campo de entrada
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 8,
-                      offset: Offset(0, 2),
-                    ),
-                  ],
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: TextField(
-                  controller: _loginCodeController,
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                    border: InputBorder.none,
-                    hintText: 'Código de Inicio de Sesión',
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: 400),
+                child: Card(
+                  elevation: 8,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  keyboardType: TextInputType.number,
-                ),
-              ),
-              SizedBox(height: 24),
-              // Botón de inicio de sesión
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () => _validateLoginCode(context),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    padding: EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: Text(
-                    "Iniciar Sesión",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        TextField(
+                          controller: _loginCodeController,
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide.none,
+                            ),
+                            filled: true,
+                            fillColor: Colors.grey[200],
+                            hintText: 'Login Code',
+                          ),
+                          keyboardType: TextInputType.number,
+                        ),
+                        SizedBox(height: 16),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: () => _validateLoginCode(context),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue,
+                              padding: EdgeInsets.symmetric(vertical: 14),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            child: Text(
+                              "Iniciar Sesión",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -166,7 +167,7 @@ class NextScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Detalle"),
+        title: Text("Back"),
         backgroundColor: Colors.blue,
       ),
       body: Center(
