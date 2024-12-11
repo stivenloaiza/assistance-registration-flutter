@@ -34,7 +34,7 @@ class _HeaderAdminState extends State<HeaderAdmin> {
               padding: EdgeInsets.only(
                   right: 16.0), // Padding adicional a la derecha
               child: Text(
-                "REPORTES CODERS", // Asegúrate de que el texto esté en un formato correcto
+                "REPORTES ADMINISTRADOR", // Asegúrate de que el texto esté en un formato correcto
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,

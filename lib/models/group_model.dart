@@ -2,6 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class GroupModel{
+  final String? id;
   final String created_at;
   final String created_by;
   final String deleted_at;
@@ -19,6 +20,7 @@ class GroupModel{
   final List<String> users_id;
 
   GroupModel({
+    this.id,
     required this.created_at,
     required this.created_by,
     required this.deleted_at,
@@ -36,8 +38,9 @@ class GroupModel{
     required this.users_id,
   });
 
-  factory GroupModel.fromMap(Map<String, dynamic> data){
+  factory GroupModel.fromMap(Map<String, dynamic> data, [String? documentId]){
     return GroupModel(
+      id:documentId,
       created_at: data["created_at"] ?? "",
       created_by: data["created_by"] ?? "",
       deleted_at: data["deleted_at"] ?? "",
@@ -75,5 +78,6 @@ class GroupModel{
       "users_id": users_id,
     };
   }
+
 
 }

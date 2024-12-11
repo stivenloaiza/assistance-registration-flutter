@@ -15,7 +15,7 @@ class GroupService{
     QuerySnapshot querySnapshot = await collectionReferenceGroupModel.get();
     print("query $querySnapshot");
     querySnapshot.docs.forEach((document){
-      var data = GroupModel.fromMap(document.data() as Map<String,dynamic>);
+      var data = GroupModel.fromMap(document.data() as Map<String,dynamic>,document.id);
       groupModel.add(data);
     });
     return groupModel;
