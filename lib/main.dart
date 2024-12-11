@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/', // Define la ruta inicial
       routes: {
-        '/': (context) => const MyHomePage(title: 'Flutter Demo Home Page'),
+        '/': (context) => const MyHomePage(title: 'Flutter Demo Home Pagee'),
         '/register': (context) => RegisterPage(),
         '/login': (context) => LoginPage(),
         '/loginDevice' : (context) => login_devices(),
