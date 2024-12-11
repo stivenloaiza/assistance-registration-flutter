@@ -1,3 +1,4 @@
+import 'package:asia_project/views/qr-dinamic/qr_scanner_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -32,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (loginCode.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Por favor, ingresa el código de inicio de sesión.')),
+        const SnackBar(content: Text('Por favor, ingresa el código de inicio de sesión.')),
       );
       return;
     }
@@ -58,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Código incorrecto. Inténtalo nuevamente.')),
+        const SnackBar(content: Text('Código incorrecto. Inténtalo nuevamente.')),
       );
 
       if (_failedAttempts >= 3) {
@@ -163,6 +164,8 @@ class _LoginScreenState extends State<LoginScreen> {
 }
 
 class NextScreen extends StatelessWidget {
+  const NextScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -170,7 +173,7 @@ class NextScreen extends StatelessWidget {
         title: Text("Back"),
         backgroundColor: Colors.blue,
       ),
-      body: Center(
+      body: const Center(
         child: Text(
           "Acá va la cara",
           style: TextStyle(
@@ -179,6 +182,19 @@ class NextScreen extends StatelessWidget {
             color: Colors.black87,
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Navegar a QRScannerScreen
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const QRScannerScreen(),
+            ),
+          );
+        },
+        backgroundColor: Colors.blue,
+        child: const Icon(Icons.qr_code_scanner),
       ),
     );
   }

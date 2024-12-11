@@ -45,9 +45,9 @@ class _LoginPageState extends State<LoginPage> {
           String role = doc['role'];
 
           if (role == 'admin') {
-            Navigator.pushReplacementNamed(context, '/admin_test');
+            Navigator.pushReplacementNamed(context, '/home_admin_user');
           } else {
-            Navigator.pushReplacementNamed(context, '/home_test');
+            Navigator.pushReplacementNamed(context, '/home_coder');
           }
         }
 

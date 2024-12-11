@@ -94,7 +94,7 @@ class _HomePageState extends State<HomePage> {
                 DevicePage(
                   isMobile: isMobile,
                   onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
-                ),
+                ),  
               ],
             ),
           ),

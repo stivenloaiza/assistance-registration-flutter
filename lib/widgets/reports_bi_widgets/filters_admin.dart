@@ -46,7 +46,6 @@ class _FilterAdminState extends State<FilterAdmin> {
               children: <Widget>[
                 Row(
                   children: [
-                    Image.asset('assets/images/filtra-logo.png', width: 100.0),
                     const SizedBox(width: 12),
                     Expanded(
                       child: DropdownButtonFormField<String>(
@@ -97,21 +96,6 @@ class _FilterAdminState extends State<FilterAdmin> {
                       ),
                     ),
                   ],
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    elevation: 0.0,
-                  ),
-                  onPressed: () {
-                    if (selectedGroup != null) {
-                      widget.onGroupSelected(selectedGroup!);
-                    }
-                  },
-                  child: const Text(
-                    style: TextStyle(color: Colors.black),
-                    "Aplicar Filtro",
-                  ),
                 ),
               ],
             ),
