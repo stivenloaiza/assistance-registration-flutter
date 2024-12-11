@@ -12,4 +12,8 @@ class GroupController implements GroupPort{
   Future<List<GroupModel>> findAllGroup() async{
     return await groupService.getAllGroup();
   }
+  @override
+  Future<List<GroupModel>> findAllGroupByUserId(String userId) async{
+    return await groupService.getAllGroupByUserId(userId);
+  }
 }

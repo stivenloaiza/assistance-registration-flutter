@@ -22,13 +22,14 @@
     int? selectedNumber;
     final FirebaseFirestore _firestore = FirebaseFirestore.instance;
     late Future<List<GroupModel>> _groupFuture;
+    final String userId = "PdYx885x9lac4u7Xx40X";
 
     @override
     void initState() {
       super.initState();
       final GroupService _groupService = GroupService(firestore: _firestore);
       final GroupController _groupController = GroupController(_groupService);
-      _groupFuture = _groupController.findAllGroup();
+      _groupFuture = _groupController.findAllGroupByUserId(userId);
     }
 
     @override
@@ -109,7 +110,7 @@
                           setState(() {
                             selectedNumber = 1;
                           });
-                          final attendanceFuture = UtilApplication.attendanceFindByDateRangeInstance(_firestore, "1").then((value){
+                          final attendanceFuture = UtilApplication.attendanceFindByDateRangeInstance(_firestore, "1", userId).then((value){
                             print("Today");
                             print(value);
                           });
@@ -129,7 +130,7 @@
                           setState(() {
                             selectedNumber = 2;
                           });
-                          final attendanceFuture = UtilApplication.attendanceFindByDateRangeInstance(_firestore, "7").then((value){
+                          final attendanceFuture = UtilApplication.attendanceFindByDateRangeInstance(_firestore, "7", userId).then((value){
                             print("Week");
                             print(value);
                           });
@@ -148,7 +149,7 @@
                           setState(() {
                             selectedNumber = 3;
                           });
-                          final attendanceFuture = UtilApplication.attendanceFindByDateRangeInstance(_firestore, "1 mes").then((value){
+                          final attendanceFuture = UtilApplication.attendanceFindByDateRangeInstance(_firestore, "1 mes", userId).then((value){
                             print("Month");
                             print(value);
                           });
@@ -167,10 +168,10 @@
                           setState(() {
                             selectedNumber = 4;
                           });
-                          final attendanceFuture = UtilApplication.getAllAttendanceInstance(_firestore).then((value){
+                          final attendanceFuture = UtilApplication.getAllAttendanceByUserIdInstance(_firestore, userId).then((value){
                             print("All");
                             value.forEach((element){
-                              print("ddd ${element.timeStamp} ${element.user}");
+                              print("attendanceFuture ${element.timeStamp} ${element.user}");
                             });
 
                           });

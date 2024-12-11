@@ -17,8 +17,8 @@ class AttendanceController implements AttendancePort{
   }
 
   @override
-  Future<List<AttendanceModel>> findAttendanceByDateRange(String range)async{
-    return await _attendanceService.getAttendanceByDateRange(range);
+  Future<List<AttendanceModel>> findAttendanceByDateRange(String range, String userId)async{
+    return await _attendanceService.getAttendanceByDateRange(range, userId);
   }
 
   @override
