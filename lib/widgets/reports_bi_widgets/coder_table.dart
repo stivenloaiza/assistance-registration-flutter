@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:asia_project/controllers/user_controller.dart'; // Asegúrate de que la ruta sea correcta
 import 'package:asia_project/services/user_service.dart'; // Asegúrate de que la ruta sea correcta
 import 'package:cloud_firestore/cloud_firestore.dart'; // Asegúrate de que la ruta sea correcta
-import 'package:asia_project/models/user_model.dart'; // Asegúrate de que la ruta sea correcta
+import 'package:asia_project/models/user_reports_model.dart'; // Asegúrate de que la ruta sea correcta
 
 class UserListScreen extends StatefulWidget {
   const UserListScreen({Key? key}) : super(key: key);

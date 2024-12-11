@@ -1,5 +1,5 @@
 
-import 'package:asia_project/models/user_model.dart';
+import 'package:asia_project/models/user_reports_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserService{

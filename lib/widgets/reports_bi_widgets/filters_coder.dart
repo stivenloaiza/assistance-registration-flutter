@@ -4,8 +4,8 @@
   import 'package:asia_project/utils/utilApplication.dart';
   import 'package:cloud_firestore/cloud_firestore.dart';
   import 'package:flutter/material.dart';
-  import 'package:asia_project/models/group_model.dart';
-  import 'package:asia_project/controllers/group_controller.dart';
+  import 'package:asia_project/models/group_reports_model.dart';
+  import 'package:asia_project/controllers/group_reports_controller.dart';
   import 'package:asia_project/services/group_service.dart';
 
   class FilterCoder extends StatefulWidget {
