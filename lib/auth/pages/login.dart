@@ -1,222 +1,211 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
 
+// Provider para manejar el estado global del usuario
+class UserProvider extends ChangeNotifier {
+  User? _currentUser;
+  String? _userRole;
+
+  User? get currentUser => _currentUser;
+  String? get userRole => _userRole;
+
+  void setUser(User? user, String? role) {
+    _currentUser = user;
+    _userRole = role;
+    notifyListeners();
+  }
+
+  void clearUser() {
+    _currentUser = null;
+    _userRole = null;
+    notifyListeners();
+  }
+
+  bool get isLoggedIn => _currentUser != null;
+}
+
+// Página de Login
 class LoginPage extends StatefulWidget {
+  const LoginPage({Key? key}) : super(key: key);
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-  // Controladores para email y contraseña
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   void _loginUser() async {
+    if (!_formKey.currentState!.validate()) return;
+
     try {
-      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
+
       User? user = userCredential.user;
 
       if (user != null) {
+        print('User ID: ${user.uid}');
+        
+        DocumentSnapshot userDoc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
 
-        DocumentReference userDoc =
-            _firestore.collection('users').doc(user.uid);
+      
+        if (userDoc.exists) {
+          String role = userDoc['role'] ?? 'user';
 
+          Provider.of<UserProvider>(context, listen: false).setUser(user, role);
 
-        DocumentSnapshot doc = await userDoc.get();
-        if (doc.exists) {
-
-          String nombre = doc['email'];
-          print('Nombre del usuario: $nombre');
-        } else {
-          print('No se encontró el documento del usuario en Firestore');
-        }
-
-        if (doc.exists) {
-          String role = doc['role'];
-
+    
           if (role == 'admin') {
-            Navigator.pushReplacementNamed(context, '/admin_test');
+            Navigator.pushReplacementNamed(context, '/admin_dashboard');
           } else {
-            Navigator.pushReplacementNamed(context, '/home_test');
+            Navigator.pushReplacementNamed(context, '/home');
           }
-        }
 
-        print('Usuario ha iniciado sesión: ${user.email}');
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Inicio de sesión exitoso')),
-        );
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Inicio de sesión exitoso')),
+          );
+        } else {
+
+          _showErrorDialog('Perfil de usuario no encontrado');
+        }
       }
     } on FirebaseAuthException catch (e) {
-      String message = 'Ocurrió un error. Inténtalo de nuevo.';
-
-      if (e.code == 'user-not-found') {
-        message = 'No se encontró ningún usuario con ese correo electrónico.';
-      } else if (e.code == 'wrong-password') {
-        message = 'La contraseña es incorrecta.';
+      String errorMessage = 'Error de autenticación';
+      switch (e.code) {
+        case 'user-not-found':
+          errorMessage = 'No se encontró un usuario con este correo';
+          break;
+        case 'wrong-password':
+          errorMessage = 'Contraseña incorrecta';
+          break;
+        case 'invalid-email':
+          errorMessage = 'Correo electrónico inválido';
+          break;
       }
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message)),
-      );
+      _showErrorDialog(errorMessage);
     } catch (e) {
-      print('Error: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Ocurrió un error. Inténtalo de nuevo.')),
-      );
+
+      _showErrorDialog('Ocurrió un error inesperado');
     }
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Error'),
+        content: Text(message),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Aceptar'),
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+          )
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: Colors.white,
       body: Center(
         child: SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.all(35),
-            constraints: const BoxConstraints(
-              maxWidth: 400,
-              minHeight: 400,
-            ),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: const [
-                BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 10,
-                  offset: Offset(0, 5),
-                ),
-              ],
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Center(
-                  child: Text(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
                     'ASIA',
                     style: TextStyle(
-                      fontSize: 30,
+                      fontSize: 36,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF333333),
+                      color: Colors.blue,
                     ),
                   ),
-                ),
-                const SizedBox(height: 35),
-                // Campo Email
-                TextField(
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                    labelText: 'Email',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(color: Color(0xFFCCCCCC)),
+                  const SizedBox(height: 40),
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                      labelText: 'Correo Electrónico',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      prefixIcon: const Icon(Icons.email),
                     ),
-                    filled: true,
-                    fillColor: Colors.grey[100],
-                    prefixIcon:
-                        const Icon(Icons.email, color: Color(0xFF999999)),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor ingresa tu correo';
+                      }
+                      return null;
+                    },
                   ),
-                ),
-                const SizedBox(height: 35),
-                // Campo Password
-                TextField(
-                  controller: _passwordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(color: Color(0xFFCCCCCC)),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    controller: _passwordController,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      labelText: 'Contraseña',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      prefixIcon: const Icon(Icons.lock),
                     ),
-                    filled: true,
-                    fillColor: Colors.grey[100],
-                    prefixIcon:
-                        const Icon(Icons.lock, color: Color(0xFF999999)),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor ingresa tu contraseña';
+                      }
+                      return null;
+                    },
                   ),
-                ),
-                const SizedBox(height: 50),
-                // Botón de inicio de sesión
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
+                  const SizedBox(height: 30),
+                  ElevatedButton(
                     onPressed: _loginUser,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF007BFF),
+                      minimumSize: const Size(double.infinity, 50),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      padding: const EdgeInsets.symmetric(vertical: 15),
                     ),
-                    child: const Text(
-                      'Sign in',
-                      style: TextStyle(fontSize: 18, color: Colors.white),
-                    ),
+                    child: const Text('Iniciar Sesión'),
                   ),
-                ),
-
-                const SizedBox(
-                    height:
-                        20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    // Botón Registrarse
-                    Expanded(
-                      child: ElevatedButton(
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextButton(
                         onPressed: () {
-                          // Navegación registro
-                          Navigator.pushNamed(context,
-                              '/register');
+                          Navigator.pushNamed(context, '/register');
                         },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              Colors.grey[300],
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          padding: const EdgeInsets.symmetric(vertical: 15),
-                        ),
-                        child: const Text(
-                          'Registrarse',
-                          style: TextStyle(fontSize: 16, color: Colors.black),
-                        ),
+                        child: const Text('Registrarse'),
                       ),
-                    ),
-                    const SizedBox(width: 20),
-
-                    Expanded(
-                      child: ElevatedButton(
+                      TextButton(
                         onPressed: () {
-                          // Navegación login
-                          Navigator.pushNamed(context,
-                              '/loginDevice');
+                          Navigator.pushNamed(context, '/reset_password');
                         },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF007BFF),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          padding: const EdgeInsets.symmetric(vertical: 15),
-                        ),
-                        child: const Text(
-                          'Login Device',
-                          style: TextStyle(fontSize: 16, color: Colors.white),
-                        ),
+                        child: const Text('Olvidé mi contraseña'),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
