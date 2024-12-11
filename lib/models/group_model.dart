@@ -2,6 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class GroupModel{
+  final String? id;
   final String created_at;
   final String created_by;
   final String deleted_at;
@@ -13,11 +14,13 @@ class GroupModel{
   final String end_date;
   final String end_time;
   final String start_date;
+  final String start_time;
   final int time_tolerance;
   final String title;
   final List<String> users_id;
 
   GroupModel({
+    this.id,
     required this.created_at,
     required this.created_by,
     required this.deleted_at,
@@ -27,6 +30,7 @@ class GroupModel{
     required this.description,
     required this.device,
     required this.end_date,
+    required this.start_time,
     required this.end_time,
     required this.start_date,
     required this.time_tolerance,
@@ -34,8 +38,9 @@ class GroupModel{
     required this.users_id,
   });
 
-  factory GroupModel.fromMap(Map<String, dynamic> data){
+  factory GroupModel.fromMap(Map<String, dynamic> data, [String? documentId]){
     return GroupModel(
+      id:documentId,
       created_at: data["created_at"] ?? "",
       created_by: data["created_by"] ?? "",
       deleted_at: data["deleted_at"] ?? "",
@@ -45,11 +50,12 @@ class GroupModel{
       description: data["description"] ?? "",
       device: data["device"] ?? "",
       end_date: data["end_date"] ?? "",
+      start_time: data["start_time"] ?? "",
       end_time: data["end_time"] ?? "",
       start_date: data["start_date"] ?? "",
-      time_tolerance: data["time_tolerance"] ?? "",
+      time_tolerance: data["time_tolerance"] ?? 0,
       title: data["title"] ?? "",
-      users_id: data["user_id"] ?? "",
+      users_id: data["user_id"] ?? [""],
     );
   }
 
@@ -64,6 +70,7 @@ class GroupModel{
       "description": description,
       "device": device,
       "end_date": end_date,
+      "start_time": start_time,
       "end_time": end_time,
       "start_date": start_date,
       "time_tolerance": time_tolerance,
@@ -71,5 +78,6 @@ class GroupModel{
       "users_id": users_id,
     };
   }
+
 
 }

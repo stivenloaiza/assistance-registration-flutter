@@ -27,32 +27,38 @@ class AttendanceController implements AttendancePort{
   }
 
   @override
-  Future<Map<String, Map<String, dynamic>>> findAttendanceByUserAndDateRange(String userId, DateTimeRange dateRange) async{
+  Future<Map<String, Map<String, dynamic>>> findAttendanceByUserAndDateRange(
+      String userId,
+      DateTimeRange dateRange,
+      String groupId,
+      ) async {
     try {
       final QuerySnapshot snapshot = await FirebaseFirestore.instance
           .collection('attendance')
           .where('user', isEqualTo: userId)
           .where('timeStamp', isGreaterThanOrEqualTo: dateRange.start)
           .where('timeStamp', isLessThanOrEqualTo: dateRange.end)
+          .where('group', isEqualTo: groupId) // Filtramos por grupo
           .get();
+      print("ddd ${snapshot.docs}");
 
       final Map<String, Map<String, dynamic>> groupAttendance = {};
 
       for (var doc in snapshot.docs) {
         final data = doc.data() as Map<String, dynamic>;
-        final String groupId = data['group'];
         final String status = data['attendanceStatus'];
 
         groupAttendance[groupId] ??= {'late': 0, 'onTime': 0, 'absent': 0};
         groupAttendance[groupId]?[status] =
             (groupAttendance[groupId]?[status] ?? 0) + 1;
       }
-
+      print("groupAttendance -- $groupAttendance");
       return groupAttendance;
     } catch (e) {
       throw Exception("Error fetching attendance data: $e");
     }
   }
+
 
   @override
   List<ChartData> processAttendanceForWidget(Map<String, Map<String, dynamic>> groupAttendance) {
@@ -81,18 +87,36 @@ class AttendanceController implements AttendancePort{
   }
 
   @override
-  Future<BarChartWidget> buildAttendanceWidget(String userId, DateTimeRange dateRange, String chartTitle) async{
-    final groupAttendance = await findAttendanceByUserAndDateRange(userId, dateRange);
+  Future<BarChartWidget> buildAttendanceWidget(
+      String userId,
+      DateTimeRange dateRange,
+      String chartTitle,
+      String groupId, // Añadimos el groupId
+      ) async {
+    print("""
+    $userId,
+    $dateRange, 
+    $chartTitle,
+    $groupId
+    """);
+    final groupAttendance = await findAttendanceByUserAndDateRange(userId, dateRange, groupId); // Filtramos por grupo
+    final List<AttendanceModel> attendanceByGroup = await findByProperty("group", groupId); // Get all attendance by groupId
+    attendanceByGroup.forEach((attendance){
+      print("Attendance: ${attendance.toString()}");
+    });
     final List<ChartData> chartData = processAttendanceForWidget(groupAttendance);
 
+    print("groupAttendance $groupAttendance");
+    print("chartDATA ${chartData}");
     return BarChartWidget(
       chartTitle: chartTitle,
       ref: {
-        'titleFirstValue': 'Ausencia',
-        'titleSecondValue': 'Presente',
-        'titleThirdValue': 'Retraso',
+        'titleFirstValue': 'Absent',
+        'titleSecondValue': 'Present',
+        'titleThirdValue': 'Delay',
       },
       data: chartData,
     );
   }
+
 }

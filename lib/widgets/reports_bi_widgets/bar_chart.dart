@@ -7,7 +7,7 @@ class BarChartWidget extends StatefulWidget {
   final Map<String, String> ref;
   final Color backgroundColor;
 
-  const BarChartWidget({
+  BarChartWidget({
     super.key,
     required this.chartTitle,
     required this.data,
@@ -15,10 +15,11 @@ class BarChartWidget extends StatefulWidget {
     this.backgroundColor = Colors.white,
   });
 
-  final Color firstBarColor = const Color.fromRGBO(252, 121, 0, 1);
-  final Color secondBarColor = const Color.fromRGBO(24, 20, 243, 1);
-  final Color thirdBarColor = const Color.fromARGB(255, 125, 194, 237);
-  final Color avgColor = const Color.fromRGBO(181, 181, 181, 1);
+  // Definir los colores como variables de instancia
+  final Color firstBarColor = Color.fromRGBO(252, 121, 0, 1);
+  final Color secondBarColor = Color.fromRGBO(24, 20, 243, 1);
+  final Color thirdBarColor = Color.fromARGB(255, 125, 194, 237);
+  final Color avgColor = Color.fromRGBO(181, 181, 181, 1);
 
   @override
   State<BarChartWidget> createState() => _BarChartWidgetState();
@@ -29,18 +30,24 @@ class _BarChartWidgetState extends State<BarChartWidget> {
   late List<BarChartGroupData> barGroups;
   late List<BarChartGroupData> showingBarGroups;
   int touchedGroupIndex = -1;
+  bool isLoading = true; // Variable para manejar el estado de carga
 
   @override
   void initState() {
     super.initState();
-    barGroups = widget.data.asMap().entries.map((entry) {
-      final index = entry.key;
-      final chartData = entry.value;
-      return makeGroupData(index, chartData.numberFirstValue,
-          chartData.numberSecondValue, chartData.numberThirdValue ?? 0);
-    }).toList();
-
-    showingBarGroups = List.of(barGroups);
+    // Simulando un retraso en la carga de los datos (esto debe reemplazarse con tu lógica real de carga de datos)
+    Future.delayed(Duration(seconds: 2), () {
+      setState(() {
+        barGroups = widget.data.asMap().entries.map((entry) {
+          final index = entry.key;
+          final chartData = entry.value;
+          return makeGroupData(index, chartData.numberFirstValue,
+              chartData.numberSecondValue, chartData.numberThirdValue ?? 0);
+        }).toList();
+        showingBarGroups = List.of(barGroups);
+        isLoading = false;
+      });
+    });
   }
 
   @override
@@ -51,7 +58,7 @@ class _BarChartWidgetState extends State<BarChartWidget> {
 
     final maxY = roundUpToNextMultipleOfFive(widget.data.fold<double>(
       0,
-      (previousMax, element) => [
+          (previousMax, element) => [
         element.numberFirstValue,
         element.numberSecondValue,
         element.numberThirdValue ?? 0,
@@ -79,16 +86,21 @@ class _BarChartWidgetState extends State<BarChartWidget> {
             _buildLegend(),
             const SizedBox(height: 40),
             Expanded(
-              child: BarChart(
+              child: isLoading
+                  ? Center(
+                child: CircularProgressIndicator(), // Indicador de carga
+              )
+                  : BarChart(
                 BarChartData(
                   minY: 0,
                   maxY: maxY,
                   barTouchData: BarTouchData(
                     touchTooltipData: BarTouchTooltipData(
                       getTooltipColor: (group) =>
-                          const Color.fromRGBO(181, 181, 181, 1),
+                      const Color.fromRGBO(181, 181, 181, 1),
                       getTooltipItem: (group, groupIndex, rod, rodIndex) {
                         final chartData = widget.data[group.x.toInt()];
+                        print("sss $chartData");
                         return BarTooltipItem(
                           'Avg: ${chartData.average.toStringAsFixed(1)}\n',
                           const TextStyle(
@@ -120,15 +132,15 @@ class _BarChartWidgetState extends State<BarChartWidget> {
                         if (touchedGroupIndex != -1) {
                           showingBarGroups[touchedGroupIndex] =
                               showingBarGroups[touchedGroupIndex].copyWith(
-                            barRods: showingBarGroups[touchedGroupIndex]
-                                .barRods
-                                .map((rod) {
-                              return rod.copyWith(
-                                toY: widget.data[touchedGroupIndex].average,
-                                color: widget.avgColor,
+                                barRods: showingBarGroups[touchedGroupIndex]
+                                    .barRods
+                                    .map((rod) {
+                                  return rod.copyWith(
+                                    toY: widget.data[touchedGroupIndex].average,
+                                    color: widget.avgColor,
+                                  );
+                                }).toList(),
                               );
-                            }).toList(),
-                          );
                         }
                       });
                     },
@@ -169,7 +181,7 @@ class _BarChartWidgetState extends State<BarChartWidget> {
                       sideTitles: SideTitles(
                         showTitles: true,
                         reservedSize: 28,
-                        interval: maxY / 5,
+                        interval: maxY > 0 ? maxY / 5 : 1,
                         getTitlesWidget: (value, meta) {
                           return SideTitleWidget(
                             axisSide: meta.axisSide,
@@ -221,16 +233,14 @@ class _BarChartWidgetState extends State<BarChartWidget> {
   }
 
   Widget _legendItem(Color color, String title) {
-    return SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            const SizedBox(width: 5),
-            CircleAvatar(radius: 8, backgroundColor: color),
-            const SizedBox(width: 5),
-            Text(title, style: const TextStyle(fontSize: 14)),
-          ],
-        ));
+    return Row(
+      children: [
+        const SizedBox(width: 5),
+        CircleAvatar(radius: 8, backgroundColor: color),
+        const SizedBox(width: 5),
+        Text(title, style: const TextStyle(fontSize: 14)),
+      ],
+    );
   }
 
   BarChartGroupData makeGroupData(int x, double y1, double y2, double y3) {
@@ -270,8 +280,5 @@ class ChartData {
     required this.numberFirstValue,
     required this.numberSecondValue,
     this.numberThirdValue,
-  }) : average = (numberFirstValue +
-                numberSecondValue +
-                (numberThirdValue != null ? numberThirdValue : 0)) /
-            2;
+  }) : average = (numberFirstValue + numberSecondValue + (numberThirdValue ?? 0)) / 3;
 }

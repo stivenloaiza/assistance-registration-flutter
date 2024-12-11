@@ -19,13 +19,12 @@ class AttendanceService {
     return attendance;
   }
 
+
   DateTime calculateStartDate(String range) {
     DateTime now = DateTime.now();
     switch (range) {
       case "1":
         return now.subtract(const Duration(days: 1));
-      case "3":
-        return now.subtract(const Duration(days: 3));
       case "7":
         return now.subtract(const Duration(days: 7));
       case "1 mes":
@@ -42,10 +41,12 @@ class AttendanceService {
 
     try {
       DateTime startDate = calculateStartDate(range);
+      print("startDate ${startDate}");
       QuerySnapshot querySnapshot = await collectionReferenceAttendance
           .where("timeStamp",
-              isGreaterThanOrEqualTo: startDate.toIso8601String())
+              isGreaterThanOrEqualTo: Timestamp.fromDate(startDate))
           .get();
+      print("query ${querySnapshot}");
       querySnapshot.docs.forEach((document) {
         var data =
             AttendanceModel.fromMap(document.data() as Map<String, dynamic>);
@@ -67,11 +68,11 @@ class AttendanceService {
       QuerySnapshot querySnapshot = await collectionReferenceAttendance
           .where(property, isEqualTo: valueProperty)
           .get();
-      querySnapshot.docs.forEach((document) {
-        var data =
-            AttendanceModel.fromMap(document.data() as Map<String, dynamic>);
-        attendanceList.add(data);
-      });
+
+      attendanceList = querySnapshot.docs.map((document) {
+        return AttendanceModel.fromMap(document.data() as Map<String, dynamic>);
+      }).toList();
+
     } catch (error) {
       print("Error with the method getAttendanceByProperty. Error: $error");
     }
@@ -185,5 +186,33 @@ class AttendanceService {
       'lateData': lateData,
       'ref': [firstDate, middleDate, lastDate],
     };
+  }
+
+  Future<int> getTotalAttendanceByUser(String userId)async{
+    String userCurrent = "ZlVXfzUz94Ks25eFUfGp";
+    List<AttendanceModel> attendanceModels = [];
+
+    CollectionReference collectionReferenceAttendance =
+    firestore.collection("attendance");
+    QuerySnapshot queryAttendance = await collectionReferenceAttendance.where("user", isEqualTo: userId ?? userCurrent).get();
+    queryAttendance.docs.forEach((document) {
+      var data =
+      AttendanceModel.fromMap(document.data() as Map<String, dynamic>);
+      attendanceModels.add(data);
+    });
+    return attendanceModels.length;
+  }
+
+  Future<int> getTotalAttendanceByUserGroup(String? userId, String group)async{
+    String userCurrent = "ZlVXfzUz94Ks25eFUfGp";
+    List<AttendanceModel> attendanceModels = [];
+
+    CollectionReference collectionReferenceAttendance = firestore.collection("attendance");
+    QuerySnapshot queryAttendance = await collectionReferenceAttendance.where("user", isEqualTo: userId ?? userCurrent).where("group", isEqualTo: group).get();
+    queryAttendance.docs.forEach((document){
+      var data = AttendanceModel.fromMap(document.data() as Map<String,dynamic>);
+      attendanceModels.add(data);
+    });
+    return attendanceModels.length;
   }
 }
