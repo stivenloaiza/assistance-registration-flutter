@@ -6,7 +6,6 @@ import 'package:asia_project/services/attendance_service.dart';
 import 'package:asia_project/widgets/reports_bi_widgets/filters_admin.dart';
 import 'package:asia_project/widgets/reports_bi_widgets/table_admin_reports.dart';
 import 'package:asia_project/widgets/reports_bi_widgets/line_chart.dart';
-
 class ReportsAdmin extends StatefulWidget {
   const ReportsAdmin({super.key});
 
@@ -80,6 +79,7 @@ class _ReportsAdminState extends State<ReportsAdmin> {
         child: Column(
           children: [
             const HeaderAdmin(),
+            
             FilterAdmin(
               onGroupSelected: (groupTitle) {
                 setState(() {
