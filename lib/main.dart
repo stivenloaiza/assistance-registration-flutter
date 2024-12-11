@@ -31,9 +31,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      initialRoute: '/', // Define la ruta inicial
+      initialRoute: '/login', // Define la ruta inicial
       routes: {
-        '/': (context) => const MyHomePage(title: 'Flutter Demo Home Pagee'),
+        '/': (context) =>  LoginPage(),
         '/register': (context) => RegisterPage(),
         '/login': (context) => LoginPage(),
         '/loginDevice' : (context) => login_devices(),
@@ -64,73 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            // Text(
-            //   '$_counter',
-            //   style: Theme.of(context).textTheme.headlineMedium,
-            // ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(
-                    context, '/register'); // Navega a la página de registro
-              },
-              child: const Text('Go to Register'),
-            ),
-            const SizedBox(height: 20,),
-            ElevatedButton(
-              onPressed: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DeviceManagementApp(),
-              ),
-            );
-            },
-            child: const Text("Device Management")
-            ),
-            const SizedBox(height: 20,),
-            ElevatedButton(
-              onPressed: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => NotificationsPage(),
-              ),
-            );
-            },
-            child: const Text("Vista notificaciones")
-            ),
-            const SizedBox(height: 20,),
-            ElevatedButton(
-              onPressed: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => LoginPage(),
-              ),
-            );
-            },
-            child: const Text("Login")
-            ),
-            const SizedBox(height: 20,),
-            ElevatedButton(
-              onPressed: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => login_devices(),
-              ),
-            );
-            },
-            child: const Text("login devices")
-            )
-          ],
-        ),
+    
       ),
     );
   }

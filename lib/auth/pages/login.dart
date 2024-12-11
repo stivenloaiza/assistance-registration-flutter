@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:asia_project/global_state.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -25,6 +26,8 @@ class _LoginPageState extends State<LoginPage> {
 
       if (user != null) {
 
+        GlobalState().currentUserUid = user.uid;
+        
         DocumentReference userDoc =
             _firestore.collection('users').doc(user.uid);
 
@@ -32,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
         DocumentSnapshot doc = await userDoc.get();
         if (doc.exists) {
 
-          String nombre = doc['nombre'];
+          String nombre = doc['email'];
           print('Nombre del usuario: $nombre');
         } else {
           print('No se encontró el documento del usuario en Firestore');
