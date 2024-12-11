@@ -41,7 +41,7 @@ class _GroupsPageState extends State<GroupsPage> {
       _groups = querySnapshot.docs.map((doc) {
         final group = Group.fromMap(
           doc.data() as Map<String, dynamic>,
-          id: doc.id, 
+          id: doc.id,
         );
         print("Group ID: ${group.id}"); // Debug para verificar
         return group;
@@ -57,6 +57,18 @@ class _GroupsPageState extends State<GroupsPage> {
       _groups.removeWhere((group) => group.id == groupId); // Eliminamos de la lista
     });
   }
+
+  // Método para editar un grupo
+  Future<void> _editGroup(String groupId) async {
+    // Muestra un mensaje de SnackBar cuando se haga clic en editar
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Este es el botón de actualizar')),
+    );
+
+    // Aquí puedes agregar la lógica de edición cuando implementes el formulario o la vista para editar el grupo.
+    // Esto puede incluir navegar a otra pantalla o abrir un modal con los detalles del grupo.
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +97,7 @@ class _GroupsPageState extends State<GroupsPage> {
               usersId: group.usersId,
               groupId: group.id,
               onDelete: () => _deleteGroup(group.id),
-              onEdit: () => _deleteGroup(group.id),
+              onEdit: () => _editGroup(group.id),
             );
           },
         ),
