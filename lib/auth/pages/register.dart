@@ -35,6 +35,7 @@ class _RegisterPageState extends State<RegisterPage> {
       });
     }
   }
+  
 
   void _registerUser() async {
     if (!_acceptTerms) {
