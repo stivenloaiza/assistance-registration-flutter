@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class LineChart2 extends StatefulWidget {
   final List<double> data;
-  final List<String> ref;
+  final List<dynamic> ref;
 
   const LineChart2({required this.data, required this.ref, super.key});
 
@@ -156,7 +156,7 @@ class _LineChart2State extends State<LineChart2> {
       minX: 0,
       maxX: maxX,
       minY: 0,
-      maxY: 3, // Rango ajustado al nuevo sistema de etiquetas
+      maxY: 4, // Rango ajustado al nuevo sistema de etiquetas
       lineBarsData: [
         LineChartBarData(
           spots: List.generate(

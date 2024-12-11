@@ -42,7 +42,7 @@ class _BarChartWidgetState extends State<BarChartWidget> {
           final index = entry.key;
           final chartData = entry.value;
           return makeGroupData(index, chartData.numberFirstValue,
-              chartData.numberSecondValue, chartData.numberThirdValue ?? 0);
+              chartData.numberSecondValue ?? 0, chartData.numberThirdValue ?? 0);
         }).toList();
         showingBarGroups = List.of(barGroups);
         isLoading = false;
@@ -60,7 +60,7 @@ class _BarChartWidgetState extends State<BarChartWidget> {
       0,
           (previousMax, element) => [
         element.numberFirstValue,
-        element.numberSecondValue,
+        element.numberSecondValue ?? 0,
         element.numberThirdValue ?? 0,
       ].reduce((a, b) => a > b ? a : b).clamp(previousMax, double.infinity),
     ));
@@ -225,7 +225,8 @@ class _BarChartWidgetState extends State<BarChartWidget> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             _legendItem(widget.firstBarColor, widget.ref['titleFirstValue']!),
-            _legendItem(widget.secondBarColor, widget.ref['titleSecondValue']!),
+            if (widget.ref['titleSecondValue'] != null)
+              _legendItem(widget.secondBarColor, widget.ref['titleSecondValue']!),
             if (widget.ref['titleThirdValue'] != null)
               _legendItem(widget.thirdBarColor, widget.ref['titleThirdValue']!),
           ],
@@ -271,14 +272,14 @@ class _BarChartWidgetState extends State<BarChartWidget> {
 class ChartData {
   final String barTitle;
   final double numberFirstValue;
-  final double numberSecondValue;
+  final double? numberSecondValue;
   final double? numberThirdValue;
   final double average;
 
   ChartData({
     required this.barTitle,
     required this.numberFirstValue,
-    required this.numberSecondValue,
+    this.numberSecondValue,
     this.numberThirdValue,
-  }) : average = (numberFirstValue + numberSecondValue + (numberThirdValue ?? 0)) / 3;
+  }) : average = (numberFirstValue + (numberSecondValue ?? 0) + (numberThirdValue ?? 0)) / 3;
 }
