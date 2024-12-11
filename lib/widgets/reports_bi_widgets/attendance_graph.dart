@@ -82,4 +82,3 @@ class AttendanceGraph extends StatelessWidget {
     );
   }
 }
-
