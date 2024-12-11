@@ -1,6 +1,6 @@
 
 import 'package:asia_project/models/attendance_model.dart';
-import 'package:asia_project/models/group_model.dart';
+import 'package:asia_project/models/group_reports_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class GroupService{

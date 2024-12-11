@@ -36,7 +36,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const ReportsCoders(),
+      debugShowCheckedModeBanner: false,
+      home: const ReportsAdmin(),
     );
   }
 }

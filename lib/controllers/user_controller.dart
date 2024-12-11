@@ -1,6 +1,6 @@
 import 'package:asia_project/ports/user_port.dart';
 import '../services/user_service.dart';
-import '../models/user_model.dart';
+import '../models/user_reports_model.dart';
 
 class UserController implements UserPort {
   final UserService _userService;

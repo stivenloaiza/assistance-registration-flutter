@@ -91,6 +91,7 @@ class _ReportsAdminState extends State<ReportsAdmin> {
             if (isLoading)
               const CircularProgressIndicator()
             else if (attendanceData.isNotEmpty && chartData != null) ...[
+              const SizedBox(height: 16),
               AttendanceTable(data: attendanceData),
               const SizedBox(height: 16),
               CustomLineChart(
