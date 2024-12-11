@@ -20,15 +20,15 @@ class UtilApplication{
     }
   }
 
-  static Future<List<AttendanceModel>> attendanceFindByDateRangeInstance(FirebaseFirestore firestore, String range)async{
+  static Future<List<AttendanceModel>> attendanceFindByDateRangeInstance(FirebaseFirestore firestore, String range, String userId)async{
     final AttendanceService _attendanceService = AttendanceService(firestore: firestore);
     final AttendanceController _attendanceController = AttendanceController(_attendanceService);
-    return await _attendanceController.findAttendanceByDateRange(range);
+    return await _attendanceController.findAttendanceByDateRange(range, userId);
   }
 
-  static Future<List<AttendanceModel>> getAllAttendanceInstance(FirebaseFirestore firestore)async{
+  static Future<List<AttendanceModel>> getAllAttendanceByUserIdInstance(FirebaseFirestore firestore, String userId)async{
     final AttendanceService _attendanceService = AttendanceService(firestore: firestore);
     final AttendanceController _attendanceController = AttendanceController(_attendanceService);
-    return await _attendanceController.findAllAttendance();
+    return await _attendanceController.findByProperty("user", userId);
   }
 }

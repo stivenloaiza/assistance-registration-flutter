@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 abstract class AttendancePort{
   Future<List<AttendanceModel>> findAllAttendance();
-  Future<List<AttendanceModel>> findAttendanceByDateRange(String range);
+  Future<List<AttendanceModel>> findAttendanceByDateRange(String range, String userId);
   Future<List<AttendanceModel>> findByProperty(String Property, String valueProperty);
   Future<Map<String, Map<String,dynamic>>> findAttendanceByUserAndDateRange(String userId, DateTimeRange dateRange, String groupId);
   List<ChartData> processAttendanceForWidget(Map<String, Map<String, dynamic>> groupAttendance);

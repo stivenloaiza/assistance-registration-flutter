@@ -34,7 +34,7 @@ class AttendanceService {
     }
   }
 
-  Future<List<AttendanceModel>> getAttendanceByDateRange(String range) async {
+  Future<List<AttendanceModel>> getAttendanceByDateRange(String range, String userId) async {
     List<AttendanceModel> attendanceList = [];
     CollectionReference collectionReferenceAttendance =
         firestore.collection("attendance");
@@ -45,6 +45,7 @@ class AttendanceService {
       QuerySnapshot querySnapshot = await collectionReferenceAttendance
           .where("timeStamp",
               isGreaterThanOrEqualTo: Timestamp.fromDate(startDate))
+          .where("user", isEqualTo: userId)
           .get();
       print("query ${querySnapshot}");
       querySnapshot.docs.forEach((document) {
