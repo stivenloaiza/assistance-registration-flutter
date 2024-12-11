@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      initialRoute: '/', // Define la ruta inicial
+      initialRoute: '/login', // Define la ruta inicial
       routes: {
         '/': (context) => const MyHomePage(title: 'Flutter Demo Home Page'),
         '/register': (context) => RegisterPage(),
