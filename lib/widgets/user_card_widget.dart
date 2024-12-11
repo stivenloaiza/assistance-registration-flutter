@@ -10,6 +10,8 @@ class UserCard extends StatelessWidget {
   final String userId;  // Recibimos el ID
   final VoidCallback onDelete;  // Recibimos el callback de eliminación
   final VoidCallback onEdit;  // Recibimos el callback de edición
+  final VoidCallback onTap; // Indica si se muestran los botones de acción
+
 
   // Constructor para recibir los parámetros
   const UserCard({
@@ -20,12 +22,18 @@ class UserCard extends StatelessWidget {
     required this.imageUrl,
     required this.userId,  // Recibimos el ID
     required this.onDelete,  // Recibimos el callback de eliminación
-    required this.onEdit,  // Recibimos el callback de edición
+    required this.onEdit,
+     required this.onTap,    // Recibimos el callback de edición
   });
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(BuildContext context) 
+  {
+     return GestureDetector(
+      onTap: onTap,
+      child:Container(
+
+      
       padding: const EdgeInsets.all(16.0),
       margin: const EdgeInsets.symmetric(vertical: 8.0),
       decoration: BoxDecoration(
@@ -56,6 +64,7 @@ class UserCard extends StatelessWidget {
           ),
         ],
       ),
-    );
+    ),
+     );
   }
 }
