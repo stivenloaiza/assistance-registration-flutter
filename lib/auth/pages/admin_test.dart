@@ -1,28 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:asia_project/global_state.dart';
 
-class AdminTest extends StatefulWidget {
-  const AdminTest({Key? key}) : super(key: key);
-
-  @override
-  _AdminTestState createState() => _AdminTestState();
-}
-
-class _AdminTestState extends State<AdminTest> {
+class AdminTest extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // Obtiene el UID del estado global
+    String? userId = GlobalState().currentUserUid;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Servicios'),
+        title: const Text('Admin Test'),
       ),
-      body: const Center(
+      body: Center(
         child: Text(
-          'TEST',
-          style: TextStyle(
-            fontSize: 48, 
-            fontWeight: FontWeight.bold
-          ),
+          'TEST: ${userId ?? "No encontrado"}', // Muestra el UID o un mensaje alternativo
+          style: const TextStyle(fontSize: 24),
         ),
       ),
     );
   }
 }
+
