@@ -16,6 +16,24 @@ Future<Map<String, Map<String, dynamic>>> fetchAttendanceData(
         .where('timeStamp', isLessThanOrEqualTo: dateRange.end)
         .get();
 
+    // Mapa para almacenar los nombres de grupos asociados a los IDs
+    final Map<String, String> groupIdToTitle = {};
+
+    // Obtener los IDs únicos de los grupos en los registros de attendance
+    final Set<String> groupIds = snapshot.docs
+        .map((doc) => (doc.data() as Map<String, dynamic>)['group'] as String)
+        .toSet();
+
+    // Cargar los nombres de los grupos desde la colección groups
+    final QuerySnapshot groupSnapshot = await FirebaseFirestore.instance
+        .collection('groups')
+        .where(FieldPath.documentId, whereIn: groupIds.toList())
+        .get();
+
+    for (var doc in groupSnapshot.docs) {
+      groupIdToTitle[doc.id] = doc['title'];
+    }
+
     final Map<String, Map<String, dynamic>> groupAttendance = {};
 
     for (var doc in snapshot.docs) {
@@ -23,9 +41,12 @@ Future<Map<String, Map<String, dynamic>>> fetchAttendanceData(
       final String groupId = data['group'];
       final String status = data['attendanceStatus'];
 
-      groupAttendance[groupId] ??= {'late': 0, 'onTime': 0, 'absent': 0};
-      groupAttendance[groupId]?[status] =
-          (groupAttendance[groupId]?[status] ?? 0) + 1;
+      // Obtener el nombre del grupo usando el mapa creado anteriormente
+      final String groupTitle = groupIdToTitle[groupId] ?? 'Unknown Group';
+
+      groupAttendance[groupTitle] ??= {'late': 0, 'onTime': 0, 'absent': 0};
+      groupAttendance[groupTitle]?[status] =
+          (groupAttendance[groupTitle]?[status] ?? 0) + 1;
     }
 
     return groupAttendance;
@@ -33,6 +54,7 @@ Future<Map<String, Map<String, dynamic>>> fetchAttendanceData(
     throw Exception("Error fetching attendance data: $e");
   }
 }
+
 
 List<ChartData> processAttendanceForWidget(
     Map<String, Map<String, dynamic>> groupAttendance) {
