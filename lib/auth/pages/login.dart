@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:asia_project/global_state.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -25,6 +26,8 @@ class _LoginPageState extends State<LoginPage> {
 
       if (user != null) {
 
+        GlobalState().currentUserUid = user.uid;
+        
         DocumentReference userDoc =
             _firestore.collection('users').doc(user.uid);
 
