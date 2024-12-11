@@ -46,7 +46,6 @@ class _CustomLineChartState extends State<CustomLineChart> {
     );
   }
 
-  double get maxY => widget.data.reduce((a, b) => a > b ? a : b);
   double get maxX => widget.data.length - 1;
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
@@ -55,7 +54,8 @@ class _CustomLineChartState extends State<CustomLineChart> {
       fontSize: 12,
     );
 
-    if (value.toInt() > 0 && value.toInt() < widget.ref.length) {
+    // Mostrar títulos solo si están definidos en 'ref'
+    if (value.toInt() >= 0 && value.toInt() < widget.ref.length) {
       return SideTitleWidget(
         axisSide: meta.axisSide,
         child: Text(widget.ref[value.toInt()], style: style),
@@ -91,7 +91,7 @@ class _CustomLineChartState extends State<CustomLineChart> {
         leftTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
-            interval: maxY / 5,
+            interval: 20, // Intervalos fijos para que se adapte a 100 como máximo
             getTitlesWidget: leftTitleWidgets,
             reservedSize: 32,
           ),
@@ -104,7 +104,7 @@ class _CustomLineChartState extends State<CustomLineChart> {
       minX: 0,
       maxX: maxX,
       minY: 0,
-      maxY: maxY,
+      maxY: 100, // Máximo del eje Y fijo a 100
       lineBarsData: [
         LineChartBarData(
           spots: List.generate(
@@ -157,7 +157,7 @@ class _CustomLineChartState extends State<CustomLineChart> {
         leftTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
-            interval: maxY / 5,
+            interval: 20,
             getTitlesWidget: leftTitleWidgets,
             reservedSize: 32,
           ),
@@ -203,7 +203,7 @@ class _CustomLineChartState extends State<CustomLineChart> {
       minX: 0,
       maxX: maxX,
       minY: 0,
-      maxY: maxY,
+      maxY: 100,
     );
   }
 }

@@ -1,14 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FilterAdmin extends StatefulWidget {
-  const FilterAdmin({super.key});
+  final Function(String) onGroupSelected;
+
+  const FilterAdmin({super.key, required this.onGroupSelected});
 
   @override
   State<FilterAdmin> createState() => _FilterAdminState();
 }
 
 class _FilterAdminState extends State<FilterAdmin> {
-  int? selectedGroup;
+  String? selectedGroup;
+  List<String> groupTitles = [];
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  @override
+  void initState() {
+    super.initState();
+    loadGroups();
+  }
+
+  Future<void> loadGroups() async {
+    try {
+      QuerySnapshot querySnapshot = await firestore.collection('groups').get();
+      setState(() {
+        groupTitles = querySnapshot.docs.map((doc) => doc['title'] as String).toList();
+      });
+    } catch (e) {
+      print("Error loading groups: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +38,7 @@ class _FilterAdminState extends State<FilterAdmin> {
       color: Colors.white,
       child: Column(
         children: [
-
           const SizedBox(height: 5),
-
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -28,22 +48,24 @@ class _FilterAdminState extends State<FilterAdmin> {
                   children: [
                     Image.asset('assets/images/filtra-logo.png', width: 100.0),
                     const SizedBox(width: 12),
-                    // Selector de grupo (1-5)
                     Expanded(
-                      child: DropdownButtonFormField<int>(
+                      child: DropdownButtonFormField<String>(
                         value: selectedGroup,
                         hint: const Text("Seleccionar grupo"),
-                        onChanged: (int? newValue) {
+                        onChanged: (String? newValue) {
                           setState(() {
                             selectedGroup = newValue;
                           });
+                          if (newValue != null) {
+                            widget.onGroupSelected(newValue);
+                          }
                         },
-                        items: List.generate(5, (index) {
+                        items: groupTitles.map((title) {
                           return DropdownMenuItem(
-                            value: index + 1,
-                            child: Text("Grupo ${index + 1}"),
+                            value: title,
+                            child: Text(title),
                           );
-                        }),
+                        }).toList(),
                         dropdownColor: const Color.fromRGBO(255, 255, 255, 1),
                         decoration: InputDecoration(
                           filled: true,
@@ -69,7 +91,7 @@ class _FilterAdminState extends State<FilterAdmin> {
                             borderRadius: BorderRadius.circular(40),
                             borderSide: BorderSide.none,
                           ),
-                          contentPadding: EdgeInsets.symmetric(
+                          contentPadding: const EdgeInsets.symmetric(
                               vertical: 10, horizontal: 15),
                         ),
                       ),
@@ -77,15 +99,14 @@ class _FilterAdminState extends State<FilterAdmin> {
                   ],
                 ),
                 const SizedBox(height: 16),
-
-                // Botón de aplicar filtro
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     elevation: 0.0,
                   ),
                   onPressed: () {
-                    // Lógica para aplicar el filtro
-                    print("Grupo");
+                    if (selectedGroup != null) {
+                      widget.onGroupSelected(selectedGroup!);
+                    }
                   },
                   child: const Text(
                     style: TextStyle(color: Colors.black),
