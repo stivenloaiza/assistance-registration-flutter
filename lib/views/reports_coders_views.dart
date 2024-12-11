@@ -1,3 +1,6 @@
+import 'package:asia_project/controllers/attendance_controller.dart';
+import 'package:asia_project/ports/attendance_port.dart';
+import 'package:asia_project/services/attendance_service.dart';
 import 'package:asia_project/widgets/reports_bi_widgets/bar_chart.dart';
 import 'package:asia_project/widgets/reports_bi_widgets/filters_coder.dart';
 import 'package:asia_project/widgets/reports_bi_widgets/header_coder_widget.dart';
@@ -106,18 +109,29 @@ class ReportsCoders extends StatefulWidget {
 }
 
 class _ReportsCodersState extends State<ReportsCoders> {
- final String userId = "gQyFZVUf8rzjlpYl1gIv";
+  // Variables principales
+  final String userId = "gQyFZVUf8rzjlpYl1gIv";
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  late AttendanceController _attendanceController;
+  late AttendanceService _attendanceService;
+
+  // Rango de fechas
   final DateTimeRange dateRange = DateTimeRange(
     start: DateTime.now().subtract(const Duration(days: 30)),
     end: DateTime.now(),
   );
 
-  late Future<BarChartWidget> attendanceWidget;
+  // Widget futuro para gráficos
+  late Future<BarChartWidget> _attendanceWidget;
 
   @override
   void initState() {
     super.initState();
-    attendanceWidget = buildAttendanceWidget(userId, dateRange, "Attendance Overview");
+    // Inicialización de servicio y controlador
+    _attendanceService = AttendanceService(firestore: _firestore);
+    _attendanceController = AttendanceController(_attendanceService);
+    _attendanceWidget = _attendanceController.buildAttendanceWidget(
+        userId, dateRange, "Visualización de Asistencia");
   }
 
   @override
@@ -128,8 +142,9 @@ class _ReportsCodersState extends State<ReportsCoders> {
           children: [
             const HeaderCoder(),
             const FilterCoder(),
+            // Builder para el gráfico de barras
             FutureBuilder<BarChartWidget>(
-              future: attendanceWidget,
+              future: _attendanceWidget,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CircularProgressIndicator();
@@ -140,24 +155,17 @@ class _ReportsCodersState extends State<ReportsCoders> {
                 }
               },
             ),
-            CustomPieChart(
-              chartTitle: 'Attendance Overview',
-              data: [
-                PieData(pieTitle: 'Present', pieValue: 70, color: Colors.blue),
-                PieData(pieTitle: 'Absent', pieValue: 20, color: Colors.red),
-              ],
-            ),
-            const CustomLineChart(
+            CustomLineChart(
               data: [30, 60, 90, 70, 50],
               ref: ['', 'Jan', 'May', 'Sep'],
             ),
-
-
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          // Acción del botón flotante
+        },
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
@@ -171,6 +179,7 @@ class _ReportsCodersState extends State<ReportsCoders> {
   }
 }
 
+// Clase personalizada para la posición del botón flotante
 class CustomFABLocation extends FloatingActionButtonLocation {
   @override
   Offset getOffset(ScaffoldPrelayoutGeometry scaffoldGeometry) {
