@@ -32,7 +32,7 @@ class _GroupFormState extends State<GroupForm> {
   TimeOfDay? _endTime;
 
   // Variable para almacenar la foto seleccionada
-  File? _image;
+
 
   @override
   void initState() {
@@ -99,9 +99,7 @@ class _GroupFormState extends State<GroupForm> {
   }
 
   // Método para seleccionar una foto de la galería o cámara
-  Future<void> _selectImage() async {
-   
-  }
+ 
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -257,13 +255,6 @@ class _GroupFormState extends State<GroupForm> {
 
           const SizedBox(height: 20),
 
-          // Botón para agregar una foto
-          ElevatedButton(
-            onPressed: _selectImage,
-            child: const Text('Rostro'),
-          ),
-
-          const SizedBox(height: 20),
 
           // Botones de acción
           Row(
