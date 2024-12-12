@@ -5,7 +5,7 @@ import 'package:asia_project/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'; // Para acceder a la base de datos
 
 class EditGroupModal extends StatefulWidget {
-  final Group group;  // El grupo que vamos a editar
+  final Group group; // El grupo que vamos a editar
 
   const EditGroupModal({Key? key, required this.group}) : super(key: key);
 
@@ -32,20 +32,24 @@ class _EditGroupModalState extends State<EditGroupModal> {
     super.initState();
     // Inicializamos los controladores con los valores actuales del grupo
     _titleController = TextEditingController(text: widget.group.title);
-    _descriptionController = TextEditingController(text: widget.group.description);
+    _descriptionController =
+        TextEditingController(text: widget.group.description);
     _deviceController = TextEditingController(text: widget.group.device);
     _startDateController = TextEditingController(text: widget.group.startDate);
     _endDateController = TextEditingController(text: widget.group.endDate);
     _startTimeController = TextEditingController(text: widget.group.startTime);
     _endTimeController = TextEditingController(text: widget.group.endTime);
-    _timeToleranceController = TextEditingController(text: widget.group.timeTolerance.toString());
-    _selectedUserIds = List.from(widget.group.usersId); // Cargar los usuarios del grupo al iniciar
+    _timeToleranceController =
+        TextEditingController(text: widget.group.timeTolerance.toString());
+    _selectedUserIds = List.from(
+        widget.group.usersId); // Cargar los usuarios del grupo al iniciar
     _loadUsersData(); // Cargar usuarios desde Firebase
   }
 
   Future<void> _loadUsersData() async {
     try {
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('users').get();
+      QuerySnapshot querySnapshot =
+          await FirebaseFirestore.instance.collection('users').get();
       setState(() {
         _users = querySnapshot.docs.map((doc) {
           final user = User.fromMap({
@@ -76,9 +80,9 @@ class _EditGroupModalState extends State<EditGroupModal> {
   Future<void> _saveGroup() async {
     if (_formKey.currentState!.validate()) {
       final updatedGroup = Group(
-        id: widget.group.id,  // Mantenemos el ID del grupo
-        createdAt: widget.group.createdAt,  // No lo modificamos
-        createdBy: widget.group.createdBy,  // No lo modificamos
+        id: widget.group.id, // Mantenemos el ID del grupo
+        createdAt: widget.group.createdAt, // No lo modificamos
+        createdBy: widget.group.createdBy, // No lo modificamos
         description: _descriptionController.text,
         device: _deviceController.text,
         endDate: _endDateController.text,
@@ -87,9 +91,10 @@ class _EditGroupModalState extends State<EditGroupModal> {
         startTime: _startTimeController.text,
         timeTolerance: int.parse(_timeToleranceController.text),
         title: _titleController.text,
-        usersId: _selectedUserIds,  // Usamos los usuarios seleccionados
-        updatedAt: DateTime.now().toString(),  // Actualizamos la fecha de modificación
-        updatedBy: widget.group.createdBy,  // Podemos asignar el mismo creador
+        usersId: _selectedUserIds, // Usamos los usuarios seleccionados
+        updatedAt:
+            DateTime.now().toString(), // Actualizamos la fecha de modificación
+        updatedBy: widget.group.createdBy, // Podemos asignar el mismo creador
       );
 
       // Usamos el controlador para actualizar el grupo en Firebase
@@ -116,7 +121,8 @@ class _EditGroupModalState extends State<EditGroupModal> {
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
           boxShadow: const [
-            BoxShadow(color: Colors.black, offset: Offset(0, 10), blurRadius: 10),
+            BoxShadow(
+                color: Colors.black, offset: Offset(0, 10), blurRadius: 10),
           ],
         ),
         child: Form(
@@ -210,9 +216,23 @@ class _EditGroupModalState extends State<EditGroupModal> {
                     labelText: 'Seleccionar Usuarios',
                     border: OutlineInputBorder(),
                   ),
-                  child: Text(_selectedUserIds.isEmpty
-                      ? 'No se seleccionaron usuarios'
-                      : _selectedUserIds.join(', ')),
+                  child: SingleChildScrollView(
+                    scrollDirection:
+                        Axis.horizontal, // Hacemos scroll horizontal
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context)
+                              .size
+                              .width), // Limitar el ancho al tamaño de la pantalla
+                      child: Text(
+                        _selectedUserIds.isEmpty
+                            ? 'No se seleccionaron usuarios'
+                            : _selectedUserIds.join(', '),
+                        overflow: TextOverflow
+                            .ellipsis, // Si el texto es muy largo, se corta con "..."
+                      ),
+                    ),
+                  ),
                 ),
               ),
 
@@ -257,7 +277,8 @@ class _UserSelectDialogState extends State<UserSelectDialog> {
   @override
   void initState() {
     super.initState();
-    _selectedUsers = List.from(widget.selectedUserIds); // Inicializa con los usuarios seleccionados
+    _selectedUsers = List.from(
+        widget.selectedUserIds); // Inicializa con los usuarios seleccionados
   }
 
   @override
@@ -268,7 +289,7 @@ class _UserSelectDialogState extends State<UserSelectDialog> {
         child: Column(
           children: widget.users.map((user) {
             return CheckboxListTile(
-              title: Text(user.name),  // Mostrar el nombre del usuario
+              title: Text(user.name), // Mostrar el nombre del usuario
               value: _selectedUsers.contains(user.id),
               onChanged: (bool? selected) {
                 setState(() {
@@ -278,7 +299,8 @@ class _UserSelectDialogState extends State<UserSelectDialog> {
                     _selectedUsers.remove(user.id);
                   }
                 });
-                widget.onSelectionChanged(_selectedUsers);  // Notificar a la pantalla principal
+                widget.onSelectionChanged(
+                    _selectedUsers); // Notificar a la pantalla principal
               },
             );
           }).toList(),

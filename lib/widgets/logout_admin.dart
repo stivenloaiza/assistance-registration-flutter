@@ -32,6 +32,7 @@ class LogoutWidget extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).pop();
               },
+              
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(

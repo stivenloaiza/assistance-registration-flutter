@@ -152,7 +152,7 @@ class _AttendanceTableState extends State<AttendanceTable> {
               ),
               onPressed: () => _downloadPDFWeb(),
               child: const Text(
-                "Descargar PDF",
+                "PDF",
                 style: TextStyle(fontSize: 14, color: Colors.white),
               ),
             ),
@@ -168,7 +168,7 @@ class _AttendanceTableState extends State<AttendanceTable> {
               ),
               onPressed: () => _downloadExcelWeb(),
               child: const Text(
-                "Descargar Excel",
+                "Excel",
                 style: TextStyle(fontSize: 14, color: Colors.white),
               ),
             ),

@@ -3,6 +3,7 @@ import 'package:asia_project/models/user_model.dart';
 import 'package:asia_project/widgets/custom_apbar_admin.dart';
 import 'package:asia_project/widgets/custom_modal.dart';
 import 'package:asia_project/widgets/edit_users_widget.dart';
+import 'package:asia_project/widgets/single_user_card.dart';
 import 'package:asia_project/widgets/user_card_widget.dart';
 import 'package:asia_project/widgets/user_modal_admin.dart';
 import 'package:flutter/material.dart';
@@ -134,7 +135,7 @@ class _SingleUserViewState extends State<SingleUserView> {
           ? Center(child: Text('No user found'))
           : Padding(
         padding: const EdgeInsets.all(24.0),
-        child: UserCard(
+        child: SingleUserCard(
           name: _user!.name,
           email: _user!.email,
           documentNumber: _user!.documentNumber.toString(),

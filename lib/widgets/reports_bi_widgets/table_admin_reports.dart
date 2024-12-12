@@ -240,7 +240,7 @@ final int rowsPerPage = 10;
               ),
               onPressed: () => _downloadPDFWeb(),
               child: const Text(
-                "Descargar PDF",
+                "PDF",
                 style: TextStyle(fontSize: 14, color: Colors.white),
               ),
             ),
@@ -256,7 +256,7 @@ final int rowsPerPage = 10;
               ),
               onPressed: () => _downloadExcelWeb(),
               child: const Text(
-                "Descargar Excel",
+                "Excel",
                 style: TextStyle(fontSize: 14, color: Colors.white),
               ),
             ),

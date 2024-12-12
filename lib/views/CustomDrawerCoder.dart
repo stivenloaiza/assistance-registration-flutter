@@ -77,7 +77,7 @@ class CustomDrawerCoder extends StatelessWidget {
                 _buildDrawerItem(
                   icon: Icons.people,
                   title: 'Users',
-                  index: 1,
+                  index: 0,
                   context: context,
                 ),
               ],
@@ -85,7 +85,7 @@ class CustomDrawerCoder extends StatelessWidget {
             _buildDrawerItem(
               icon: Icons.dock_rounded,
               title: 'Logout',
-              index: 4,
+              index: 1,
               context: context,
             ),
           ],

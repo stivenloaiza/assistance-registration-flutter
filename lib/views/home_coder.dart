@@ -3,6 +3,7 @@ import 'package:asia_project/utils/const_data_admin_user.dart';
 import 'package:asia_project/views/CustomDrawerCoder.dart';
 import 'package:asia_project/views/qr-dinamic/generate_qr_widget.dart';
 import 'package:asia_project/views/userOnly_view.dart';
+import 'package:asia_project/widgets/logout_admin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +17,7 @@ class HomeCoderView extends StatefulWidget {
 class _HomeCoderViewState extends State<HomeCoderView> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final PageController _pageController = PageController();
-  final String userId = GlobalState().currentUserUid ?? "gQyFZVUf8rzjlpYl1gIv";
+  final String userId = GlobalState().currentUserUid ?? "x3UhGMh6KhawmMZAVUEj9ttvpkw1";
   int _currentPage = 0;
   String? useId; // UID del usuario, puede ser null al inicio
 
@@ -93,6 +94,11 @@ class _HomeCoderViewState extends State<HomeCoderView> {
                   isMobile: isMobile,
                   onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
                 ),
+                LogoutWidget(
+                  onLogoutComplete: () {
+                    Navigator.pushReplacementNamed(context, '/login');
+                  },
+                )
               ],
             ),
           ),
