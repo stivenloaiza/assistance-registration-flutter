@@ -1,22 +1,20 @@
 import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui';
-import 'package:asia_project/DB/DatabaseHelper.dart';
-import 'package:asia_project/ML/Recognition.dart';
 import 'package:image/image.dart' as img;
 import 'package:tflite_flutter/tflite_flutter.dart';
-
-
+import '../DB/DatabaseHelper.dart';
+import 'Recognition.dart';
 
 class Recognizer {
   late Interpreter interpreter;
   late InterpreterOptions _interpreterOptions;
-  static const int WIDTH = 112;
-  static const int HEIGHT = 112;
+  static const int WIDTH = 160;
+  static const int HEIGHT = 160;
   final dbHelper = DatabaseHelper();
   Map<String,Recognition> registered = Map();
   @override
-  String get modelName => 'assets/mobile_face_net.tflite';
+  String get modelName => 'assets/facenet.tflite';
 
   Recognizer({int? numThreads}) {
     _interpreterOptions = InterpreterOptions();
@@ -84,7 +82,7 @@ class Recognizer {
         }
       }
     }
-    return reshapedArray.reshape([1,112,112,3]);
+    return reshapedArray.reshape([1,160,160,3]);
   }
 
   Recognition recognize(img.Image image,Rect location) {
@@ -94,7 +92,7 @@ class Recognizer {
     print(input.shape.toString());
 
     //TODO output array
-    List output = List.filled(1*192, 0).reshape([1,192]);
+    List output = List.filled(1*512, 0).reshape([1,512]);
 
     //TODO performs inference
     final runs = DateTime.now().millisecondsSinceEpoch;
