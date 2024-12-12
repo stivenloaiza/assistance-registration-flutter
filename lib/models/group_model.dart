@@ -1,5 +1,5 @@
 class Group {
-  final String id;
+  String id;
   final String createdAt;
   final String createdBy;
   final String? deletedAt;
@@ -9,6 +9,7 @@ class Group {
   final String endDate;
   final String endTime;
   final String startDate;
+  final String startTime;
   final int timeTolerance;
   final String title;
   final String? updatedAt;
@@ -16,7 +17,7 @@ class Group {
   final List<String> usersId;
 
   Group({
-    required this.id,
+   this.id='',
     required this.createdAt,
     required this.createdBy,
     this.deletedAt,
@@ -26,6 +27,7 @@ class Group {
     required this.endDate,
     required this.endTime,
     required this.startDate,
+    required this.startTime,
     required this.timeTolerance,
     required this.title,
     this.updatedAt,
@@ -46,6 +48,7 @@ class Group {
       endDate: map['end_date'] ?? '',
       endTime: map['end_time'] ?? '',
       startDate: map['start_date'] ?? '',
+      startTime: map['start_time'] ?? '',
       timeTolerance: map['time_tolerance'] ?? 0,
       title: map['title'] ?? '',
       updatedAt: map['updated_at'],
@@ -66,6 +69,7 @@ class Group {
       'end_date': endDate,
       'end_time': endTime,
       'start_date': startDate,
+      'start_time': startTime,
       'time_tolerance': timeTolerance,
       'title': title,
       'updated_at': updatedAt,

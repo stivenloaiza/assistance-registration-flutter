@@ -66,7 +66,7 @@ class _RegisterPageState extends State<RegisterPage> {
         'email': user.email,
         'photo': '',
         'role': 'postulante',
-        'status': 'inactivo',
+        'status': false,
         'face_data': '',
         'otp': 0,
         'terms': '',

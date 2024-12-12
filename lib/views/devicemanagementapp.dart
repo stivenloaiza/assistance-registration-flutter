@@ -43,82 +43,92 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
       _deviceStatus = device?['status'] ?? false;
     });
 
-    showModalBottomSheet(
+    showDialog(
       context: context,
-      isScrollControlled: true,
-      builder: (context) => Padding(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-          left: 16,
-          right: 16,
-          top: 16,
-        ),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                isEditing ? 'Editar Dispositivo' : 'Nuevo Dispositivo',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 16),
-              TextFormField(
-                initialValue: _deviceName,
-                decoration: InputDecoration(labelText: 'Nombre'),
-                validator: (value) =>
-                    value == null || value.isEmpty ? 'Campo requerido' : null,
-                onSaved: (value) => _deviceName = value,
-              ),
-              TextFormField(
-                initialValue: _deviceLocation,
-                decoration: InputDecoration(labelText: 'Ubicación'),
-                validator: (value) =>
-                    value == null || value.isEmpty ? 'Campo requerido' : null,
-                onSaved: (value) => _deviceLocation = value,
-              ),
-              DropdownButtonFormField<bool>(
-                value: _deviceStatus,
-                decoration: InputDecoration(labelText: 'Estado'),
-                items: [
-                  DropdownMenuItem(
-                    value: true,
-                    child: Text('Activo'),
-                  ),
-                  DropdownMenuItem(
-                    value: false,
-                    child: Text('Inactivo'),
-                  ),
-                ],
-                onChanged: (value) => setState(() => _deviceStatus = value),
-                validator: (value) =>
-                    value == null ? 'Seleccione un estado' : null,
-              ),
-              TextFormField(
-                initialValue: _loginCode,
-                decoration: InputDecoration(labelText: 'Código de Inicio de Sesión (6 dígitos)'),
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Campo requerido';
-                  }
-                  if (value.length != 6 || int.tryParse(value) == null) {
-                    return 'Debe ser un número de 6 dígitos';
-                  }
-                  return null;
-                },
-                onSaved: (value) => _loginCode = value,
-              ),
-              SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: _saveDevice,
-                child: Text(isEditing ? 'Actualizar' : 'Crear'),
-              ),
-              SizedBox(height: 16),
-            ],
+      builder: (context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
           ),
-        ),
-      ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SingleChildScrollView(
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      isEditing ? 'Editar Dispositivo' : 'Nuevo Dispositivo',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 16),
+                    TextFormField(
+                      initialValue: _deviceName,
+                      decoration: InputDecoration(labelText: 'Nombre'),
+                      validator: (value) =>
+                          value == null || value.isEmpty ? 'Campo requerido' : null,
+                      onSaved: (value) => _deviceName = value,
+                    ),
+                    TextFormField(
+                      initialValue: _deviceLocation,
+                      decoration: InputDecoration(labelText: 'Ubicación'),
+                      validator: (value) =>
+                          value == null || value.isEmpty ? 'Campo requerido' : null,
+                      onSaved: (value) => _deviceLocation = value,
+                    ),
+                    DropdownButtonFormField<bool>(
+                      value: _deviceStatus,
+                      decoration: InputDecoration(labelText: 'Estado'),
+                      items: [
+                        DropdownMenuItem(
+                          value: true,
+                          child: Text('Activo'),
+                        ),
+                        DropdownMenuItem(
+                          value: false,
+                          child: Text('Inactivo'),
+                        ),
+                      ],
+                      onChanged: (value) => setState(() => _deviceStatus = value),
+                      validator: (value) =>
+                          value == null ? 'Seleccione un estado' : null,
+                    ),
+                    TextFormField(
+                      initialValue: _loginCode,
+                      decoration: InputDecoration(
+                          labelText: 'Código de Inicio de Sesión (6 dígitos)'),
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Campo requerido';
+                        }
+                        if (value.length != 6 || int.tryParse(value) == null) {
+                          return 'Debe ser un número de 6 dígitos';
+                        }
+                        return null;
+                      },
+                      onSaved: (value) => _loginCode = value,
+                    ),
+                    SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: _saveDevice,
+                      child: Text(isEditing ? 'Actualizar' : 'Crear'),
+                    ),
+                    SizedBox(height: 16),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('Cancelar'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -127,7 +137,6 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
       _formKey.currentState!.save();
 
       if (isEditing) {
-
         await devicesCollection.doc(editingDeviceId).update({
           "name": _deviceName!,
           "location": _deviceLocation!,
@@ -135,7 +144,6 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
           "loginCode": _loginCode!,
         });
       } else {
-
         await devicesCollection.add({
           "name": _deviceName!,
           "location": _deviceLocation!,
@@ -155,7 +163,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Administración de Dispositivos'),
+        title: Text('Device List'),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: devicesCollection.snapshots(),

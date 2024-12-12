@@ -1,5 +1,5 @@
 import 'package:asia_project/widgets/custom_modal.dart';
-import 'package:asia_project/widgets/user_admin_create.dart';
+import 'package:asia_project/widgets/group_admin_create.dart';
 import 'package:flutter/material.dart';
 
 class FloatingButton extends StatefulWidget {
@@ -21,8 +21,8 @@ class _FloatingButtonState extends State<FloatingButton> {
           context: context,
           builder: (BuildContext context) {
             return const CustomModal(
-              title: 'Nuevo Usuario',
-              child: UserForm(),
+              title: 'Nuevo Grupo',
+              child: GroupForm(),
             );
           },
         );
