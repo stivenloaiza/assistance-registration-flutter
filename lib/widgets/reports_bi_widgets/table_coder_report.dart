@@ -138,6 +138,14 @@ class _AttendanceTableState extends State<AttendanceTable> {
           ],
         ),
         const SizedBox(height: 16),
+        const Text(
+          "Descargar Información",
+          style: TextStyle(
+              fontSize: 14,
+              color: Color(0xFF343C6A),
+              fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 16),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

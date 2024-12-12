@@ -8,17 +8,17 @@ import "package:universal_html/html.dart" as html;
 import 'package:pdf/pdf.dart';
 
 class AttendanceTable extends StatefulWidget {
-final List<Map<String, dynamic>> data;
+  final List<Map<String, dynamic>> data;
 
-const AttendanceTable({super.key, required this.data});
+  const AttendanceTable({super.key, required this.data});
 
-@override
-State<AttendanceTable> createState() => _AttendanceTableState();
+  @override
+  State<AttendanceTable> createState() => _AttendanceTableState();
 }
 
 class _AttendanceTableState extends State<AttendanceTable> {
-int currentPage = 0;
-final int rowsPerPage = 10;
+  int currentPage = 0;
+  final int rowsPerPage = 10;
 
   @override
   Widget build(BuildContext context) {
@@ -226,6 +226,14 @@ final int rowsPerPage = 10;
           ],
         ),
         const SizedBox(height: 16),
+        const Text(
+          "Descargar Información",
+          style: TextStyle(
+              fontSize: 14,
+              color: Color(0xFF343C6A),
+              fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 16),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -272,7 +280,14 @@ final int rowsPerPage = 10;
       pw.Page(
         build: (context) {
           return pw.Table.fromTextArray(
-            headers: ["Fecha", "Registrados", "Asistentes", "A Tiempo", "Tarde", "Inasistentes"],
+            headers: [
+              "Fecha",
+              "Registrados",
+              "Asistentes",
+              "A Tiempo",
+              "Tarde",
+              "Inasistentes"
+            ],
             data: widget.data.map((row) {
               return [
                 row['date'],
@@ -304,7 +319,14 @@ final int rowsPerPage = 10;
     final excel = Excel.createExcel();
     final sheet = excel['Asistencia'];
 
-    sheet.appendRow(["Fecha", "Registrados", "Asistentes", "A Tiempo", "Tarde", "Inasistentes"]);
+    sheet.appendRow([
+      "Fecha",
+      "Registrados",
+      "Asistentes",
+      "A Tiempo",
+      "Tarde",
+      "Inasistentes"
+    ]);
 
     for (var row in widget.data) {
       sheet.appendRow([

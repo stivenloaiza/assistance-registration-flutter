@@ -1,3 +1,4 @@
+import 'package:asia_project/widgets/reports_bi_widgets/card.dart';
 import 'package:asia_project/widgets/reports_bi_widgets/header_admin_widget.dart';
 import 'package:asia_project/widgets/reports_bi_widgets/search_input_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -134,7 +135,14 @@ class _DashboardPageState extends State<DashboardPage> {
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ] else
-                const Text("No hay datos disponibles"),
+                const Column(
+                  children: [
+                    SizedBox(height: 16),
+                    Text("No hay datos seleccionados."),
+                    SizedBox(height: 16),
+                    TipsCards()
+                  ],
+                )
             ],
           ),
         ),
