@@ -13,8 +13,8 @@ class UserCard extends StatelessWidget {
   final VoidCallback onTap; // Indica si se muestran los botones de acción
 
   // Añadir role y status
-  final String role;
-  final bool status;
+  final String? role;
+  final bool? status;
 
   const UserCard({
     super.key,
@@ -26,8 +26,8 @@ class UserCard extends StatelessWidget {
     this.onDelete,  // Recibimos el callback de eliminación
     this.onEdit,
      required this.onTap,    // Recibimos el callback de edición
-    required this.role,    // Recibimos el role
-    required this.status
+   this.role,    // Recibimos el role
+     this.status
   });
 
   @override
@@ -61,8 +61,8 @@ class UserCard extends StatelessWidget {
               name: name,
               email: email,
               documentNumber: documentNumber,
-              role: role,  // Pasamos el role
-              status: status, // Pasamos el status
+              role: role?? '',  // Pasamos el role
+              status: status ?? false, // Pasamos el status
             ),
             SizedBox(width: 16.0),
             ActionButtons(
