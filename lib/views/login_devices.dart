@@ -1,3 +1,4 @@
+import 'package:asia_project/views/face-view/face_view.dart';
 import 'package:asia_project/views/qr-dinamic/qr_scanner_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -50,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => NextScreen(),
+          builder: (context) => MyHomePage(),
         ),
       );
     } else {
@@ -173,16 +174,9 @@ class NextScreen extends StatelessWidget {
         title: Text("Back"),
         backgroundColor: Colors.blue,
       ),
-      body: const Center(
-        child: Text(
-          "Acá va la cara",
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Colors.black87,
-          ),
-        ),
-      ),
+      body:
+        MyHomePage(),
+
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Navegar a QRScannerScreen
