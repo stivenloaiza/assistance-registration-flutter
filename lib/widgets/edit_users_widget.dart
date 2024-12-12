@@ -81,6 +81,16 @@ class _EditUserModalState extends State<EditUserModal> {
     }
   }
 
+  // Navegar a la nueva página
+  void _navigateToNewPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => NewPage(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -164,6 +174,15 @@ class _EditUserModalState extends State<EditUserModal> {
                   ),
                 ],
               ),
+
+              const SizedBox(height: 24),
+
+              // Botón para redirigir a otra página
+              ElevatedButton(
+                onPressed: _navigateToNewPage,
+                child: const Text('Integrar Foto'),
+              ),
+
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: _save,
@@ -171,6 +190,23 @@ class _EditUserModalState extends State<EditUserModal> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class NewPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Nueva Página')),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.pop(context); // Vuelve a la página anterior
+          },
+          child: const Text('Volver'),
         ),
       ),
     );

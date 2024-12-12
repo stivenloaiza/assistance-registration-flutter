@@ -21,8 +21,8 @@ class _FloatingButtonState extends State<FloatingButton> {
           context: context,
           builder: (BuildContext context) {
             return const CustomModal(
-              title: 'Nuevo Usuario',
-              child: UserForm(),
+              title: 'Nuevo Grupo',
+              child: GroupForm(),
             );
           },
         );

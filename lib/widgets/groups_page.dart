@@ -1,9 +1,9 @@
-// Controlador para manejar grupos
 import 'package:asia_project/controllers/group_controller.dart';
 import 'package:asia_project/models/group_model.dart'; // Modelo del grupo
 import 'package:asia_project/widgets/custom_apbar_admin.dart'; // AppBar personalizado
 import 'package:asia_project/widgets/floating_button_widget.dart'; // Botón flotante para agregar grupo
 import 'package:asia_project/widgets/group_card_widget.dart'; // Card para mostrar cada grupo
+import 'package:asia_project/widgets/groups_modal.widget.dart'; // Modal para editar el grupo
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'; // Importa Firestore
 
@@ -18,7 +18,6 @@ class GroupsPage extends StatefulWidget {
   });
 
   @override
-  // ignore: library_private_types_in_public_api
   _GroupsPageState createState() => _GroupsPageState();
 }
 
@@ -60,15 +59,26 @@ class _GroupsPageState extends State<GroupsPage> {
 
   // Método para editar un grupo
   Future<void> _editGroup(String groupId) async {
-    // Muestra un mensaje de SnackBar cuando se haga clic en editar
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Este es el botón de actualizar')),
+    // Buscar el grupo por su ID, y si no lo encuentra, devolver null
+    final group = _groups.firstWhere(
+      (g) => g.id == groupId, 
+      orElse: () => Group(id: '', createdAt: '', createdBy: '', description: '', device: '', endDate: '', endTime: '', startDate: '', startTime: '', timeTolerance: 0, title: '', usersId: []), // Regresa un objeto vacío en lugar de null
     );
 
-    // Aquí puedes agregar la lógica de edición cuando implementes el formulario o la vista para editar el grupo.
-    // Esto puede incluir navegar a otra pantalla o abrir un modal con los detalles del grupo.
+    // Verificar si el grupo existe antes de abrir el modal
+    if (group.id.isNotEmpty) {
+      // Abrir el modal de edición para ese grupo
+      showDialog(
+        context: context,
+        builder: (context) => EditGroupModal(group: group), // Pasa el grupo al modal
+      );
+    } else {
+      // Si no se encuentra el grupo, muestra un mensaje (opcional)
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Grupo no encontrado')),
+      );
+    }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -84,25 +94,28 @@ class _GroupsPageState extends State<GroupsPage> {
         child: _groups.isEmpty
             ? const Center(child: CircularProgressIndicator())
             : ListView.builder(
-          itemCount: _groups.length,
-          itemBuilder: (context, index) {
-            final group = _groups[index];
-            return GroupCard(
-              title: group.title,
-              description: group.description,
-              device: group.device,
-              startDate: group.startDate,
-              endDate: group.endDate,
-              timeTolerance: group.timeTolerance,
-              usersId: group.usersId,
-              groupId: group.id,
-              onDelete: () => _deleteGroup(group.id),
-              onEdit: () => _editGroup(group.id),
-            );
-          },
-        ),
+                itemCount: _groups.length,
+                itemBuilder: (context, index) {
+                  final group = _groups[index];
+                  return GroupCard(
+                    title: group.title,
+                    description: group.description,
+                    device: group.device,
+                    startDate: group.startDate,
+                    endDate: group.endDate,
+                    timeTolerance: group.timeTolerance,
+                    usersId: group.usersId,
+                    groupId: group.id,
+                    onDelete: () => _deleteGroup(group.id),
+                    onEdit: () => _editGroup(group.id), // Llamamos a _editGroup
+                  );
+                },
+              ),
       ),
       floatingActionButton: const FloatingButton(), // Botón flotante para agregar nuevo grupo
     );
   }
 }
+
+
+
