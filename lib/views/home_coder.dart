@@ -32,17 +32,17 @@ class _HomeCoderViewState extends State<HomeCoderView> {
     });
   }
 
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
-
   void _getUserId() {
     final User? user = FirebaseAuth.instance.currentUser;
     setState(() {
       useId = user?.uid; // Asigna el UID al estado si el usuario está autenticado
     });
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 
   @override
@@ -54,30 +54,52 @@ class _HomeCoderViewState extends State<HomeCoderView> {
       key: _scaffoldKey,
       drawer: isMobile
           ? SizedBox(
-        width: screenWidth * 0.5,
-        child: Drawer(
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              topRight: Radius.circular(0),
-              bottomRight: Radius.circular(0),
-            ),
-          ),
-          backgroundColor: AppColors.background,
-          child: CustomDrawerCoder(
-            currentIndex: _currentPage,
-            onNavigate: _navigateToPage,
-          ),
-        ),
-      )
+              width: screenWidth * 0.5,
+              child: Drawer(
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(0),
+                    bottomRight: Radius.circular(0),
+                  ),
+                ),
+                backgroundColor: AppColors.background,
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: CustomDrawerCoder(
+                        currentIndex: _currentPage,
+                        onNavigate: _navigateToPage,
+                      ),
+                    ),
+                    LogoutWidget(
+                      onLogoutComplete: () {
+                        Navigator.pushReplacementNamed(context, '/login');
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            )
           : null,
       body: Row(
         children: [
           if (!isMobile)
             SizedBox(
               width: AppDimensions.drawerWidth,
-              child: CustomDrawerCoder(
-                currentIndex: _currentPage,
-                onNavigate: _navigateToPage,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: CustomDrawerCoder(
+                      currentIndex: _currentPage,
+                      onNavigate: _navigateToPage,
+                    ),
+                  ),
+                  LogoutWidget(
+                    onLogoutComplete: () {
+                      Navigator.pushReplacementNamed(context, '/login');
+                    },
+                  ),
+                ],
               ),
             ),
           Expanded(
@@ -94,11 +116,6 @@ class _HomeCoderViewState extends State<HomeCoderView> {
                   isMobile: isMobile,
                   onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
                 ),
-                LogoutWidget(
-                  onLogoutComplete: () {
-                    Navigator.pushReplacementNamed(context, '/login');
-                  },
-                )
               ],
             ),
           ),
@@ -106,16 +123,14 @@ class _HomeCoderViewState extends State<HomeCoderView> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          if (userId != null) {
-            // Navegar a GenerateQRScreen solo si userId no es null
+          if (userId.isNotEmpty) {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => GenerateQRScreen(userId: userId!), // Pasa el UID como parámetro
+                builder: (context) => GenerateQRScreen(userId: userId),
               ),
             );
           } else {
-            // Muestra un mensaje si el UID aún no está disponible
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('UID no disponible. Intenta de nuevo.'),
@@ -124,7 +139,10 @@ class _HomeCoderViewState extends State<HomeCoderView> {
           }
         },
         backgroundColor: const Color(0xFF343C6A),
-        child: const Icon(Icons.qr_code_scanner, color: Colors.white,),
+        child: const Icon(
+          Icons.qr_code_scanner,
+          color: Colors.white,
+        ),
       ),
     );
   }

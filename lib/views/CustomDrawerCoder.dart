@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:asia_project/utils/const_data_admin_user.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class CustomDrawerCoder extends StatelessWidget {
   final int currentIndex;
@@ -14,11 +15,9 @@ class CustomDrawerCoder extends StatelessWidget {
   Widget _buildDrawerItem({
     required IconData icon,
     required String title,
-    required int index,
-    required BuildContext context,
+    required VoidCallback onTap,
+    required bool isSelected,
   }) {
-    final bool isSelected = currentIndex == index;
-
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: Row(
@@ -50,16 +49,54 @@ class CustomDrawerCoder extends StatelessWidget {
                   style: TextStyle(
                     color: isSelected ? AppColors.secondary : Colors.grey,
                     fontWeight:
-                    isSelected ? FontWeight.w600 : FontWeight.normal,
+                        isSelected ? FontWeight.w600 : FontWeight.normal,
                   ),
                 ),
-                onTap: () => onNavigate(index),
+                onTap: onTap,
                 hoverColor: AppColors.secondary.withOpacity(0.1),
               ),
             ),
           ),
         ],
       ),
+    );
+  }
+
+  void _showLogoutConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Cerrar Sesión'),
+          content: const Text('¿Estás seguro de que deseas cerrar sesión?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancelar'),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+              ),
+              onPressed: () async {
+                try {
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.of(context).pop(); // Cierra el diálogo
+                  Navigator.pushReplacementNamed(context, '/login'); // Redirige a login
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Error al cerrar sesión'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              },
+              child: const Text('Cerrar Sesión'),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -77,16 +114,16 @@ class CustomDrawerCoder extends StatelessWidget {
                 _buildDrawerItem(
                   icon: Icons.people,
                   title: 'Users',
-                  index: 0,
-                  context: context,
+                  isSelected: currentIndex == 0,
+                  onTap: () => onNavigate(0),
                 ),
               ],
             ),
             _buildDrawerItem(
               icon: Icons.dock_rounded,
               title: 'Logout',
-              index: 1,
-              context: context,
+              isSelected: false, // No requiere un índice porque no navega
+              onTap: () => _showLogoutConfirmationDialog(context),
             ),
           ],
         ),
