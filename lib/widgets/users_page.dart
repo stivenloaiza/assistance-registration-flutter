@@ -125,35 +125,37 @@ class _UsersPageState extends State<UsersPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CustomAppBar(
-          isMobile: widget.isMobile,
-          onMenuPressed: widget.onMenuPressed,
-          title: 'Users',
-          searchController: _searchController, // Pasa el controlador al AppBar
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: _filteredUsers.isEmpty
-              ? const Center(child: CircularProgressIndicator())
-              : ListView.builder(
-                  itemCount: _filteredUsers.length,
-                  itemBuilder: (context, index) {
-                    final user = _filteredUsers[index];
-                    return UserCard(
-                      name: user.name,
-                      email: user.email,
-                      documentNumber: user.documentNumber.toString(),
-                      imageUrl: user.photo.isNotEmpty
-                          ? user.photo
-                          : 'https://riwi.io/wp-content/uploads/2023/07/favicon.png',
-                      userId: user.id,
-                      onDelete: () => _deleteUser(user.id),
-                      onEdit: () => _showEditModal(
-                          user), // Llama al método para mostrar el modal de edición
-                      onTap: () => _showUserModal(user),
-                    );
-                  },
-                ),
-        ));
+      appBar: CustomAppBar(
+        isMobile: widget.isMobile,
+        onMenuPressed: widget.onMenuPressed,
+        title: 'Users',
+        searchController: _searchController, // Pasa el controlador al AppBar
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: _filteredUsers.isEmpty
+            ? const Center(child: CircularProgressIndicator())
+            : ListView.builder(
+                itemCount: _filteredUsers.length,
+                itemBuilder: (context, index) {
+                  final user = _filteredUsers[index];
+                  return UserCard(
+                    name: user.name,
+                    email: user.email,
+                    documentNumber: user.documentNumber.toString(),
+                    imageUrl: user.photo.isNotEmpty
+                        ? user.photo
+                        : 'https://riwi.io/wp-content/uploads/2023/07/favicon.png',
+                    userId: user.id,
+                    onDelete: () => _deleteUser(user.id),
+                    onEdit: () => _showEditModal(user),
+                    onTap: () => _showUserModal(user),
+                    role: user.role, // Pasamos el role
+                    status: user.status, // Pasamos el status
+                  );
+                },
+              ),
+      ),
+    );
   }
 }
