@@ -4,7 +4,7 @@ import 'package:excel/excel.dart';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:path_provider/path_provider.dart';
-import 'dart:html' as html;
+import "package:universal_html/html.dart" as html;
 import 'package:pdf/pdf.dart';
 
 class AttendanceTable extends StatefulWidget {

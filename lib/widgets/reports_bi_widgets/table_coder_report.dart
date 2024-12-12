@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:excel/excel.dart';
-import 'dart:html' as html;
+import "package:universal_html/html.dart" as html;
+
 
 class AttendanceTable extends StatefulWidget {
   final List<Map<String, dynamic>> data;
