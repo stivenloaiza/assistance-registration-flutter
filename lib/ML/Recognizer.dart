@@ -1,20 +1,22 @@
 import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui';
+import 'package:asia_project/DB/DatabaseHelper.dart';
+import 'package:asia_project/ML/Recognition.dart';
 import 'package:image/image.dart' as img;
 import 'package:tflite_flutter/tflite_flutter.dart';
-import '../DB/DatabaseHelper.dart';
-import 'Recognition.dart';
+
+
 
 class Recognizer {
   late Interpreter interpreter;
   late InterpreterOptions _interpreterOptions;
-  static const int WIDTH = 160;
-  static const int HEIGHT = 160;
+  static const int WIDTH = 112;
+  static const int HEIGHT = 112;
   final dbHelper = DatabaseHelper();
   Map<String,Recognition> registered = Map();
   @override
-  String get modelName => 'assets/facenet.tflite';
+  String get modelName => 'assets/mobile_face_net.tflite';
 
   Recognizer({int? numThreads}) {
     _interpreterOptions = InterpreterOptions();
@@ -34,9 +36,9 @@ class Recognizer {
   void loadRegisteredFaces() async {
     registered.clear();
     final allRows = await dbHelper.queryAllRows();
-   // debugPrint('query all rows:');
+    // debugPrint('query all rows:');
     for (final row in allRows) {
-    //  debugPrint(row.toString());
+      //  debugPrint(row.toString());
       print(row[DatabaseHelper.columnName]);
       String name = row[DatabaseHelper.columnName];
       List<double> embd = row[DatabaseHelper.columnEmbedding].split(',').map((e) => double.parse(e)).toList().cast<double>();
@@ -82,7 +84,7 @@ class Recognizer {
         }
       }
     }
-    return reshapedArray.reshape([1,160,160,3]);
+    return reshapedArray.reshape([1,112,112,3]);
   }
 
   Recognition recognize(img.Image image,Rect location) {
@@ -92,7 +94,7 @@ class Recognizer {
     print(input.shape.toString());
 
     //TODO output array
-    List output = List.filled(1*512, 0).reshape([1,512]);
+    List output = List.filled(1*192, 0).reshape([1,192]);
 
     //TODO performs inference
     final runs = DateTime.now().millisecondsSinceEpoch;
@@ -101,13 +103,13 @@ class Recognizer {
     print('Time to run inference: $run ms$output');
 
     //TODO convert dynamic list to double list
-     List<double> outputArray = output.first.cast<double>();
+    List<double> outputArray = output.first.cast<double>();
 
-     //TODO looks for the nearest embeeding in the database and returns the pair
-     Pair pair = findNearest(outputArray);
-     print("distance= ${pair.distance}");
+    //TODO looks for the nearest embeeding in the database and returns the pair
+    Pair pair = findNearest(outputArray);
+    print("distance= ${pair.distance}");
 
-     return Recognition(pair.name,location,outputArray,pair.distance);
+    return Recognition(pair.name,location,outputArray,pair.distance);
   }
 
   //TODO  looks for the nearest embeeding in the database and returns the pair which contain information of registered face with which face is most similar
@@ -137,9 +139,9 @@ class Recognizer {
 
 }
 class Pair{
-   String name;
-   double distance;
-   Pair(this.name,this.distance);
+  String name;
+  double distance;
+  Pair(this.name,this.distance);
 }
 
 

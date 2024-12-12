@@ -1,6 +1,7 @@
 import 'package:asia_project/auth/pages/login.dart';
 import 'package:asia_project/auth/pages/register.dart';
 import 'package:asia_project/views/devicemanagementapp.dart';
+import 'package:asia_project/views/face-view/face_view.dart';
 import 'package:asia_project/views/home_admin_user.dart';
 import 'package:asia_project/views/home_coder.dart';
 import 'package:asia_project/views/login_devices.dart';
@@ -45,29 +46,10 @@ class MyApp extends StatelessWidget {
         '/loginDevice': (context) => login_devices(),
         '/home_admin_user': (context) => HomePage(),
         '/home_coder': (context) => HomeCoderView(),
+        '/face': (context) => MyHomePage(),
       },
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
 
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(),
-    );
-  }
-}
