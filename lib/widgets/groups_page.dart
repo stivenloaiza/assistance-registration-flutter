@@ -59,21 +59,31 @@ class _GroupsPageState extends State<GroupsPage> {
 
   // Método para editar un grupo
   Future<void> _editGroup(String groupId) async {
-    // Buscar el grupo por su ID, y si no lo encuentra, devolver null
+    // Buscar el grupo por su ID
     final group = _groups.firstWhere(
       (g) => g.id == groupId, 
-      orElse: () => Group(id: '', createdAt: '', createdBy: '', description: '', device: '', endDate: '', endTime: '', startDate: '', startTime: '', timeTolerance: 0, title: '', usersId: []), // Regresa un objeto vacío en lugar de null
+      orElse: () => Group(id: '', createdAt: '', createdBy: '', description: '', device: '', endDate: '', endTime: '', startDate: '', startTime: '', timeTolerance: 0, title: '', usersId: []), 
     );
 
     // Verificar si el grupo existe antes de abrir el modal
     if (group.id.isNotEmpty) {
       // Abrir el modal de edición para ese grupo
-      showDialog(
+      final updatedGroup = await showDialog<Group>(
         context: context,
         builder: (context) => EditGroupModal(group: group), // Pasa el grupo al modal
       );
+
+      // Si el grupo fue editado (no es null), actualizamos la lista
+      if (updatedGroup != null) {
+        setState(() {
+          // Reemplazamos el grupo editado en la lista de grupos
+          final index = _groups.indexWhere((g) => g.id == updatedGroup.id);
+          if (index != -1) {
+            _groups[index] = updatedGroup; // Reemplazar el grupo editado
+          }
+        });
+      }
     } else {
-      // Si no se encuentra el grupo, muestra un mensaje (opcional)
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Grupo no encontrado')),
       );
@@ -116,6 +126,7 @@ class _GroupsPageState extends State<GroupsPage> {
     );
   }
 }
+
 
 
 

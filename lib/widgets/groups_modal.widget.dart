@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:asia_project/models/group_model.dart';  // Asegúrate de importar el modelo de grupo
-import 'package:asia_project/controllers/group_controller.dart';  // Asegúrate de importar el controlador
+import 'package:asia_project/models/group_model.dart';
+import 'package:asia_project/controllers/group_controller.dart';
+import 'package:asia_project/models/user_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; // Para acceder a la base de datos
 
 class EditGroupModal extends StatefulWidget {
   final Group group;  // El grupo que vamos a editar
@@ -22,6 +24,9 @@ class _EditGroupModalState extends State<EditGroupModal> {
   late TextEditingController _endTimeController;
   late TextEditingController _timeToleranceController;
 
+  List<User> _users = []; // Lista para usuarios cargados desde Firestore
+  List<String> _selectedUserIds = []; // Lista de IDs de usuarios seleccionados
+
   @override
   void initState() {
     super.initState();
@@ -34,6 +39,25 @@ class _EditGroupModalState extends State<EditGroupModal> {
     _startTimeController = TextEditingController(text: widget.group.startTime);
     _endTimeController = TextEditingController(text: widget.group.endTime);
     _timeToleranceController = TextEditingController(text: widget.group.timeTolerance.toString());
+    _selectedUserIds = List.from(widget.group.usersId); // Cargar los usuarios del grupo al iniciar
+    _loadUsersData(); // Cargar usuarios desde Firebase
+  }
+
+  Future<void> _loadUsersData() async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('users').get();
+      setState(() {
+        _users = querySnapshot.docs.map((doc) {
+          final user = User.fromMap({
+            'id': doc.id,
+            ...doc.data() as Map<String, dynamic>,
+          });
+          return user;
+        }).toList();
+      });
+    } catch (e) {
+      print("Error al cargar los usuarios: $e");
+    }
   }
 
   @override
@@ -63,7 +87,7 @@ class _EditGroupModalState extends State<EditGroupModal> {
         startTime: _startTimeController.text,
         timeTolerance: int.parse(_timeToleranceController.text),
         title: _titleController.text,
-        usersId: widget.group.usersId,  // Mantenemos los mismos usuarios
+        usersId: _selectedUserIds,  // Usamos los usuarios seleccionados
         updatedAt: DateTime.now().toString(),  // Actualizamos la fecha de modificación
         updatedBy: widget.group.createdBy,  // Podemos asignar el mismo creador
       );
@@ -157,6 +181,43 @@ class _EditGroupModalState extends State<EditGroupModal> {
                 },
               ),
               SizedBox(height: 20),
+
+              // Campo de selección de usuarios
+              GestureDetector(
+                onTap: () async {
+                  final selectedIds = await showDialog<List<String>>(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return UserSelectDialog(
+                        users: _users,
+                        selectedUserIds: _selectedUserIds,
+                        onSelectionChanged: (selectedList) {
+                          setState(() {
+                            _selectedUserIds = selectedList;
+                          });
+                        },
+                      );
+                    },
+                  );
+                  if (selectedIds != null) {
+                    setState(() {
+                      _selectedUserIds = selectedIds;
+                    });
+                  }
+                },
+                child: InputDecorator(
+                  decoration: const InputDecoration(
+                    labelText: 'Seleccionar Usuarios',
+                    border: OutlineInputBorder(),
+                  ),
+                  child: Text(_selectedUserIds.isEmpty
+                      ? 'No se seleccionaron usuarios'
+                      : _selectedUserIds.join(', ')),
+                ),
+              ),
+
+              SizedBox(height: 20),
+
               ElevatedButton(
                 onPressed: _saveGroup,
                 child: Text('Guardar cambios'),
@@ -170,6 +231,69 @@ class _EditGroupModalState extends State<EditGroupModal> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class UserSelectDialog extends StatefulWidget {
+  final List<User> users;
+  final List<String> selectedUserIds;
+  final Function(List<String>) onSelectionChanged;
+
+  const UserSelectDialog({
+    Key? key,
+    required this.users,
+    required this.selectedUserIds,
+    required this.onSelectionChanged,
+  }) : super(key: key);
+
+  @override
+  _UserSelectDialogState createState() => _UserSelectDialogState();
+}
+
+class _UserSelectDialogState extends State<UserSelectDialog> {
+  late List<String> _selectedUsers;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedUsers = List.from(widget.selectedUserIds); // Inicializa con los usuarios seleccionados
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Seleccionar Usuarios'),
+      content: SingleChildScrollView(
+        child: Column(
+          children: widget.users.map((user) {
+            return CheckboxListTile(
+              title: Text(user.name),  // Mostrar el nombre del usuario
+              value: _selectedUsers.contains(user.id),
+              onChanged: (bool? selected) {
+                setState(() {
+                  if (selected == true) {
+                    _selectedUsers.add(user.id);
+                  } else {
+                    _selectedUsers.remove(user.id);
+                  }
+                });
+                widget.onSelectionChanged(_selectedUsers);  // Notificar a la pantalla principal
+              },
+            );
+          }).toList(),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text('Cancelar'),
+        ),
+        ElevatedButton(
+          onPressed: () => Navigator.of(context).pop(_selectedUsers),
+          child: Text('Aceptar'),
+        ),
+      ],
     );
   }
 }
