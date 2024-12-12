@@ -25,6 +25,7 @@ class _GroupsPageState extends State<GroupsPage> {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   List<Group> _groups = [];
   final GroupController _groupsController = GroupController(); // Controlador para grupos
+  Map<String, String> _usersMap = {}; // Mapa para almacenar los IDs de usuarios y sus nombres
 
   @override
   void initState() {
@@ -32,19 +33,43 @@ class _GroupsPageState extends State<GroupsPage> {
     _loadGroupsData(); // Cargar los grupos al iniciar
   }
 
-  // Método para cargar los datos desde Firestore
+  // Método para cargar los datos de los grupos y los usuarios
   Future<void> _loadGroupsData() async {
     QuerySnapshot querySnapshot = await _db.collection('groups').get();
 
+    List<Group> loadedGroups = querySnapshot.docs.map((doc) {
+      final group = Group.fromMap(
+        doc.data() as Map<String, dynamic>,
+        id: doc.id,
+      );
+      return group;
+    }).toList();
+
+    // Obtener los IDs de los usuarios de todos los grupos
+    Set<String> userIds = {};
+    for (var group in loadedGroups) {
+      userIds.addAll(group.usersId);
+    }
+
+    // Cargar los nombres de los usuarios
+    await _loadUsersNames(userIds);
+
     setState(() {
-      _groups = querySnapshot.docs.map((doc) {
-        final group = Group.fromMap(
-          doc.data() as Map<String, dynamic>,
-          id: doc.id,
-        );
-        print("Group ID: ${group.id}"); // Debug para verificar
-        return group;
-      }).toList();
+      _groups = loadedGroups;
+    });
+  }
+
+  // Método para cargar los nombres de los usuarios
+  Future<void> _loadUsersNames(Set<String> userIds) async {
+    Map<String, String> userNames = {};
+    for (String userId in userIds) {
+      DocumentSnapshot userDoc = await _db.collection('users').doc(userId).get();
+      if (userDoc.exists) {
+        userNames[userId] = userDoc['name'] ?? 'Unknown User';
+      }
+    }
+    setState(() {
+      _usersMap = userNames; // Guardamos los nombres de los usuarios en el mapa
     });
   }
 
@@ -67,16 +92,13 @@ class _GroupsPageState extends State<GroupsPage> {
 
     // Verificar si el grupo existe antes de abrir el modal
     if (group.id.isNotEmpty) {
-      // Abrir el modal de edición para ese grupo
       final updatedGroup = await showDialog<Group>(
         context: context,
-        builder: (context) => EditGroupModal(group: group), // Pasa el grupo al modal
+        builder: (context) => EditGroupModal(group: group),
       );
 
-      // Si el grupo fue editado (no es null), actualizamos la lista
       if (updatedGroup != null) {
         setState(() {
-          // Reemplazamos el grupo editado en la lista de grupos
           final index = _groups.indexWhere((g) => g.id == updatedGroup.id);
           if (index != -1) {
             _groups[index] = updatedGroup; // Reemplazar el grupo editado
@@ -114,18 +136,21 @@ class _GroupsPageState extends State<GroupsPage> {
                     startDate: group.startDate,
                     endDate: group.endDate,
                     timeTolerance: group.timeTolerance,
-                    usersId: group.usersId,
+                    usersId: group.usersId
+                        .map((userId) => _usersMap[userId] ?? 'Unknown User')
+                        .toList(),
                     groupId: group.id,
                     onDelete: () => _deleteGroup(group.id),
-                    onEdit: () => _editGroup(group.id), // Llamamos a _editGroup
+                    onEdit: () => _editGroup(group.id),
                   );
                 },
               ),
       ),
-      floatingActionButton: const FloatingButton(), // Botón flotante para agregar nuevo grupo
+      floatingActionButton: const FloatingButton(),
     );
   }
 }
+
 
 
 

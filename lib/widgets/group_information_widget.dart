@@ -27,9 +27,8 @@ class GroupInformation extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Título del grupo
           Text(
-            title, // Usamos el parámetro 'title'
+            title, 
             style: const TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
@@ -37,36 +36,16 @@ class GroupInformation extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8.0),
-
-          // Descripción del grupo
-          Text(
-            description, // Usamos el parámetro 'description'
-            style: const TextStyle(fontSize: 16.0),
-          ),
+          Text(description, style: const TextStyle(fontSize: 16.0)),
           const SizedBox(height: 8.0),
-
-          // Información del dispositivo
-          Text(
-            'Device: $device', // Usamos el parámetro 'device'
-            style: const TextStyle(color: Colors.grey, fontSize: 14.0),
-          ),
+          Text('Device: $device', style: const TextStyle(color: Colors.grey, fontSize: 14.0)),
           const SizedBox(height: 8.0),
-
-          // Rango de fechas
-          Text(
-            'Start: $startDate - End: $endDate', // Usamos los parámetros de fechas
-            style: const TextStyle(fontSize: 14.0),
-          ),
+          Text('Start: $startDate - End: $endDate', style: const TextStyle(fontSize: 14.0)),
           const SizedBox(height: 8.0),
-
-          // Tolerancia de tiempo
-          Text(
-            'Time Tolerance: $timeTolerance minutes', // Usamos 'timeTolerance'
-            style: const TextStyle(color: Colors.grey, fontSize: 14.0),
-          ),
+          Text('Time Tolerance: $timeTolerance minutes', style: const TextStyle(color: Colors.grey, fontSize: 14.0)),
           const SizedBox(height: 16.0),
 
-          // Usuarios del grupo
+          // Mostrar los nombres de los usuarios
           if (usersId.isNotEmpty)
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,3 +68,4 @@ class GroupInformation extends StatelessWidget {
     );
   }
 }
+
