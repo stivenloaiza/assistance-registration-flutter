@@ -8,27 +8,26 @@ import 'package:asia_project/services/attendance_service.dart';
 import 'package:asia_project/widgets/reports_bi_widgets/filters_admin.dart';
 import 'package:asia_project/widgets/reports_bi_widgets/table_admin_reports.dart';
 import 'package:asia_project/widgets/reports_bi_widgets/line_chart.dart';
+ // Importación del CustomAppBar
 
-class DashboardPage extends StatelessWidget {
+class DashboardPage extends StatefulWidget {
   final bool isMobile;
   final VoidCallback onMenuPressed;
 
-   DashboardPage({
+  const DashboardPage({
     Key? key,
     required this.isMobile,
     required this.onMenuPressed,
   }) : super(key: key);
 
-  final AttendanceService attendanceService = AttendanceService(
-    firestore: FirebaseFirestore.instance,
-  );
+  @override
+  State<DashboardPage> createState() => _DashboardPageState();
+}
 
-  String? selectedGroup;
-  List<Map<String, dynamic>> attendanceData = [];
-  bool isLoading = false;
-  Map<String, dynamic>? chartData;
-
-  Map<String, dynamic> generateChartData(List<Map<String, dynamic>> attendanceData) {
+class _DashboardPageState extends State<DashboardPage> {
+  Map<String, dynamic> generateChartData(
+      List<Map<String, dynamic>> attendanceData) {
+    // Extraer datos para los gráficos
     final List<double> onTimeData = attendanceData
         .map((entry) => entry['onTimePercentage'] as double)
         .toList();
@@ -39,6 +38,7 @@ class DashboardPage extends StatelessWidget {
         .map((entry) => entry['latePercentage'] as double)
         .toList();
 
+    // Calcular referencias para el eje X (ref)
     final int length = attendanceData.length;
     final String firstDate = attendanceData.first['date'];
     final String middleDate = attendanceData[length ~/ 2]['date'];
@@ -52,31 +52,49 @@ class DashboardPage extends StatelessWidget {
     };
   }
 
+  final AttendanceService attendanceService = AttendanceService(
+    firestore: FirebaseFirestore.instance,
+  );
+
+  String? selectedGroup;
+  List<Map<String, dynamic>> attendanceData = [];
+  bool isLoading = false;
+
+  Map<String, dynamic>? chartData;
+
   Future<void> loadAttendanceData(String groupTitle) async {
-    isLoading = true;
+    setState(() {
+      isLoading = true;
+    });
     try {
       final data = await attendanceService.getAttendanceAverages(groupTitle);
       final generatedChartData = generateChartData(data);
-      attendanceData = data;
-      chartData = generatedChartData;
-      print(attendanceData);
+      setState(() {
+        attendanceData = data;
+        chartData = generatedChartData;
+        print(attendanceData);
+      });
     } catch (e) {
       print("Error loading attendance data: $e");
     } finally {
-      isLoading = false;
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController searchController = TextEditingController();
+
     return Scaffold(
-      appBar: CustomAppBar(
-        isMobile: isMobile,
-        onMenuPressed: onMenuPressed,
-        title: 'Stadistics',
-        searchController: TextEditingController(),
+      appBar: CustomAppBar( 
+        isMobile: widget.isMobile,
+        onMenuPressed: widget.onMenuPressed,
+        title: "Stadistics",
+        searchController: searchController,
       ),
-      body: SingleChildScrollView(
+      body: SingleChildScrollView( // Envolvemos el cuerpo en un SingleChildScrollView
         child: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Column(
@@ -84,7 +102,9 @@ class DashboardPage extends StatelessWidget {
             children: [
               FilterAdmin(
                 onGroupSelected: (groupTitle) {
-                  selectedGroup = groupTitle;
+                  setState(() {
+                    selectedGroup = groupTitle;
+                  });
                   loadAttendanceData(groupTitle);
                 },
               ),
@@ -127,7 +147,7 @@ class DashboardPage extends StatelessWidget {
                     SizedBox(height: 16),
                     TipsCards()
                   ],
-                ),
+                )
             ],
           ),
         ),
@@ -135,3 +155,4 @@ class DashboardPage extends StatelessWidget {
     );
   }
 }
+

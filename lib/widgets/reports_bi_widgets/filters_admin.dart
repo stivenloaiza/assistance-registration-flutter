@@ -35,7 +35,6 @@ class _FilterAdminState extends State<FilterAdmin> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
       child: Column(
         children: [
           const SizedBox(height: 5),
@@ -65,10 +64,10 @@ class _FilterAdminState extends State<FilterAdmin> {
                             child: Text(title),
                           );
                         }).toList(),
-                        dropdownColor: const Color.fromRGBO(255, 255, 255, 1),
+                        dropdownColor: const Color.fromARGB(255, 255, 255, 255),
                         decoration: InputDecoration(
                           filled: true,
-                          fillColor: const Color.fromRGBO(247, 242, 250, 1),
+                          fillColor: const Color.fromARGB(255, 255, 255, 255),
                           border: InputBorder.none,
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(40),

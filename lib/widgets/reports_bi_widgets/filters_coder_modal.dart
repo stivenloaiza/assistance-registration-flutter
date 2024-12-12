@@ -8,12 +8,12 @@ import 'package:asia_project/utils/utilApplication.dart';
 import 'package:asia_project/widgets/reports_bi_widgets/bar_chart.dart';
 import 'package:asia_project/models/attendance_model.dart';
 
-class FilterCoder extends StatefulWidget {
+class FilterCoderModal extends StatefulWidget {
   final Function(List<Map<String, dynamic>>) onTableDataProcessed;
   final Function(List<ChartData>) onBarChartDataProcessed;
   final Function(List<double>, List<String>) onLineChartDataProcessed;
 
-  const FilterCoder({
+  const FilterCoderModal({
     super.key,
     required this.onTableDataProcessed,
     required this.onBarChartDataProcessed,
@@ -21,10 +21,10 @@ class FilterCoder extends StatefulWidget {
   });
 
   @override
-  State<FilterCoder> createState() => _FilterCoderState();
+  State<FilterCoderModal> createState() => _FilterCoderState();
 }
 
-class _FilterCoderState extends State<FilterCoder> {
+class _FilterCoderState extends State<FilterCoderModal> {
   String? selectedGroup;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   late Future<List<GroupModel>> _groupFuture;

@@ -76,8 +76,6 @@ class _ReportsAdminState extends State<ReportsAdmin> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // const HeaderAdmin(),
-            
             FilterAdmin(
               onGroupSelected: (groupTitle) {
                 setState(() {

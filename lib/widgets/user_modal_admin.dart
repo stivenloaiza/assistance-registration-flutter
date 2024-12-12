@@ -1,4 +1,4 @@
-import 'package:asia_project/views/reports_coders_views.dart';
+import 'package:asia_project/views/reports_coders_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:asia_project/models/user_model.dart';
 import 'dart:math';
@@ -24,75 +24,61 @@ class UserModalWidget extends StatelessWidget {
     );
   }
 
-  Widget contentBox(context) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        shape: BoxShape.rectangle,
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(color: Colors.black, offset: Offset(0, 10), blurRadius: 10),
-        ],
-      ),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              user.name,
-              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 15),
-            Text(
-              user.email,
-              style: const TextStyle(fontSize: 18, color: Colors.grey),
-            ),
-            const SizedBox(height: 20),
-            Container(
-              height: 700,
-              color: Colors.white,
-              child: const ReportsCoders(),
-            ),
-            const SizedBox(height: 20),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('Close', style: TextStyle(fontSize: 18)),
+ Widget contentBox(BuildContext context) {
+  final mediaQuery = MediaQuery.of(context).size;
+
+  return Center(
+    child: SingleChildScrollView(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: mediaQuery.width * 0.9, // Máximo 90% del ancho de la pantalla
+          maxHeight: mediaQuery.height * 0.9, // Máximo 90% del alto de la pantalla
+        ),
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            shape: BoxShape.rectangle,
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: const [
+              BoxShadow(color: Colors.black, offset: Offset(0, 10), blurRadius: 10),
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                user.name,
+                style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
               ),
-            ),
-          ],
+              const SizedBox(height: 15),
+              Text(
+                user.email,
+                style: const TextStyle(fontSize: 18, color: Colors.grey),
+              ),
+              const SizedBox(height: 20),
+              // ReportsCoders ajustable
+              Flexible(
+                child: Container(
+                  color: Colors.white,
+                  child: const ReportsCodersModal(),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Close', style: TextStyle(fontSize: 18)),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
-    );
-  }
-
-  Widget buildInfoRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            '$label:',
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-          Text(value.isNotEmpty ? value : 'N/A'),
-        ],
-      ),
-    );
-  }
-
-  String formatDate(String dateString) {
-    if (dateString.isEmpty) return 'N/A';
-    try {
-      final date = DateTime.parse(dateString);
-      return '${date.month}/${date.day}/${date.year}';
-    } catch (e) {
-      return dateString;
-    }
-  }
+    ),
+  );
+}
 }

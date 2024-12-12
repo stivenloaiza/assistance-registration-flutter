@@ -38,6 +38,7 @@ class TipsCards extends StatelessWidget {
 
   Widget _buildTipCard({required String tip, required IconData icon}) {
     return Card(
+      color: Colors.white,
       elevation: 4.0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
@@ -49,7 +50,7 @@ class TipsCards extends StatelessWidget {
             Icon(
               icon,
               size: 40.0,
-              color: Colors.indigo,
+              color: Colors.grey,
             ),
             const SizedBox(width: 16.0),
             Expanded(
