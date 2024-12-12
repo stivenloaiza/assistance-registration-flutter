@@ -1,3 +1,4 @@
+import 'package:asia_project/widgets/custom_apbar_admin.dart';
 import 'package:asia_project/widgets/reports_bi_widgets/card.dart';
 import 'package:asia_project/widgets/reports_bi_widgets/header_admin_widget.dart';
 import 'package:asia_project/widgets/reports_bi_widgets/search_input_widget.dart';
@@ -8,24 +9,26 @@ import 'package:asia_project/widgets/reports_bi_widgets/filters_admin.dart';
 import 'package:asia_project/widgets/reports_bi_widgets/table_admin_reports.dart';
 import 'package:asia_project/widgets/reports_bi_widgets/line_chart.dart';
 
-class DashboardPage extends StatefulWidget {
+class DashboardPage extends StatelessWidget {
   final bool isMobile;
   final VoidCallback onMenuPressed;
 
-  const DashboardPage({
+   DashboardPage({
     Key? key,
     required this.isMobile,
     required this.onMenuPressed,
   }) : super(key: key);
 
-  @override
-  State<DashboardPage> createState() => _DashboardPageState();
-}
+  final AttendanceService attendanceService = AttendanceService(
+    firestore: FirebaseFirestore.instance,
+  );
 
-class _DashboardPageState extends State<DashboardPage> {
-  Map<String, dynamic> generateChartData(
-      List<Map<String, dynamic>> attendanceData) {
-    // Extraer datos para los gráficos
+  String? selectedGroup;
+  List<Map<String, dynamic>> attendanceData = [];
+  bool isLoading = false;
+  Map<String, dynamic>? chartData;
+
+  Map<String, dynamic> generateChartData(List<Map<String, dynamic>> attendanceData) {
     final List<double> onTimeData = attendanceData
         .map((entry) => entry['onTimePercentage'] as double)
         .toList();
@@ -36,7 +39,6 @@ class _DashboardPageState extends State<DashboardPage> {
         .map((entry) => entry['latePercentage'] as double)
         .toList();
 
-    // Calcular referencias para el eje X (ref)
     final int length = attendanceData.length;
     final String firstDate = attendanceData.first['date'];
     final String middleDate = attendanceData[length ~/ 2]['date'];
@@ -50,46 +52,31 @@ class _DashboardPageState extends State<DashboardPage> {
     };
   }
 
-  final AttendanceService attendanceService = AttendanceService(
-    firestore: FirebaseFirestore.instance,
-  );
-
-  String? selectedGroup;
-  List<Map<String, dynamic>> attendanceData = [];
-  bool isLoading = false;
-
-  Map<String, dynamic>? chartData;
-
   Future<void> loadAttendanceData(String groupTitle) async {
-    setState(() {
-      isLoading = true;
-    });
+    isLoading = true;
     try {
       final data = await attendanceService.getAttendanceAverages(groupTitle);
       final generatedChartData = generateChartData(data);
-      setState(() {
-        attendanceData = data;
-        chartData = generatedChartData;
-        print(attendanceData);
-      });
+      attendanceData = data;
+      chartData = generatedChartData;
+      print(attendanceData);
     } catch (e) {
       print("Error loading attendance data: $e");
     } finally {
-      setState(() {
-        isLoading = false;
-      });
+      isLoading = false;
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text('Stadistics'),
-        
+      appBar: CustomAppBar(
+        isMobile: isMobile,
+        onMenuPressed: onMenuPressed,
+        title: 'Stadistics',
+        searchController: TextEditingController(),
       ),
-      body: SingleChildScrollView(  // Envolvemos el cuerpo en un SingleChildScrollView
+      body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Column(
@@ -97,9 +84,7 @@ class _DashboardPageState extends State<DashboardPage> {
             children: [
               FilterAdmin(
                 onGroupSelected: (groupTitle) {
-                  setState(() {
-                    selectedGroup = groupTitle;
-                  });
+                  selectedGroup = groupTitle;
                   loadAttendanceData(groupTitle);
                 },
               ),
@@ -142,7 +127,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     SizedBox(height: 16),
                     TipsCards()
                   ],
-                )
+                ),
             ],
           ),
         ),
