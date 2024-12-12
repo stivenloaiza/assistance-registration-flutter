@@ -86,8 +86,8 @@ class _GroupsPageState extends State<GroupsPage> {
   Future<void> _editGroup(String groupId) async {
     // Buscar el grupo por su ID
     final group = _groups.firstWhere(
-      (g) => g.id == groupId, 
-      orElse: () => Group(id: '', createdAt: '', createdBy: '', description: '', device: '', endDate: '', endTime: '', startDate: '', startTime: '', timeTolerance: 0, title: '', usersId: []), 
+      (g) => g.id == groupId,
+      orElse: () => Group(id: '', createdAt: '', createdBy: '', description: '', device: '', endDate: '', endTime: '', startDate: '', startTime: '', timeTolerance: 0, title: '', usersId: []),
     );
 
     // Verificar si el grupo existe antes de abrir el modal

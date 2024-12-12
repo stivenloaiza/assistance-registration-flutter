@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class ActionButtons extends StatelessWidget {
-  final VoidCallback onDelete;
-  final VoidCallback onEdit;  // Recibimos el callback de edición
+  final VoidCallback? onDelete;
+  final VoidCallback? onEdit;  // Recibimos el callback de edición
 
   const ActionButtons({
     super.key,
-    required this.onDelete,
-    required this.onEdit,  // Aceptamos el callback de edición
+    this.onDelete,
+    this.onEdit,  // Aceptamos el callback de edición
   });
 
   @override

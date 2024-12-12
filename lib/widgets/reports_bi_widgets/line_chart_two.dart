@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class LineChart2 extends StatefulWidget {
   final List<double> data;
-  final List<String> ref;
+  final List<dynamic> ref;
 
   const LineChart2({required this.data, required this.ref, super.key});
 
@@ -107,8 +107,8 @@ class _LineChart2State extends State<LineChart2> {
     // Mapear valores específicos a etiquetas
     final Map<int, String> labels = {
       1: 'A',
-      2: 'T',
-      3: 'R',
+      2: 'R',
+      3: 'T',
     };
 
     final String? label = labels[value.toInt()];
@@ -156,7 +156,7 @@ class _LineChart2State extends State<LineChart2> {
       minX: 0,
       maxX: maxX,
       minY: 0,
-      maxY: 3, // Rango ajustado al nuevo sistema de etiquetas
+      maxY: 4, // Rango ajustado al nuevo sistema de etiquetas
       lineBarsData: [
         LineChartBarData(
           spots: List.generate(
@@ -166,8 +166,8 @@ class _LineChart2State extends State<LineChart2> {
           isCurved: true,
           gradient: LinearGradient(
             colors: [
-              Colors.cyan,
-              Colors.indigo,
+              Colors.orange,
+              Colors.red,
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -178,8 +178,8 @@ class _LineChart2State extends State<LineChart2> {
               show: true,
               gradient: LinearGradient(
                 colors: [
-                  Colors.cyan.withOpacity(0.2),
-                  Colors.indigo.withOpacity(0.1),
+                  Colors.orange.withOpacity(0.2),
+                  Colors.red.withOpacity(0.1),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -227,8 +227,8 @@ class _LineChart2State extends State<LineChart2> {
           isCurved: false,
           gradient: LinearGradient(
             colors: [
-              Colors.cyan,
-              Colors.indigo,
+              Colors.orange,
+              Colors.red,
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -238,8 +238,8 @@ class _LineChart2State extends State<LineChart2> {
               show: true,
               gradient: LinearGradient(
                 colors: [
-                  Colors.cyan.withOpacity(0.2),
-                  Colors.indigo.withOpacity(0.1),
+                  Colors.orange.withOpacity(0.2),
+                  Colors.red.withOpacity(0.1),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -255,7 +255,7 @@ class _LineChart2State extends State<LineChart2> {
       minX: 0,
       maxX: maxX,
       minY: 0,
-      maxY: 3,
+      maxY: 4,
     );
   }
 }

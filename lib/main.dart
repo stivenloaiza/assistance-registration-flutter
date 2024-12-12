@@ -2,19 +2,26 @@ import 'package:asia_project/auth/pages/login.dart';
 import 'package:asia_project/auth/pages/register.dart';
 import 'package:asia_project/views/devicemanagementapp.dart';
 import 'package:asia_project/views/home_admin_user.dart';
+import 'package:asia_project/views/home_coder.dart';
 import 'package:asia_project/views/login_devices.dart';
 import 'package:asia_project/views/notifications_screen.dart';
 import 'package:asia_project/views/reports_coders_views.dart';
 import 'package:asia_project/views/services_page.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
+  if(kIsWeb){
+     await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  }else{
+    await Firebase.initializeApp();
+  }
+ 
   runApp(const MyApp());
 }
 
@@ -37,7 +44,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginPage(),
         '/loginDevice': (context) => login_devices(),
         '/home_admin_user': (context) => HomePage(),
-        '/home_coder': (context) => ReportsCoders(),
+        '/home_coder': (context) => HomeCoderView(),
       },
     );
   }

@@ -1,3 +1,4 @@
+import 'package:asia_project/views/reports_coders_views.dart';
 import 'package:flutter/material.dart';
 import 'package:asia_project/models/user_model.dart';
 import 'dart:math';
@@ -25,7 +26,7 @@ class UserModalWidget extends StatelessWidget {
 
   Widget contentBox(context) {
     return Container(
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         shape: BoxShape.rectangle,
         color: Colors.white,
@@ -34,47 +35,42 @@ class UserModalWidget extends StatelessWidget {
           BoxShadow(color: Colors.black, offset: Offset(0, 10), blurRadius: 10),
         ],
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Text(
-            user.name,
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
-          ),
-          SizedBox(height: 15),
-          Text(
-            user.email,
-            style: TextStyle(fontSize: 18, color: Colors.grey),
-          ),
-          SizedBox(height: 20),
-          // Removed the AttendanceChartWidget
-          Container(
-            height: 100, // Placeholder for chart
-            color: Colors.grey[200],
-            child: Center(child: Text("Attendance Data Placeholder")),
-          ),
-          SizedBox(height: 20),
-          _buildInfoRow('Document Number', user.documentNumber),
-          _buildInfoRow('Birth Date', _formatDate(user.birthDate)),
-          _buildInfoRow('Created At', _formatDate(user.createdAt)),
-          _buildInfoRow('Role', user.role),
-          _buildInfoRow('Status', user.status ? 'Active' : 'Inactive'),
-          SizedBox(height: 20),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Close', style: TextStyle(fontSize: 18)),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              user.name,
+              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
             ),
-          ),
-        ],
+            const SizedBox(height: 15),
+            Text(
+              user.email,
+              style: const TextStyle(fontSize: 18, color: Colors.grey),
+            ),
+            const SizedBox(height: 20),
+            Container(
+              height: 700,
+              color: Colors.white,
+              child: const ReportsCoders(),
+            ),
+            const SizedBox(height: 20),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Close', style: TextStyle(fontSize: 18)),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildInfoRow(String label, String value) {
+  Widget buildInfoRow(String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
@@ -82,7 +78,7 @@ class UserModalWidget extends StatelessWidget {
         children: [
           Text(
             '$label:',
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           Text(value.isNotEmpty ? value : 'N/A'),
         ],
@@ -90,11 +86,11 @@ class UserModalWidget extends StatelessWidget {
     );
   }
 
-  String _formatDate(String dateString) {
+  String formatDate(String dateString) {
     if (dateString.isEmpty) return 'N/A';
     try {
       final date = DateTime.parse(dateString);
-      return '${date.month}/${date.day}/${date.year}';  // Simple format (MM/dd/yyyy)
+      return '${date.month}/${date.day}/${date.year}';
     } catch (e) {
       return dateString;
     }

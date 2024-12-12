@@ -1,19 +1,20 @@
 import 'package:asia_project/widgets/action_buttons_widget.dart';
 import 'package:asia_project/widgets/user_information_widget.dart';
 import 'package:flutter/material.dart';
+
 class UserCard extends StatelessWidget {
   final String name;
   final String email;
   final String documentNumber;
   final String imageUrl;
-  final String userId;
-  final VoidCallback onDelete;
-  final VoidCallback onEdit;
-  final VoidCallback onTap;
+  final String userId;  // Recibimos el ID
+  final VoidCallback? onDelete;  // Recibimos el callback de eliminación
+  final VoidCallback? onEdit;  // Recibimos el callback de edición
+  final VoidCallback onTap; // Indica si se muestran los botones de acción
 
   // Añadir role y status
-  final String role;
-  final bool status;
+  final String? role;
+  final bool? status;
 
   const UserCard({
     super.key,
@@ -21,12 +22,12 @@ class UserCard extends StatelessWidget {
     required this.email,
     required this.documentNumber,
     required this.imageUrl,
-    required this.userId,
-    required this.onDelete,
-    required this.onEdit,
-    required this.onTap,
-    required this.role,    // Recibimos el role
-    required this.status,  // Recibimos el status
+    required this.userId,  // Recibimos el ID
+    this.onDelete,  // Recibimos el callback de eliminación
+    this.onEdit,
+     required this.onTap,    // Recibimos el callback de edición
+   this.role,    // Recibimos el role
+     this.status
   });
 
   @override
@@ -49,6 +50,7 @@ class UserCard extends StatelessWidget {
           ],
         ),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CircleAvatar(
               radius: 35.0,
@@ -59,8 +61,8 @@ class UserCard extends StatelessWidget {
               name: name,
               email: email,
               documentNumber: documentNumber,
-              role: role,  // Pasamos el role
-              status: status, // Pasamos el status
+              role: role?? '',  // Pasamos el role
+              status: status ?? false, // Pasamos el status
             ),
             SizedBox(width: 16.0),
             ActionButtons(
