@@ -174,10 +174,6 @@ class _FilterCoderState extends State<FilterCoder> {
           children: [
             Row(
               children: [
-                Image.asset(
-                  'assets/images/filtra-logo.png',
-                  width: 100.0,
-                ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: FutureBuilder<List<GroupModel>>(

@@ -2,6 +2,7 @@ import 'package:asia_project/auth/pages/login.dart';
 import 'package:asia_project/auth/pages/register.dart';
 import 'package:asia_project/views/devicemanagementapp.dart';
 import 'package:asia_project/views/home_admin_user.dart';
+import 'package:asia_project/views/home_coder.dart';
 import 'package:asia_project/views/login_devices.dart';
 import 'package:asia_project/views/notifications_screen.dart';
 import 'package:asia_project/views/reports_coders_views.dart';
@@ -37,7 +38,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginPage(),
         '/loginDevice': (context) => login_devices(),
         '/home_admin_user': (context) => HomePage(),
-        '/home_coder': (context) => ReportsCoders(),
+        '/home_coder': (context) => HomeCoderView(),
       },
     );
   }
