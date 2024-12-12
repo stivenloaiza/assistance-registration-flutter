@@ -1,9 +1,12 @@
+import 'package:asia_project/global_state.dart';
 import 'package:asia_project/utils/const_data_admin_user.dart';
 import 'package:asia_project/widgets/admin_drawer.dart';
 import 'package:asia_project/widgets/dashboard_stadists.dart';
 import 'package:asia_project/widgets/device_white.dart';
 import 'package:asia_project/widgets/groups_page.dart';
+import 'package:asia_project/widgets/logout_admin.dart';
 import 'package:asia_project/widgets/users_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -19,14 +22,69 @@ class _HomePageState extends State<HomePage> {
   int _currentPage = 0;
 
   void _navigateToPage(int index) {
-    _pageController.animateToPage(
-      index,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
+    if (index == 4) { // El índice 4 corresponde al logout
+      _handleLogout();
+    } else {
+      _pageController.animateToPage(
+        index,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+      setState(() {
+        _currentPage = index;
+      });
+    }
+  }
+
+  void _handleLogout() {
+    // Aquí se invoca el widget de logout
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Cerrar Sesión'),
+          content: const Text('¿Estás seguro de que deseas cerrar sesión?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Cierra el diálogo de confirmación
+              },
+              child: const Text('Cancelar'),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+              ),
+              onPressed: () async {
+                try {
+                  // Realizamos el logout
+                  await FirebaseAuth.instance.signOut();
+                  GlobalState().currentUserUid = null;
+
+                  // Redirigimos al login
+                  Navigator.pushReplacementNamed(context, '/login');
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Sesión cerrada exitosamente'),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Error al cerrar sesión'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              },
+              child: const Text('Cerrar Sesión'),
+            ),
+          ],
+        );
+      },
     );
-    setState(() {
-      _currentPage = index;
-    });
   }
 
   @override
@@ -94,7 +152,12 @@ class _HomePageState extends State<HomePage> {
                 DevicePage(
                   isMobile: isMobile,
                   onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
-                ),  
+                ),
+                LogoutWidget(
+                  onLogoutComplete: () {
+                    Navigator.pushReplacementNamed(context, '/login');
+                  },
+                )
               ],
             ),
           ),
