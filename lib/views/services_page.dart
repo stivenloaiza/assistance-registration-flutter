@@ -1,13 +1,14 @@
 import 'package:asia_project/widgets/service_list.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-
-class ServicesPage extends StatefulWidget {
+class NotificationsPage extends StatefulWidget {
   @override
-  _ServicesPageState createState() => _ServicesPageState();
+  _NotificationsPageState createState() => _NotificationsPageState();
 }
 
-class _ServicesPageState extends State<ServicesPage> {
+class _NotificationsPageState extends State<NotificationsPage> {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   // Opciones de filtro
   final List<String> filterOptions = [
     "Todos",
@@ -21,34 +22,22 @@ class _ServicesPageState extends State<ServicesPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Lista completa de ítems
-    final List<Map<String, dynamic>> items = [
-      {
-        "icon": Icons.warning,
-        "title": "Dispositivos no autorizados",
-        "color": Colors.yellow,
-      },
-      {
-        "icon": Icons.lock,
-        "title": "Acceso fallido",
-        "color": Colors.red,
-      },
-      {
-        "icon": Icons.schedule,
-        "title": "Inactividad prolongada",
-        "color": Colors.orange,
-      },
-      {
-        "icon": Icons.verified,
-        "title": "Dispositivo autorizado",
-        "color": Colors.blue,
-      },
-    ];
+    return StreamBuilder<List<Map<String, dynamic>>>(
+      stream: NotificationService().getNotifications(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        }
+        if (snapshot.hasError) {
+          return Center(child: Text("Error al cargar notificaciones"));
+        }
 
-    // Filtrar ítems según el filtro seleccionado
-    final filteredItems = selectedFilter == "Todos"
-        ? items
-        : items.where((item) => item['title'] == selectedFilter).toList();
+        // Filtrar según la opción seleccionada
+        final filteredItems = selectedFilter == "Todos"
+            ? snapshot.data!
+            : snapshot.data!
+                .where((item) => item['title'] == selectedFilter)
+                .toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -141,21 +130,68 @@ class _ServicesPageState extends State<ServicesPage> {
             // Lista de ítems filtrados
             Expanded(
               child: ListView.builder(
-                itemCount: filteredItems.length,
-                itemBuilder: (context, index) {
-                  final item = filteredItems[index];
-                  return ServiceListTile(
-                    icon: item['icon'],
-                    title: item['title'],
-                    subtitle: "",
-                    color: item['color'],
-                  );
-                },
-              ),
+            itemCount: filteredItems.length,
+            itemBuilder: (context, index) {
+              final item = filteredItems[index];
+              return NotificationsListTile(
+                icon: item['icon'],
+                title: item['title'],
+                subtitle: item['subtitle'],
+                color: item['color'],
+              );
+            },
+          ),
             ),
           ],
         ),
       ),
     );
+  },
+    );
   }
 }
+
+class NotificationService {
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
+
+  Stream<List<Map<String, dynamic>>> getNotifications() {
+    return _db.collection('notifications_device').snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        return {
+          'title': (doc['title'] ?? 'Sin título').toString(),
+          'subtitle': (doc['subtitle'] ?? 'Sin detalles').toString(),
+          'timestamp': (doc['timestamp'] ?? 'Sin fecha').toString(),
+          'type': (doc['type'] ?? 'default').toString(),
+          'icon': _getIcon(doc['type'] ?? 'default'),
+          'color': _getColor(doc['type'] ?? 'default'),
+        };
+      }).toList();
+    });
+  }
+}
+
+IconData _getIcon(String type) {
+    switch (type) {
+      case 'unauthorized_device':
+        return Icons.warning;
+      case 'failed_access':
+        return Icons.lock;
+      case 'long_inactivity':
+        return Icons.schedule;
+      default:
+        return Icons.lock;
+    }
+  }
+
+  Color _getColor(String type) {
+    switch (type) {
+      case 'unauthorized_device':
+        return Colors.yellow;
+      case 'failed_access':
+        return Colors.red;
+      case 'long_inactivity':
+        return Colors.orange;
+      default:
+        return Colors.red;
+    }
+  }

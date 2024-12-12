@@ -19,7 +19,7 @@ class MainScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const GenerateQRScreen()),
+                  MaterialPageRoute(builder: (context) => const GenerateQRScreen(userId: 'ztBjejaA7sedqntDjMIYcfQwpWG2',)),
                 );
               },
               child: const Text("Generar QR"),

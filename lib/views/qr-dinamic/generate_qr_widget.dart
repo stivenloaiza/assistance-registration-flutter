@@ -6,7 +6,9 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:otp/otp.dart';
 
 class GenerateQRScreen extends StatefulWidget {
-  const GenerateQRScreen({super.key});
+  final String userId; // Recibe el ID del usuario como parámetro
+
+  const GenerateQRScreen({super.key, required this.userId});
 
   @override
   _GenerateQRScreenState createState() => _GenerateQRScreenState();
@@ -17,8 +19,8 @@ class _GenerateQRScreenState extends State<GenerateQRScreen> {
   String _qrData = '';
   String qrMessage = 'Generando QR...';
   int timeLeft = 30; // Tiempo de expiración del QR
-  final String otpSecret = "HI893Y23B234H9823Y984Y23H4HJK23HJ4HKJ23HIU4H9283Y4932"; // Secret OTP
-  final String userId = "ztBjejaA7sedqntDjMIYcfQwpWG2"; // Este es el ID del usuario que estamos buscando
+  final String otpSecret =
+      "HI893Y23B234H9823Y984Y23H4HJK23HJ4HKJ23HIU4H9283Y4932"; // Secret OTP
 
   @override
   void initState() {
@@ -32,12 +34,12 @@ class _GenerateQRScreenState extends State<GenerateQRScreen> {
     try {
       // Consulta a Firestore para obtener el usuario con un identificador
       DocumentSnapshot snapshot = await FirebaseFirestore.instance
-          .collection('users') // Asumiendo que tu colección se llama 'Users'
-          .doc(userId) // ID del usuario
+          .collection('users') // Asumiendo que tu colección se llama 'users'
+          .doc(widget.userId) // Usar el ID recibido como parámetro
           .get();
 
       if (snapshot.exists) {
-        String userId = snapshot['id']; // Cambia 'uid' por el campo correspondiente
+        String userId = snapshot['id']; // Cambia 'id' por el campo correspondiente
         _generateQRData(userId); // Llama a la función para generar el QR con el UID
       } else {
         setState(() {
@@ -92,7 +94,7 @@ class _GenerateQRScreenState extends State<GenerateQRScreen> {
         } else {
           qrMessage = 'QR expirado';
           // Actualizamos el campo 'otp' a vacío en Firestore
-          FirebaseFirestore.instance.collection('users').doc(userId).update({
+          FirebaseFirestore.instance.collection('users').doc(widget.userId).update({
             'otp': "", // Ponemos el OTP en blanco
           }).then((_) {
             setState(() {
@@ -113,14 +115,14 @@ class _GenerateQRScreenState extends State<GenerateQRScreen> {
   @override
   void dispose() {
     // Actualizamos el OTP a vacío en Firestore cuando el usuario salga de la vista
-    FirebaseFirestore.instance.collection('users').doc(userId).update({
+    FirebaseFirestore.instance.collection('users').doc(widget.userId).update({
       'otp': "", // Ponemos el OTP en blanco
     }).then((_) {
       print("OTP limpiado al salir de la vista.");
     }).catchError((e) {
       print("Error al limpiar OTP al salir de la vista: $e");
     });
-    
+
     _timer.cancel();
     super.dispose();
   }
@@ -132,12 +134,12 @@ class _GenerateQRScreenState extends State<GenerateQRScreen> {
         title: const Text("Generar QR"),
         centerTitle: true,
         titleTextStyle: const TextStyle(
-          color: Color.fromRGBO(52,60,106,1),
+          color: Color.fromRGBO(52, 60, 106, 1),
           fontSize: 22,
           fontWeight: FontWeight.bold,
         ),
         iconTheme: const IconThemeData(
-          color: Color.fromRGBO(52,60,106,1),
+          color: Color.fromRGBO(52, 60, 106, 1),
         ),
         backgroundColor: Colors.white,
       ),

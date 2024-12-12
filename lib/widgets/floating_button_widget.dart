@@ -1,3 +1,5 @@
+import 'package:asia_project/widgets/custom_modal.dart';
+import 'package:asia_project/widgets/group_admin_create.dart';
 import 'package:flutter/material.dart';
 
 class FloatingButton extends StatefulWidget {
@@ -14,7 +16,17 @@ class _FloatingButtonState extends State<FloatingButton> {
       backgroundColor: const Color(0xFF343C6A),
       elevation: 3.0,
       shape: const CircleBorder(),
-      onPressed: () {},
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const CustomModal(
+              title: 'Nuevo Grupo',
+              child: GroupForm(),
+            );
+          },
+        );
+      },
       child: const Icon(
         Icons.add,
         size: 30.0,
