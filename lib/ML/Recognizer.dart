@@ -94,6 +94,10 @@ class Recognizer {
     //TODO output array
     List output = List.filled(1*512, 0).reshape([1,512]);
 
+    if (interpreter == null) {
+      throw Exception('Interpreter is not initialized yet!');
+    }
+
     //TODO performs inference
     final runs = DateTime.now().millisecondsSinceEpoch;
     interpreter.run(input, output);

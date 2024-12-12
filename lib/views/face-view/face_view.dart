@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:asia_project/ML/Recognition.dart';
 import 'package:asia_project/ML/Recognizer.dart';
+import 'package:asia_project/views/qr-dinamic/qr_scanner_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
@@ -24,27 +25,27 @@ class _MyHomePageState extends State<MyHomePage> {
   CameraLensDirection camDirec = CameraLensDirection.front;
   late List<Recognition> recognitions = [];
 
-  //TODO declare face detector
+  // declare face detector
   late FaceDetector faceDetector;
 
-  //TODO declare face recognizer
+  // declare face recognizer
   late Recognizer recognizer;
 
   @override
   void initState() {
     super.initState();
 
-    //TODO initialize face detector
+    // face detector
     var options =
     FaceDetectorOptions(performanceMode: FaceDetectorMode.accurate);
     faceDetector = FaceDetector(options: options);
-    //TODO initialize face recognizer
+    // initialize face recognizer
     recognizer = Recognizer();
-    //TODO initialize camera footage
+    // initialize camera footage
     initializeCamera();
   }
 
-  //TODO code to initialize the camera feed
+  // code to initialize the camera feed
   initializeCamera() async {
     cameras = await availableCameras();
     controller = CameraController(description, ResolutionPreset.medium,
@@ -66,36 +67,36 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  //TODO close all resources
+  // close all resources
   @override
   void dispose() {
     controller?.dispose();
     super.dispose();
   }
 
-  //TODO face detection on a frame
+  // face detection on a frame
   dynamic _scanResults;
   CameraImage? frame;
   doFaceDetectionOnFrame() async {
-    //TODO convert frame into InputImage format
+    // convert frame into InputImage format
     print('dfd');
     InputImage? inputImage = getInputImage();
-    //TODO pass InputImage to face detection model and detect faces
+    // pass InputImage to face detection model and detect faces
 
     List<Face> faces = await faceDetector.processImage(inputImage!);
 
     print("fl=" + faces.length.toString());
-    //TODO perform face recognition on detected faces
+    // perform face recognition on detected faces
     performFaceRecognition(faces);
   }
 
   img.Image? image;
   bool register = false;
-  // TODO perform Face Recognition
+  //  perform Face Recognition
   performFaceRecognition(List<Face> faces) async {
     recognitions.clear();
 
-    //TODO convert CameraImage to Image and rotate it so that our frame will be in a portrait
+    // convert CameraImage to Image and rotate it so that our frame will be in a portrait
     image = Platform.isIOS
         ? _convertBGRA8888ToImage(frame!) as img.Image?
         : _convertNV21(frame!);
@@ -104,23 +105,23 @@ class _MyHomePageState extends State<MyHomePage> {
 
     for (Face face in faces) {
       Rect faceRect = face.boundingBox;
-      //TODO crop face
+      // crop face
       img.Image croppedFace = img.copyCrop(image!,
           x: faceRect.left.toInt(),
           y: faceRect.top.toInt(),
           width: faceRect.width.toInt(),
           height: faceRect.height.toInt());
 
-      //TODO pass cropped face to face recognition model
-      Recognition recognition = recognizer.recognize(croppedFace!, faceRect);
+      // pass cropped face to face recognition model
+      Recognition recognition = recognizer.recognize(croppedFace, faceRect);
       if (recognition.distance > 1.0) {
         recognition.name = "Unknown";
       }
       recognitions.add(recognition);
 
-      //TODO show face registration dialogue
+      // show face registration dialogue
       if (register) {
-        showFaceRegistrationDialogue(croppedFace!, recognition);
+        showFaceRegistrationDialogue(croppedFace, recognition);
         //TODO firebase update dispatch
         register = false;
       }
@@ -132,7 +133,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  //TODO Face Registration Dialogue
+  // Face Registration Dialogue
   TextEditingController textEditingController = TextEditingController();
   showFaceRegistrationDialogue(img.Image croppedFace, Recognition recognition) {
     showDialog(
@@ -149,7 +150,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 height: 20,
               ),
               Image.memory(
-                Uint8List.fromList(img.encodeBmp(croppedFace!)),
+                Uint8List.fromList(img.encodeBmp(croppedFace)),
                 width: 200,
                 height: 200,
               ),
@@ -244,7 +245,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return outImg;
   }
 
-  // TODO method to convert CameraImage to Image
+  //  method to convert CameraImage to Image
   img.Image convertYUV420ToImage(CameraImage cameraImage) {
     final width = cameraImage.width;
     final height = cameraImage.height;
@@ -296,7 +297,7 @@ class _MyHomePageState extends State<MyHomePage> {
     DeviceOrientation.landscapeRight: 270,
   };
 
-  //TODO convert CameraImage to InputImage
+  // convert CameraImage to InputImage
   InputImage? getInputImage() {
     final camera =
     camDirec == CameraLensDirection.front ? cameras[1] : cameras[0];
@@ -357,7 +358,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  //TODO toggle camera direction
+  // toggle camera direction
   void _toggleCameraDirection() async {
     if (camDirec == CameraLensDirection.back) {
       camDirec = CameraLensDirection.front;
@@ -379,7 +380,7 @@ class _MyHomePageState extends State<MyHomePage> {
     List<Widget> stackChildren = [];
     size = MediaQuery.of(context).size;
     if (controller != null) {
-      //TODO View for displaying the live camera footage
+      // View for displaying the live camera footage
       stackChildren.add(
         Positioned(
           top: 0.0,
@@ -397,7 +398,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       );
 
-      //TODO View for displaying rectangles around detected aces
+      // View for displaying rectangles around detected aces
       stackChildren.add(
         Positioned(
             top: 0.0,
@@ -408,7 +409,7 @@ class _MyHomePageState extends State<MyHomePage> {
       );
     }
 
-    //TODO View for displaying the bar to switch camera direction or for registering faces
+    // View for displaying the bar to switch camera direction or for registering faces
     stackChildren.add(Positioned(
       top: size.height - 170,
       left: 0,
@@ -467,12 +468,12 @@ class _MyHomePageState extends State<MyHomePage> {
         child: FloatingActionButton(
           onPressed: () {
             // Navegar a QRScannerScreen
-            /* Navigator.push(
+            Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => const QRScannerScreen(),
             ),
-          ); */
+          );
           },
           backgroundColor: Colors.blue,
           child: const Icon(Icons.qr_code_scanner),
