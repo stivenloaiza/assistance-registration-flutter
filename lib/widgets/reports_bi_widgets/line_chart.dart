@@ -114,8 +114,8 @@ class _CustomLineChartState extends State<CustomLineChart> {
           isCurved: true,
           gradient: LinearGradient(
             colors: [
-              Colors.cyan,
-              Colors.indigo,
+              Colors.lime,
+              Colors.green,
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -126,8 +126,8 @@ class _CustomLineChartState extends State<CustomLineChart> {
               show: true,
               gradient: LinearGradient(
                 colors: [
-                  Colors.cyan.withOpacity(0.2),
-                  Colors.indigo.withOpacity(0.1),
+                  Colors.lime.withOpacity(0.2),
+                  Colors.green.withOpacity(0.1),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -175,8 +175,8 @@ class _CustomLineChartState extends State<CustomLineChart> {
           isCurved: false,
           gradient: LinearGradient(
             colors: [
-              Colors.cyan,
-              Colors.indigo,
+              Colors.lime,
+              Colors.green,
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -186,8 +186,8 @@ class _CustomLineChartState extends State<CustomLineChart> {
               show: true,
               gradient: LinearGradient(
                 colors: [
-                  Colors.cyan.withOpacity(0.2),
-                  Colors.indigo.withOpacity(0.1),
+                  Colors.lime.withOpacity(0.2),
+                  Colors.green.withOpacity(0.1),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,

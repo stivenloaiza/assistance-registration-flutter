@@ -16,10 +16,10 @@ class BarChartWidget extends StatefulWidget {
   });
 
   // Definir los colores como variables de instancia
-  final Color firstBarColor = Color.fromRGBO(252, 121, 0, 1);
-  final Color secondBarColor = Color.fromRGBO(24, 20, 243, 1);
-  final Color thirdBarColor = Color.fromARGB(255, 125, 194, 237);
-  final Color avgColor = Color.fromRGBO(181, 181, 181, 1);
+  final Color firstBarColor = Colors.red;
+  final Color secondBarColor = Colors.green;
+  final Color thirdBarColor = Colors.orange;
+  final Color avgColor = Colors.grey;
 
   @override
   State<BarChartWidget> createState() => _BarChartWidgetState();

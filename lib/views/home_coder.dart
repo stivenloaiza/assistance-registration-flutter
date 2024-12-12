@@ -1,7 +1,9 @@
 import 'package:asia_project/global_state.dart';
 import 'package:asia_project/utils/const_data_admin_user.dart';
 import 'package:asia_project/views/CustomDrawerCoder.dart';
+import 'package:asia_project/views/qr-dinamic/generate_qr_widget.dart';
 import 'package:asia_project/views/userOnly_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class HomeCoderView extends StatefulWidget {
@@ -16,6 +18,7 @@ class _HomeCoderViewState extends State<HomeCoderView> {
   final PageController _pageController = PageController();
   final String userId = GlobalState().currentUserUid ?? "gQyFZVUf8rzjlpYl1gIv";
   int _currentPage = 0;
+  String? useId; // UID del usuario, puede ser null al inicio
 
   void _navigateToPage(int index) {
     _pageController.animateToPage(
@@ -32,6 +35,13 @@ class _HomeCoderViewState extends State<HomeCoderView> {
   void dispose() {
     _pageController.dispose();
     super.dispose();
+  }
+
+  void _getUserId() {
+    final User? user = FirebaseAuth.instance.currentUser;
+    setState(() {
+      useId = user?.uid; // Asigna el UID al estado si el usuario está autenticado
+    });
   }
 
   @override
@@ -87,6 +97,28 @@ class _HomeCoderViewState extends State<HomeCoderView> {
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          if (userId != null) {
+            // Navegar a GenerateQRScreen solo si userId no es null
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => GenerateQRScreen(userId: userId!), // Pasa el UID como parámetro
+              ),
+            );
+          } else {
+            // Muestra un mensaje si el UID aún no está disponible
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('UID no disponible. Intenta de nuevo.'),
+              ),
+            );
+          }
+        },
+        backgroundColor: const Color(0xFF343C6A),
+        child: const Icon(Icons.qr_code_scanner, color: Colors.white,),
       ),
     );
   }

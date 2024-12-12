@@ -50,16 +50,10 @@ class UserModalWidget extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             Container(
-              height: 500,
+              height: 700,
               color: Colors.white,
               child: const ReportsCoders(),
             ),
-            const SizedBox(height: 20),
-            buildInfoRow('Document Number', user.documentNumber),
-            buildInfoRow('Birth Date', formatDate(user.birthDate)),
-            buildInfoRow('Created At', formatDate(user.createdAt)),
-            buildInfoRow('Role', user.role),
-            buildInfoRow('Status', user.status ? 'Active' : 'Inactive'),
             const SizedBox(height: 20),
             Align(
               alignment: Alignment.bottomRight,

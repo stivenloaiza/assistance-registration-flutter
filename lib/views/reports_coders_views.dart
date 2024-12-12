@@ -70,18 +70,10 @@ class _ReportsCodersState extends State<ReportsCoders> {
               ),
             )
           else
-            Container(
-              constraints: const BoxConstraints(
-                minHeight: 200,
-                maxHeight: 500,
-                minWidth: double.infinity,
-              ),
-              padding: const EdgeInsets.all(16.0),
-              child: lineChartData.isNotEmpty
-                  ? LineChart2(data: lineChartData, ref: lineChartRefs)
-                  : const Center(
-                child: Text("No data available for the selected group."),
-              ),
+            lineChartData.isNotEmpty
+                ? LineChart2(data: lineChartData, ref: lineChartRefs)
+                : const Center(
+              child: Text("No data available for the selected group."),
             ),
         ],
       ),

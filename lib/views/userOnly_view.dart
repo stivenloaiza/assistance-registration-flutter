@@ -142,8 +142,6 @@ class _SingleUserViewState extends State<SingleUserView> {
               ? _user!.photo
               : 'https://riwi.io/wp-content/uploads/2023/07/favicon.png',
           userId: _user!.id,
-          onDelete: _deleteUser,
-          onEdit: _showEditModal,
           onTap: _showUserModal,
         ),
       ),

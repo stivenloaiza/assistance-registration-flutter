@@ -8,8 +8,8 @@ class UserCard extends StatelessWidget {
   final String documentNumber;
   final String imageUrl;
   final String userId;  // Recibimos el ID
-  final VoidCallback onDelete;  // Recibimos el callback de eliminación
-  final VoidCallback onEdit;  // Recibimos el callback de edición
+  final VoidCallback? onDelete;  // Recibimos el callback de eliminación
+  final VoidCallback? onEdit;  // Recibimos el callback de edición
   final VoidCallback onTap; // Indica si se muestran los botones de acción
 
 
@@ -21,8 +21,8 @@ class UserCard extends StatelessWidget {
     required this.documentNumber,
     required this.imageUrl,
     required this.userId,  // Recibimos el ID
-    required this.onDelete,  // Recibimos el callback de eliminación
-    required this.onEdit,
+    this.onDelete,  // Recibimos el callback de eliminación
+    this.onEdit,
      required this.onTap,    // Recibimos el callback de edición
   });
 
@@ -49,6 +49,7 @@ class UserCard extends StatelessWidget {
         ],
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start, 
         children: [
           CircleAvatar(
             radius: 35.0,
