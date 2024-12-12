@@ -164,7 +164,6 @@ class _FilterCoderState extends State<FilterCoder> {
   @override
   Widget build(BuildContext context) {
     return Container(
-  color: Colors.white, // Fondo blanco
   child: Column(
     children: [
       const SizedBox(height: 5),
@@ -205,10 +204,10 @@ class _FilterCoderState extends State<FilterCoder> {
                               child: Text(group.title ?? "No Title"),
                             );
                           }).toList(),
-                          dropdownColor: const Color.fromRGBO(255, 255, 255, 1),
+                          dropdownColor: Colors.white,
                           decoration: InputDecoration(
                             filled: true,
-                            fillColor: const Color.fromRGBO(247, 242, 250, 1),
+                            fillColor: Colors.white,
                             border: InputBorder.none,
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(40),

@@ -1,4 +1,7 @@
+import 'package:asia_project/views/face-view/face_view.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:asia_project/utils/singleton_user.dart' as SingleUser;
 import '../models/user_model.dart'; // Importa el modelo User desde su ubicación
 
 class EditUserModal extends StatefulWidget {
@@ -83,12 +86,19 @@ class _EditUserModalState extends State<EditUserModal> {
 
   // Navegar a la nueva página
   void _navigateToNewPage() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => NewPage(),
-      ),
-    );
+    SingleUser.userSingleton = widget.user.id;
+
+    if(kIsWeb){
+      const Center(child: Text('Just available in mobile devices'));
+    }else{
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MyHomePage(),
+        ),
+      );
+    }
+
   }
 
   @override
