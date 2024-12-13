@@ -1,4 +1,5 @@
 import 'package:asia_project/global_state.dart';
+import 'package:asia_project/global_user.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:asia_project/models/group_reports_model.dart';
@@ -29,7 +30,7 @@ class _FilterCoderState extends State<FilterCoderModal> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   late Future<List<GroupModel>> _groupFuture;
   final String userId =
-      GlobalState().currentUserUid ?? "x3UhGMh6KhawmMZAVUEj9ttvpkw1";
+        GlobalStateUser().currentUser?.id ?? "x3UhGMh6KhawmMZAVUEj9ttvpkw1";
 
   @override
   void initState() {

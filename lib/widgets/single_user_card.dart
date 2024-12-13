@@ -62,7 +62,7 @@ class SingleUserCard extends StatelessWidget {
               email: email,
               documentNumber: documentNumber,
               role: role?? 'Postulante',  // Pasamos el role
-              status: status ?? false, // Pasamos el status
+              status: status ?? true, // Pasamos el status
             ),
             SizedBox(width: 16.0),
           ],

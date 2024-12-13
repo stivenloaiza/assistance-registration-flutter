@@ -1,3 +1,4 @@
+import 'package:asia_project/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:asia_project/widgets/reports_bi_widgets/line_chart_two.dart';
 import 'package:asia_project/widgets/reports_bi_widgets/bar_chart.dart';
