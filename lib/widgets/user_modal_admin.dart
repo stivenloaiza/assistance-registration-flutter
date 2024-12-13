@@ -1,3 +1,4 @@
+import 'package:asia_project/global_user.dart';
 import 'package:asia_project/views/reports_coders_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:asia_project/models/user_model.dart';
@@ -10,6 +11,11 @@ class UserModalWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Guardar el usuario en el estado global
+    GlobalStateUser().currentUser = user;
+    print(user.id);
+    print("${GlobalStateUser().currentUser}");
+
     final random = Random();
     final skillsDevelopmentAttendance = (random.nextDouble() * 100).clamp(0.0, 100.0);
     final englishAttendance = (random.nextDouble() * 100).clamp(0.0, 100.0);
